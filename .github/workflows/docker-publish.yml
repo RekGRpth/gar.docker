@@ -1,0 +1,24 @@
+name: Docker
+on:
+  push:
+    branches:
+      - latest
+  repository_dispatch:
+    types:
+      - debian
+      - latest
+      - ubuntu
+  workflow_dispatch:
+jobs:
+  build:
+    concurrency:
+      cancel-in-progress: true
+      group: ${{ github.ref }}
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+    name: ${{ github.event.client_payload.repository }} ${{ github.event_name }} ${{ github.event.branch }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: rekgrpth/git-clone-shell-action@v1
+      - uses: rekgrpth/docker-login-build-push-shell-action@v1
+      - uses: rekgrpth/github-publish-action-shell-action@v1
