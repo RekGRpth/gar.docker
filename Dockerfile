@@ -5,6 +5,7 @@ RUN set -eux; \
     apk upgrade --no-cache; \
     apk add --no-cache --virtual .build-deps \
         autoconf \
+        automake \
         gcc \
         git \
         libxml2-dev \
