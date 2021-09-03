@@ -1,27 +1,32 @@
 FROM ghcr.io/rekgrpth/gost.docker
 ADD bin /usr/local/bin
-ADD xslt /usr/local/xslt
 RUN set -eux; \
     apk update --no-cache; \
     apk upgrade --no-cache; \
     apk add --no-cache --virtual .build-deps \
-        wget \
-        unzip \
+        autoconf \
+        gcc \
+        git \
+        libxml2-dev \
+        make \
+        musl-dev \
     ; \
     mkdir -p "${HOME}/src"; \
     cd "${HOME}/src"; \
-    wget --continue --output-document="SaxonHE10-5J.zip" "https://sourceforge.net/projects/saxon/files/Saxon-HE/10/Java/SaxonHE10-5J.zip/download"; \
-    unzip "SaxonHE10-5J.zip"; \
-    mkdir -p /usr/local/jar; \
-    cp -f "saxon-he-10.5.jar" /usr/local/jar/; \
+    git clone https://github.com/RekGRpth/xml2.git; \
+    cd "${HOME}/src/xml2"; \
+    ./configure; \
+    make -j"$(nproc)" install; \
+    cd /; \
     apk add --no-cache --virtual .gar-rundeps \
+        $(scanelf --needed --nobanner --format '%n#p' --recursive /usr/local | tr ',' '\n' | sort -u | while read -r lib; do test ! -e "/usr/local/lib/$lib" && echo "so:$lib"; done) \
         jq \
-        openjdk8-jre-base \
         postgresql-client \
         unzip \
         wget \
     ; \
-    cd /; \
+    find /usr/local/bin -type f -exec strip '{}' \;; \
+    find /usr/local/lib -type f -name "*.so" -exec strip '{}' \;; \
     apk del --no-cache .build-deps; \
     find /usr -type f -name "*.a" -delete; \
     find /usr -type f -name "*.la" -delete; \
