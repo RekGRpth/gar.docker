@@ -16,6 +16,7 @@ RUN set -eux; \
     cp -f "saxon-he-10.5.jar" /usr/local/jar/; \
     apk add --no-cache --virtual .gar-rundeps \
         openjdk8-jre-base \
+        postgresql-client \
     ; \
     cd /; \
     apk del --no-cache .build-deps; \
