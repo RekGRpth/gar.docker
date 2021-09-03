@@ -6,7 +6,7 @@ RUN set -eux; \
     apk update --no-cache; \
     apk upgrade --no-cache; \
     apk add --no-cache --virtual .gar-rundeps \
-        java-common \
+        openjdk8-jre-base \
     ; \
     find /usr -type f -name "*.a" -delete; \
     find /usr -type f -name "*.la" -delete; \
