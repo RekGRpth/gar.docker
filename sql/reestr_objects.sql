@@ -4,7 +4,7 @@ CREATE TABLE gar.reestr_objects (
   changeid BIGINT NOT NULL,
   levelid INTEGER NOT NULL,
   updatedate DATE NOT NULL,
-  objectguid VARCHAR NOT NULL,
+  objectguid UUID NOT NULL,
   isactive INTEGER NOT NULL
 );
 COMMENT ON TABLE gar.reestr_objects IS 'Сведения об адресном элементе в части его идентификаторов';

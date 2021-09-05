@@ -1,7 +1,7 @@
 CREATE TABLE gar.houses (
   id BIGINT NOT NULL PRIMARY KEY,
   objectid BIGINT NOT NULL,
-  objectguid VARCHAR NOT NULL,
+  objectguid UUID NOT NULL,
   changeid BIGINT NOT NULL,
   housenum VARCHAR,
   addnum1 VARCHAR,

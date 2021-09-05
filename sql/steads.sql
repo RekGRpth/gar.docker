@@ -1,7 +1,7 @@
 CREATE TABLE gar.steads (
   id INTEGER NOT NULL PRIMARY KEY,
   objectid INTEGER NOT NULL,
-  objectguid VARCHAR NOT NULL,
+  objectguid UUID NOT NULL,
   changeid INTEGER NOT NULL,
   number VARCHAR NOT NULL,
   opertypeid VARCHAR NOT NULL,

@@ -1,7 +1,7 @@
 CREATE TABLE gar.addr_obj (
   id BIGINT NOT NULL PRIMARY KEY,
   objectid BIGINT NOT NULL,
-  objectguid VARCHAR NOT NULL,
+  objectguid UUID NOT NULL,
   changeid BIGINT NOT NULL,
   name VARCHAR NOT NULL,
   typename VARCHAR NOT NULL,

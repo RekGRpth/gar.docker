@@ -1,7 +1,7 @@
 CREATE TABLE gar.rooms (
   id BIGINT NOT NULL PRIMARY KEY,
   objectid BIGINT NOT NULL,
-  objectguid VARCHAR NOT NULL,
+  objectguid UUID NOT NULL,
   changeid BIGINT NOT NULL,
   number VARCHAR NOT NULL,
   roomtype INTEGER NOT NULL,
