@@ -1,5 +1,7 @@
 FROM ghcr.io/rekgrpth/gost.docker
 ADD bin /usr/local/bin
+ADD sql /usr/local/sql
+ADD xsd /usr/local/xsd
 RUN set -eux; \
     apk update --no-cache; \
     apk upgrade --no-cache; \
