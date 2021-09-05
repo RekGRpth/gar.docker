@@ -1,8 +1,8 @@
 CREATE TABLE gar.operation_types (
   id INTEGER NOT NULL PRIMARY KEY,
-  name VARCHAR NOT NULL,
-  shortname VARCHAR,
-  "desc" VARCHAR,
+  name TEXT NOT NULL,
+  shortname TEXT,
+  "desc" TEXT,
   updatedate DATE NOT NULL,
   startdate DATE NOT NULL,
   enddate DATE NOT NULL,

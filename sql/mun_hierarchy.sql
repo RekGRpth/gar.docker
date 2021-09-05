@@ -3,7 +3,7 @@ CREATE TABLE gar.mun_hierarchy (
   objectid BIGINT NOT NULL,
   parentobjid BIGINT,
   changeid BIGINT NOT NULL,
-  oktmo VARCHAR,
+  oktmo TEXT,
   previd BIGINT,
   nextid BIGINT,
   updatedate DATE NOT NULL,
