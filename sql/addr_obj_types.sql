@@ -1,6 +1,6 @@
 CREATE TABLE gar.addr_obj_types (
-  id INTEGER NOT NULL PRIMARY KEY,
-  level INTEGER NOT NULL,
+  id INT NOT NULL PRIMARY KEY,
+  level INT NOT NULL,
   shortname VARCHAR(50) NOT NULL,
   name VARCHAR(250) NOT NULL,
   "desc" VARCHAR(250),

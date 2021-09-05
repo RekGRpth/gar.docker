@@ -1,17 +1,17 @@
 CREATE TABLE gar.steads (
-  id INTEGER NOT NULL PRIMARY KEY,
-  objectid INTEGER NOT NULL,
+  id INT NOT NULL PRIMARY KEY,
+  objectid INT NOT NULL,
   objectguid UUID NOT NULL,
-  changeid INTEGER NOT NULL,
+  changeid INT NOT NULL,
   number VARCHAR(250) NOT NULL,
   opertypeid VARCHAR(2) NOT NULL,
-  previd INTEGER,
-  nextid INTEGER,
+  previd INT,
+  nextid INT,
   updatedate DATE NOT NULL,
   startdate DATE NOT NULL,
   enddate DATE NOT NULL,
-  isactual INTEGER NOT NULL,
-  isactive INTEGER NOT NULL
+  isactual INT NOT NULL,
+  isactive INT NOT NULL
 );
 COMMENT ON TABLE gar.steads IS 'Сведения по земельным участкам';
 COMMENT ON COLUMN gar.steads.id IS 'Уникальный идентификатор записи. Ключевое поле';

@@ -6,17 +6,17 @@ CREATE TABLE gar.houses (
   housenum VARCHAR(50),
   addnum1 VARCHAR(50),
   addnum2 VARCHAR(50),
-  housetype INTEGER,
-  addtype1 INTEGER,
-  addtype2 INTEGER,
-  opertypeid INTEGER NOT NULL,
+  housetype INT,
+  addtype1 INT,
+  addtype2 INT,
+  opertypeid INT NOT NULL,
   previd BIGINT,
   nextid BIGINT,
   updatedate DATE NOT NULL,
   startdate DATE NOT NULL,
   enddate DATE NOT NULL,
-  isactual INTEGER NOT NULL,
-  isactive INTEGER NOT NULL
+  isactual INT NOT NULL,
+  isactive INT NOT NULL
 );
 COMMENT ON TABLE gar.houses IS 'Сведения по номерам домов улиц городов и населенных пунктов';
 COMMENT ON COLUMN gar.houses.id IS 'Уникальный идентификатор записи. Ключевое поле';

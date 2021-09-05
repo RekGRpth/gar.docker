@@ -1,5 +1,5 @@
 CREATE TABLE gar.object_levels (
-  level INTEGER NOT NULL,
+  level INT NOT NULL,
   name VARCHAR(250) NOT NULL,
   shortname VARCHAR(50),
   updatedate DATE NOT NULL,

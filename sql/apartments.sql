@@ -4,15 +4,15 @@ CREATE TABLE gar.apartments (
   objectguid UUID NOT NULL,
   changeid BIGINT NOT NULL,
   number VARCHAR(50) NOT NULL,
-  aparttype INTEGER NOT NULL,
+  aparttype INT NOT NULL,
   opertypeid BIGINT NOT NULL,
   previd BIGINT,
   nextid BIGINT,
   updatedate DATE NOT NULL,
   startdate DATE NOT NULL,
   enddate DATE NOT NULL,
-  isactual INTEGER NOT NULL,
-  isactive INTEGER NOT NULL
+  isactual INT NOT NULL,
+  isactive INT NOT NULL
 );
 COMMENT ON TABLE gar.apartments IS 'Сведения по помещениям';
 COMMENT ON COLUMN gar.apartments.id IS 'Уникальный идентификатор записи. Ключевое поле';

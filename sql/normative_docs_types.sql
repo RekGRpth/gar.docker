@@ -1,5 +1,5 @@
 CREATE TABLE gar.normative_docs_types (
-  id INTEGER NOT NULL PRIMARY KEY,
+  id INT NOT NULL PRIMARY KEY,
   name VARCHAR(500) NOT NULL,
   startdate DATE NOT NULL,
   enddate DATE NOT NULL

@@ -14,7 +14,7 @@ CREATE TABLE gar.adm_hierarchy (
   updatedate DATE NOT NULL,
   startdate DATE NOT NULL,
   enddate DATE NOT NULL,
-  isactive INTEGER NOT NULL
+  isactive INT NOT NULL
 );
 COMMENT ON TABLE gar.adm_hierarchy IS 'Сведения по иерархии в административном делении';
 COMMENT ON COLUMN gar.adm_hierarchy.id IS 'Уникальный идентификатор записи. Ключевое поле';

@@ -6,14 +6,14 @@ CREATE TABLE gar.addr_obj (
   name VARCHAR(250) NOT NULL,
   typename VARCHAR(50) NOT NULL,
   level VARCHAR(10) NOT NULL,
-  opertypeid INTEGER NOT NULL,
+  opertypeid INT NOT NULL,
   previd BIGINT,
   nextid BIGINT,
   updatedate DATE NOT NULL,
   startdate DATE NOT NULL,
   enddate DATE NOT NULL,
-  isactual INTEGER NOT NULL,
-  isactive INTEGER NOT NULL
+  isactual INT NOT NULL,
+  isactive INT NOT NULL
 );
 COMMENT ON TABLE gar.addr_obj IS 'Сведения классификатора адресообразующих элементов';
 COMMENT ON COLUMN gar.addr_obj.id IS 'Уникальный идентификатор записи. Ключевое поле';

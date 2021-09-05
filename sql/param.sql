@@ -3,7 +3,7 @@ CREATE TABLE gar.param (
   objectid BIGINT NOT NULL,
   changeid BIGINT,
   changeidend BIGINT NOT NULL,
-  typeid INTEGER NOT NULL,
+  typeid INT NOT NULL,
   value VARCHAR(8000) NOT NULL,
   updatedate DATE NOT NULL,
   startdate DATE NOT NULL,

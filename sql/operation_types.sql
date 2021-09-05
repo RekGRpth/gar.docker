@@ -1,5 +1,5 @@
 CREATE TABLE gar.operation_types (
-  id INTEGER NOT NULL PRIMARY KEY,
+  id INT NOT NULL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   shortname VARCHAR(100),
   "desc" VARCHAR(250),
