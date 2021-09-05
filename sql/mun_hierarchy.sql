@@ -9,7 +9,7 @@ CREATE TABLE gar.mun_hierarchy (
   updatedate DATE NOT NULL,
   startdate DATE NOT NULL,
   enddate DATE NOT NULL,
-  isactive INT NOT NULL
+  isactive SMALLINT NOT NULL
 );
 COMMENT ON TABLE gar.mun_hierarchy IS 'Сведения по иерархии в муниципальном делении';
 COMMENT ON COLUMN gar.mun_hierarchy.id IS 'Уникальный идентификатор записи. Ключевое поле';

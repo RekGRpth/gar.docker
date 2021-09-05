@@ -11,8 +11,8 @@ CREATE TABLE gar.apartments (
   updatedate DATE NOT NULL,
   startdate DATE NOT NULL,
   enddate DATE NOT NULL,
-  isactual INT NOT NULL,
-  isactive INT NOT NULL
+  isactual SMALLINT NOT NULL,
+  isactive SMALLINT NOT NULL
 );
 COMMENT ON TABLE gar.apartments IS 'Сведения по помещениям';
 COMMENT ON COLUMN gar.apartments.id IS 'Уникальный идентификатор записи. Ключевое поле';

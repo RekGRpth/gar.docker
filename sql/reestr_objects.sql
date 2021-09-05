@@ -5,7 +5,7 @@ CREATE TABLE gar.reestr_objects (
   levelid INT NOT NULL,
   updatedate DATE NOT NULL,
   objectguid UUID NOT NULL,
-  isactive INT NOT NULL
+  isactive SMALLINT NOT NULL
 );
 COMMENT ON TABLE gar.reestr_objects IS 'Сведения об адресном элементе в части его идентификаторов';
 COMMENT ON COLUMN gar.reestr_objects.objectid IS 'Уникальный идентификатор объекта';
