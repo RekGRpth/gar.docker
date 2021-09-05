@@ -1,5 +1,6 @@
 #!/bin/sh -eux
 
+ls | while read -r old; do new=$(echo $old | sed 's/\(.*\)/\L\1/'); mv $old $new; done
 find -type f -name "*.xsd" | sort -u | while read -r xsd; do
     filename="$(basename -- "${xsd}")"
     filename="${filename%.*}"
