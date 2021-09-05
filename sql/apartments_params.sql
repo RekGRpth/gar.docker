@@ -1,15 +1,7 @@
 CREATE TABLE gar.apartments_params (
-  id BIGINT NOT NULL PRIMARY KEY,
-  objectid BIGINT NOT NULL,
-  changeid BIGINT,
-  changeidend BIGINT NOT NULL,
-  typeid INT NOT NULL,
-  value VARCHAR(8000) NOT NULL,
-  updatedate DATE NOT NULL,
-  startdate DATE NOT NULL,
-  enddate DATE NOT NULL,
-  dir SMALLINT NOT NULL
-);
+    param TEXT DEFAULT 'apartments',
+    CONSTRAINT CHECK (param = 'apartments')
+) INHERITS (gar.param);
 COMMENT ON TABLE gar.apartments_params IS 'Сведения о классификаторе параметров адресообразующих элементов и объектов недвижимости ';
 COMMENT ON COLUMN gar.apartments_params.id IS 'Идентификатор записи';
 COMMENT ON COLUMN gar.apartments_params.objectid IS 'Глобальный уникальный идентификатор адресного объекта ';
