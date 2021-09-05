@@ -1,5 +1,5 @@
 CREATE TABLE gar.addr_obj_params (
-    param TEXT DEFAULT 'addr_obj',
+    param TEXT NOT NULL DEFAULT 'addr_obj',
     CONSTRAINT CHECK (param = 'addr_obj')
 ) INHERITS (gar.param);
 COMMENT ON TABLE gar.addr_obj_params IS 'Сведения о классификаторе параметров адресообразующих элементов и объектов недвижимости ';

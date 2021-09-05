@@ -1,5 +1,5 @@
 CREATE TABLE gar.rooms_params (
-    param TEXT DEFAULT 'rooms',
+    param TEXT NOT NULL DEFAULT 'rooms',
     CONSTRAINT CHECK (param = 'rooms')
 ) INHERITS (gar.param);
 COMMENT ON TABLE gar.rooms_params IS 'Сведения о классификаторе параметров адресообразующих элементов и объектов недвижимости ';
