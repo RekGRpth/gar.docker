@@ -11,7 +11,8 @@ CREATE TABLE gar.steads (
   startdate DATE NOT NULL,
   enddate DATE NOT NULL,
   isactual SMALLINT NOT NULL,
-  isactive SMALLINT NOT NULL
+  isactive SMALLINT NOT NULL,
+  dir SMALLINT NOT NULL
 );
 COMMENT ON TABLE gar.steads IS 'Сведения по земельным участкам';
 COMMENT ON COLUMN gar.steads.id IS 'Уникальный идентификатор записи. Ключевое поле';
@@ -27,4 +28,5 @@ COMMENT ON COLUMN gar.steads.startdate IS 'Начало действия зап�
 COMMENT ON COLUMN gar.steads.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN gar.steads.isactual IS 'Статус актуальности адресного объекта ФИАС';
 COMMENT ON COLUMN gar.steads.isactive IS 'Признак действующего адресного объекта';
+COMMENT ON COLUMN gar.steads.dir IS 'Код региона';
 

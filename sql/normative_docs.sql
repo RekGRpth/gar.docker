@@ -10,7 +10,8 @@ CREATE TABLE gar.normative_docs (
   regnum VARCHAR(100),
   regdate DATE,
   accdate DATE,
-  comment VARCHAR(8000)
+  comment VARCHAR(8000),
+  dir SMALLINT NOT NULL
 );
 COMMENT ON TABLE gar.normative_docs IS 'Сведения о нормативном документе, являющемся основанием присвоения адресному элементу наименования';
 COMMENT ON COLUMN gar.normative_docs.id IS 'Уникальный идентификатор документа';
@@ -25,4 +26,5 @@ COMMENT ON COLUMN gar.normative_docs.regnum IS 'Номер государств�
 COMMENT ON COLUMN gar.normative_docs.regdate IS 'Дата государственной регистрации';
 COMMENT ON COLUMN gar.normative_docs.accdate IS 'Дата вступления в силу нормативного документа';
 COMMENT ON COLUMN gar.normative_docs.comment IS 'Комментарий';
+COMMENT ON COLUMN gar.normative_docs.dir IS 'Код региона';
 

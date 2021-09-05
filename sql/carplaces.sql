@@ -11,7 +11,8 @@ CREATE TABLE gar.carplaces (
   startdate DATE NOT NULL,
   enddate DATE NOT NULL,
   isactual SMALLINT NOT NULL,
-  isactive SMALLINT NOT NULL
+  isactive SMALLINT NOT NULL,
+  dir SMALLINT NOT NULL
 );
 COMMENT ON TABLE gar.carplaces IS 'Сведения по машино-местам';
 COMMENT ON COLUMN gar.carplaces.id IS 'Уникальный идентификатор записи. Ключевое поле';
@@ -27,4 +28,5 @@ COMMENT ON COLUMN gar.carplaces.startdate IS 'Начало действия за
 COMMENT ON COLUMN gar.carplaces.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN gar.carplaces.isactual IS 'Статус актуальности адресного объекта ФИАС';
 COMMENT ON COLUMN gar.carplaces.isactive IS 'Признак действующего адресного объекта';
+COMMENT ON COLUMN gar.carplaces.dir IS 'Код региона';
 

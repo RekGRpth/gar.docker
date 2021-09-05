@@ -13,7 +13,8 @@ CREATE TABLE gar.addr_obj (
   startdate DATE NOT NULL,
   enddate DATE NOT NULL,
   isactual SMALLINT NOT NULL,
-  isactive SMALLINT NOT NULL
+  isactive SMALLINT NOT NULL,
+  dir SMALLINT NOT NULL
 );
 COMMENT ON TABLE gar.addr_obj IS 'Сведения классификатора адресообразующих элементов';
 COMMENT ON COLUMN gar.addr_obj.id IS 'Уникальный идентификатор записи. Ключевое поле';
@@ -31,4 +32,5 @@ COMMENT ON COLUMN gar.addr_obj.startdate IS 'Начало действия за�
 COMMENT ON COLUMN gar.addr_obj.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN gar.addr_obj.isactual IS 'Статус актуальности адресного объекта ФИАС';
 COMMENT ON COLUMN gar.addr_obj.isactive IS 'Признак действующего адресного объекта';
+COMMENT ON COLUMN gar.addr_obj.dir IS 'Код региона';
 

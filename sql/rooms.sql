@@ -12,7 +12,8 @@ CREATE TABLE gar.rooms (
   startdate DATE NOT NULL,
   enddate DATE NOT NULL,
   isactual SMALLINT NOT NULL,
-  isactive SMALLINT NOT NULL
+  isactive SMALLINT NOT NULL,
+  dir SMALLINT NOT NULL
 );
 COMMENT ON TABLE gar.rooms IS 'Сведения по комнатам';
 COMMENT ON COLUMN gar.rooms.id IS 'Уникальный идентификатор записи. Ключевое поле';
@@ -29,4 +30,5 @@ COMMENT ON COLUMN gar.rooms.startdate IS 'Начало действия запи
 COMMENT ON COLUMN gar.rooms.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN gar.rooms.isactual IS 'Статус актуальности адресного объекта ФИАС';
 COMMENT ON COLUMN gar.rooms.isactive IS 'Признак действующего адресного объекта';
+COMMENT ON COLUMN gar.rooms.dir IS 'Код региона';
 

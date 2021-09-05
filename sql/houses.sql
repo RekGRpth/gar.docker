@@ -16,7 +16,8 @@ CREATE TABLE gar.houses (
   startdate DATE NOT NULL,
   enddate DATE NOT NULL,
   isactual SMALLINT NOT NULL,
-  isactive SMALLINT NOT NULL
+  isactive SMALLINT NOT NULL,
+  dir SMALLINT NOT NULL
 );
 COMMENT ON TABLE gar.houses IS 'Сведения по номерам домов улиц городов и населенных пунктов';
 COMMENT ON COLUMN gar.houses.id IS 'Уникальный идентификатор записи. Ключевое поле';
@@ -37,4 +38,5 @@ COMMENT ON COLUMN gar.houses.startdate IS 'Начало действия зап�
 COMMENT ON COLUMN gar.houses.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN gar.houses.isactual IS 'Статус актуальности адресного объекта ФИАС';
 COMMENT ON COLUMN gar.houses.isactive IS 'Признак действующего адресного объекта';
+COMMENT ON COLUMN gar.houses.dir IS 'Код региона';
 
