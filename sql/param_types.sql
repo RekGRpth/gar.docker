@@ -1,4 +1,4 @@
-CREATE TABLE gar.param_types (
+CREATE TABLE param_types (
   id INT NOT NULL PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
   code VARCHAR(50) NOT NULL,
@@ -8,13 +8,13 @@ CREATE TABLE gar.param_types (
   enddate DATE NOT NULL,
   isactive BOOLEAN NOT NULL
 );
-COMMENT ON TABLE gar.param_types IS 'Сведения по типу параметра';
-COMMENT ON COLUMN gar.param_types.id IS 'Идентификатор типа параметра (ключ)';
-COMMENT ON COLUMN gar.param_types.name IS 'Наименование';
-COMMENT ON COLUMN gar.param_types.code IS 'Краткое наименование';
-COMMENT ON COLUMN gar.param_types.desc IS 'Описание';
-COMMENT ON COLUMN gar.param_types.updatedate IS 'Дата внесения (обновления) записи';
-COMMENT ON COLUMN gar.param_types.startdate IS 'Начало действия записи';
-COMMENT ON COLUMN gar.param_types.enddate IS 'Окончание действия записи';
-COMMENT ON COLUMN gar.param_types.isactive IS 'Статус активности';
+COMMENT ON TABLE param_types IS 'Сведения по типу параметра';
+COMMENT ON COLUMN param_types.id IS 'Идентификатор типа параметра (ключ)';
+COMMENT ON COLUMN param_types.name IS 'Наименование';
+COMMENT ON COLUMN param_types.code IS 'Краткое наименование';
+COMMENT ON COLUMN param_types.desc IS 'Описание';
+COMMENT ON COLUMN param_types.updatedate IS 'Дата внесения (обновления) записи';
+COMMENT ON COLUMN param_types.startdate IS 'Начало действия записи';
+COMMENT ON COLUMN param_types.enddate IS 'Окончание действия записи';
+COMMENT ON COLUMN param_types.isactive IS 'Статус активности';
 

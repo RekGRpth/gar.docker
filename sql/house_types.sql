@@ -1,4 +1,4 @@
-CREATE TABLE gar.house_types (
+CREATE TABLE house_types (
   id INT NOT NULL PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
   shortname VARCHAR(50),
@@ -8,13 +8,13 @@ CREATE TABLE gar.house_types (
   enddate DATE NOT NULL,
   isactive BOOLEAN NOT NULL
 );
-COMMENT ON TABLE gar.house_types IS 'Сведения по типам домов';
-COMMENT ON COLUMN gar.house_types.id IS 'Идентификатор';
-COMMENT ON COLUMN gar.house_types.name IS 'Наименование';
-COMMENT ON COLUMN gar.house_types.shortname IS 'Краткое наименование';
-COMMENT ON COLUMN gar.house_types.desc IS 'Описание';
-COMMENT ON COLUMN gar.house_types.updatedate IS 'Дата внесения (обновления) записи';
-COMMENT ON COLUMN gar.house_types.startdate IS 'Начало действия записи';
-COMMENT ON COLUMN gar.house_types.enddate IS 'Окончание действия записи';
-COMMENT ON COLUMN gar.house_types.isactive IS 'Статус активности';
+COMMENT ON TABLE house_types IS 'Сведения по типам домов';
+COMMENT ON COLUMN house_types.id IS 'Идентификатор';
+COMMENT ON COLUMN house_types.name IS 'Наименование';
+COMMENT ON COLUMN house_types.shortname IS 'Краткое наименование';
+COMMENT ON COLUMN house_types.desc IS 'Описание';
+COMMENT ON COLUMN house_types.updatedate IS 'Дата внесения (обновления) записи';
+COMMENT ON COLUMN house_types.startdate IS 'Начало действия записи';
+COMMENT ON COLUMN house_types.enddate IS 'Окончание действия записи';
+COMMENT ON COLUMN house_types.isactive IS 'Статус активности';
 
