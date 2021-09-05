@@ -1,6 +1,6 @@
 CREATE TABLE gar.normative_docs_kinds (
   id INTEGER NOT NULL PRIMARY KEY,
-  name TEXT NOT NULL
+  name VARCHAR(500) NOT NULL
 );
 COMMENT ON TABLE gar.normative_docs_kinds IS 'Сведения по видам нормативных документов';
 COMMENT ON COLUMN gar.normative_docs_kinds.id IS 'Идентификатор записи';

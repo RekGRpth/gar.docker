@@ -3,7 +3,7 @@ CREATE TABLE gar.carplaces (
   objectid BIGINT NOT NULL,
   objectguid UUID NOT NULL,
   changeid BIGINT NOT NULL,
-  number TEXT NOT NULL,
+  number VARCHAR(50) NOT NULL,
   opertypeid INTEGER NOT NULL,
   previd BIGINT,
   nextid BIGINT,

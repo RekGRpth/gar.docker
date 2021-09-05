@@ -1,8 +1,8 @@
 CREATE TABLE gar.param_types (
   id INTEGER NOT NULL PRIMARY KEY,
-  name TEXT NOT NULL,
-  code TEXT NOT NULL,
-  "desc" TEXT,
+  name VARCHAR(50) NOT NULL,
+  code VARCHAR(50) NOT NULL,
+  "desc" VARCHAR(120),
   updatedate DATE NOT NULL,
   startdate DATE NOT NULL,
   enddate DATE NOT NULL,

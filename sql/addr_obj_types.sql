@@ -1,9 +1,9 @@
 CREATE TABLE gar.addr_obj_types (
   id INTEGER NOT NULL PRIMARY KEY,
   level INTEGER NOT NULL,
-  shortname TEXT NOT NULL,
-  name TEXT NOT NULL,
-  "desc" TEXT,
+  shortname VARCHAR(50) NOT NULL,
+  name VARCHAR(250) NOT NULL,
+  "desc" VARCHAR(250),
   updatedate DATE NOT NULL,
   startdate DATE NOT NULL,
   enddate DATE NOT NULL,

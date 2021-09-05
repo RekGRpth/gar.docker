@@ -4,7 +4,7 @@ CREATE TABLE gar.param (
   changeid BIGINT,
   changeidend BIGINT NOT NULL,
   typeid INTEGER NOT NULL,
-  value TEXT NOT NULL,
+  value VARCHAR(8000) NOT NULL,
   updatedate DATE NOT NULL,
   startdate DATE NOT NULL,
   enddate DATE NOT NULL

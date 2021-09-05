@@ -3,7 +3,7 @@ CREATE TABLE gar.rooms (
   objectid BIGINT NOT NULL,
   objectguid UUID NOT NULL,
   changeid BIGINT NOT NULL,
-  number TEXT NOT NULL,
+  number VARCHAR(50) NOT NULL,
   roomtype INTEGER NOT NULL,
   opertypeid INTEGER NOT NULL,
   previd BIGINT,

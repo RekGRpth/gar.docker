@@ -1,16 +1,16 @@
 CREATE TABLE gar.normative_docs (
   id BIGINT NOT NULL PRIMARY KEY,
-  name TEXT NOT NULL,
+  name VARCHAR(8000) NOT NULL,
   date DATE NOT NULL,
-  number TEXT NOT NULL,
+  number VARCHAR(150) NOT NULL,
   type INTEGER NOT NULL,
   kind INTEGER NOT NULL,
   updatedate DATE NOT NULL,
-  orgname TEXT,
-  regnum TEXT,
+  orgname VARCHAR(255),
+  regnum VARCHAR(100),
   regdate DATE,
   accdate DATE,
-  comment TEXT
+  comment VARCHAR(8000)
 );
 COMMENT ON TABLE gar.normative_docs IS 'Сведения о нормативном документе, являющемся основанием присвоения адресному элементу наименования';
 COMMENT ON COLUMN gar.normative_docs.id IS 'Уникальный идентификатор документа';
