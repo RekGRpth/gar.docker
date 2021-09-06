@@ -17,4 +17,5 @@ docker run \
     --network name=docker \
     --rm \
     --tty \
+    --user gar \
     ghcr.io/rekgrpth/gar.docker sh

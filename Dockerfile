@@ -2,7 +2,12 @@ FROM ghcr.io/rekgrpth/gost.docker
 ADD bin /usr/local/bin
 ADD sql /usr/local/sql
 ADD xsd /usr/local/xsd
+ENV GROUP=gar \
+    USER=gar
 RUN set -eux; \
+    mkdir -p "${HOME}"; \
+    addgroup -S "${GROUP}"; \
+    adduser -D -S -h "${HOME}" -s /sbin/nologin -G "${GROUP}" "${USER}"; \
     apk update --no-cache; \
     apk upgrade --no-cache; \
     apk add --no-cache --virtual .build-deps \
