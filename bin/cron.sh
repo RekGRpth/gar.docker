@@ -53,10 +53,10 @@ EOF
             deltaVersionId="$(cat .deltaVersionId)"
             if [ -z "$deltaVersionId" ]; then
                 wget --continue --output-document=.GetLastDownloadFileInfo https://fias.nalog.ru/WebServices/Public/GetLastDownloadFileInfo
-                lastVersionId="$(cat .GetLastDownloadFileInfo | jq .VersionId)"
+                lastVersionId="$(cat .GetLastDownloadFileInfo | jq --raw-output .VersionId)"
                 echo "$lastVersionId" >.deltaVersionId
                 echo "$lastVersionId" >.fullVersionId
-                URL="$(cat .GetLastDownloadFileInfo | jq .GarXMLFullURL)"
+                URL="$(cat .GetLastDownloadFileInfo | jq --raw-output .GarXMLFullURL)"
                 ZIP="$lastVersionId.zip"
                 wget --continue --output-document="$ZIP" "$URL"
             else
