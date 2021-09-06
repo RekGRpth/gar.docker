@@ -10,8 +10,7 @@ FIELDS="$(xmlstarlet select --text --noblanks --template --value-of /xs:schema/x
 FORCE_NOT_NULL="$(xmlstarlet select --text --noblanks --template --match /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:attribute --value-of @use --output ";" --value-of @name --nl "$XSD" | grep -v optional | sed -uE 's|^required;||' | sed -uE 's|^(.+)$|"\1"|' | sed 's/\(.*\)/\L\1/' | paste -sd ",")"
 deltaVersionId="$(cat .deltaVersionId)"
 fullVersionId="$(cat .fullVersionId)"
-if [ "$deltaVersionId" == "$fullVersionId" ]; then
+if [ "$deltaVersionId" = "$fullVersionId" ]; then
     psql --no-password --variable=ON_ERROR_STOP=1 --command="TRUNCATE TABLE ONLY \"$TABLE\" RESTART IDENTITY CASCADE"
 fi
-cat "$CSV" | psql --no-password --variable=ON_ERROR_STOP=1 --command="COPY \"$TABLE\" ($FIELDS) FROM stdin WITH (FORMAT csv, DELIMITER E';', QUOTE E'\b', FORCE_NOT_NULL ($FORCE_NOT_NULL))"
-FORCE_NOT_NULL ()
+psql --no-password --variable=ON_ERROR_STOP=1 --command="COPY \"$TABLE\" ($FIELDS) FROM stdin WITH (FORMAT csv, DELIMITER E';', QUOTE E'\b', FORCE_NOT_NULL ($FORCE_NOT_NULL))" <"$CSV"
