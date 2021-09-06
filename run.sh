@@ -17,4 +17,4 @@ docker run \
     --network name=docker \
     --rm \
     --tty \
-    ghcr.io/rekgrpth/postgres.docker sh
+    ghcr.io/rekgrpth/gar.docker sh
