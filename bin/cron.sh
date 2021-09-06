@@ -30,8 +30,8 @@ EOF
         ;;
         "csv2pg" )
             find /usr/local/xsd -type f -name "*.xsd" | sort -u | while read -r XSD; do
-                CSV="$(basename -- "${XSD%.*}")"
-                find -type f -name "as_${CSV}_2*.csv" | sort -u | xargs -r -n 1 -P "$(nproc)" csv2pg.sh "$XSD"
+                TABLE="$(basename -- "${XSD%.*}")"
+                find -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs -r -n 1 -P "$(nproc)" csv2pg.sh "$TABLE"
             done
             echo update >.state
         ;;
@@ -44,8 +44,8 @@ EOF
         ;;
         "xml2csv" )
             find /usr/local/xsd -type f -name "*.xsd" | sort -u | while read -r XSD; do
-                XML="$(basename -- "${XSD%.*}")"
-                find -type f -name "as_${XML}_2*.xml" | sort -u | xargs -r -n 1 -P "$(nproc)" xml2csv.sh "$XSD"
+                TABLE="$(basename -- "${XSD%.*}")"
+                find -type f -name "as_${TABLE}_2*.xml" | sort -u | xargs -r -n 1 -P "$(nproc)" xml2csv.sh "$TABLE"
             done
             echo csv2pg >.state
         ;;
