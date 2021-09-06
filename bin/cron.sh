@@ -52,4 +52,4 @@ while
     esac
     state="$(cat .state)"
     test "$state" != "done"
-do true; done
+do true; done 2>&1 | tee cron.log
