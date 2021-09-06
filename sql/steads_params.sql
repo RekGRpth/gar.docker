@@ -1,5 +1,5 @@
 CREATE TABLE steads_params (
-    param TEXT NOT NULL DEFAULT 'steads',
+    param param_type NOT NULL DEFAULT 'steads',
     CONSTRAINT steads_params_param_check CHECK (param = 'steads')
 ) INHERITS (param);
 COMMENT ON TABLE steads_params IS 'Сведения о классификаторе параметров адресообразующих элементов и объектов недвижимости ';

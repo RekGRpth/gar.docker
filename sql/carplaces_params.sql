@@ -1,5 +1,5 @@
 CREATE TABLE carplaces_params (
-    param TEXT NOT NULL DEFAULT 'carplaces',
+    param param_type NOT NULL DEFAULT 'carplaces',
     CONSTRAINT carplaces_params_param_check CHECK (param = 'carplaces')
 ) INHERITS (param);
 COMMENT ON TABLE carplaces_params IS 'Сведения о классификаторе параметров адресообразующих элементов и объектов недвижимости ';

@@ -20,3 +20,11 @@ COMMENT ON COLUMN param.updatedate IS 'Дата внесения (обновле
 COMMENT ON COLUMN param.startdate IS 'Дата начала действия записи';
 COMMENT ON COLUMN param.enddate IS 'Дата окончания действия записи';
 
+CREATE TYPE param_type AS ENUM (
+  'addr_obj',
+  'apartments',
+  'carplaces',
+  'houses',
+  'rooms',
+  'steads'
+);
