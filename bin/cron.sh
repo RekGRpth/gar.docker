@@ -1,13 +1,8 @@
 #!/bin/sh -eux
 
-#HTM=Updates.html
-#ZIP=fias_dbf.zip
 touch .deltaVersionId
 touch .fullVersionId
 touch .state
-#exec 2>&1
-#set -ex
-#if [ "$(ps | grep 'dbf.sh' | grep -v grep | wc -l)" -ne "2" ]; then exit; fi
 state="$(cat .state)"
 while
     case "$state" in
