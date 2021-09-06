@@ -10,6 +10,7 @@ while
             find /usr/local/xsd -type f -name "*.xsd" | sort -u | while read -r XSD; do
                 TABLE="$(basename -- "${XSD%.*}")"
                 find -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs -r -n 1 -P "$(nproc)" csv2pg.sh "$TABLE" || exit 255
+                echo "$?"
             done
             echo done >.state
         ;;
@@ -24,6 +25,7 @@ while
             find /usr/local/xsd -type f -name "*.xsd" | sort -u | while read -r XSD; do
                 TABLE="$(basename -- "${XSD%.*}")"
                 find -type f -name "as_${TABLE}_2*.xml" | sort -u | xargs -r -n 1 -P "$(nproc)" xml2csv.sh "$TABLE" || exit 255
+                echo "$?"
             done
             echo csv2pg >.state
         ;;
