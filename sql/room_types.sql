@@ -1,4 +1,4 @@
-CREATE TABLE gar.room_types (
+CREATE TABLE room_types (
   id INT NOT NULL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   shortname VARCHAR(50),
