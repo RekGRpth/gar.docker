@@ -15,7 +15,7 @@ while
         ;;
         "unzip" )
             ls *.zip | sort -u | while read -r ZIP; do
-                unzip -ouLL "$ZIP"
+                unzip -ouLL "$ZIP" -d "${ZIP%.*}"
                 rm -f "$ZIP"
             done
             echo xml2csv >.state
@@ -33,11 +33,11 @@ while
             if [ -z "$deltaVersionId" ]; then
                 wget --continue --output-document=.GetLastDownloadFileInfo https://fias.nalog.ru/WebServices/Public/GetLastDownloadFileInfo
                 lastVersionId="$(cat .GetLastDownloadFileInfo | jq --raw-output .VersionId)"
-                echo "$lastVersionId" >.deltaVersionId
-                echo "$lastVersionId" >.fullVersionId
                 URL="$(cat .GetLastDownloadFileInfo | jq --raw-output .GarXMLFullURL)"
                 ZIP="$lastVersionId.zip"
                 wget --continue --output-document="$ZIP" "$URL"
+                echo "$lastVersionId" >.deltaVersionId
+                echo "$lastVersionId" >.fullVersionId
             else
                 wget --continue --output-document=.GetAllDownloadFileInfo https://fias.nalog.ru/WebServices/Public/GetAllDownloadFileInfo
                 cat .GetAllDownloadFileInfo | jq --raw-output "sort_by(.VersionId) | .[] | select(.VersionId > $deltaVersionId) | [.VersionId, .GarXMLDeltaURL] | join(\";\")" | while IFS=';' read -r lastVersionId GarXMLDeltaURL; do
