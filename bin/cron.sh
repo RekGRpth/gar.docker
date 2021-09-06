@@ -8,24 +8,27 @@ while
     case "$state" in
         "csv2pg" )
             find /usr/local/xsd -type f -name "*.xsd" | sort -u | while read -r XSD; do
+                echo "$state" >.state
                 TABLE="$(basename -- "${XSD%.*}")"
-                find -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs -r -n 1 -P "$(nproc)" csv2pg.sh "$TABLE" || exit 255
+                find -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs -r -n 1 -P "$(nproc)" csv2pg.sh "$TABLE"
+                echo done >.state
             done
-            echo done >.state
         ;;
         "unzip" )
             ls *.zip | sort -u | while read -r ZIP; do
+                echo "$state" >.state
                 unzip -ouLL "$ZIP" -d "${ZIP%.*}"
                 rm -f "$ZIP"
+                echo xml2csv >.state
             done
-            echo xml2csv >.state
         ;;
         "xml2csv" )
             find /usr/local/xsd -type f -name "*.xsd" | sort -u | while read -r XSD; do
+                echo "$state" >.state
                 TABLE="$(basename -- "${XSD%.*}")"
-                find -type f -name "as_${TABLE}_2*.xml" | sort -u | xargs -r -n 1 -P "$(nproc)" xml2csv.sh "$TABLE" || exit 255
+                find -type f -name "as_${TABLE}_2*.xml" | sort -u | xargs -r -n 1 -P "$(nproc)" xml2csv.sh "$TABLE"
+                echo csv2pg >.state
             done
-            echo csv2pg >.state
         ;;
         * )
             echo done >.state
