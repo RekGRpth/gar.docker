@@ -18,7 +18,6 @@ RUN set -eux; \
         libxml2-dev \
         make \
         musl-dev \
-        su-exec \
     ; \
     mkdir -p "${HOME}/src"; \
     cd "${HOME}/src"; \
@@ -32,6 +31,7 @@ RUN set -eux; \
         jq \
         libxslt \
         postgresql-client \
+        su-exec \
         unzip \
         xmlstarlet \
     ; \
