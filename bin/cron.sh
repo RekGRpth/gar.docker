@@ -7,9 +7,9 @@ touch .fullVersionId
 touch .state
 #exec 2>&1
 #set -ex
-if [ "$(ps | grep 'dbf.sh' | grep -v grep | wc -l)" -ne "2" ]; then exit; fi
-state="$(cat state)"
-while 
+#if [ "$(ps | grep 'dbf.sh' | grep -v grep | wc -l)" -ne "2" ]; then exit; fi
+state="$(cat .state)"
+while
     case "$state" in
         "drop" )
             ls *.sql | xargs -r -n 1 -P "$(nproc)" sh /drop.sh
@@ -42,28 +42,41 @@ EOF
             echo combine > state
         ;;
         "unzip" )
-            unzip -ouLL "$ZIP"
-            chmod 644 *.dbf
-            rm -f "$ZIP"
-            echo dbf2sql > state
+            ls *.zip | sort -u | while read -r ZIP; do
+                unzip -ouLL "$ZIP"
+                rm -f "$ZIP"
+            done
+            echo xml2csv >.state
+        ;;
+        "xml2csv" )
+            find /usr/local/xsd -type f -name "*.xsd" | sort -u | while read -r XSD; do
+                XML="$(basename -- "${XSD%.*}")"
+                find -type f -name "as_${XML}_2*.xml" | sort -u | xargs -r -n 1 -P "$(nproc)" xml2csv.sh "$XSD"
+            done
+            echo csv2pg >.state
         ;;
         * )
-            wget --continue --output-document=.GetLastDownloadFileInfo https://fias.nalog.ru/WebServices/Public/GetLastDownloadFileInfo
             deltaVersionId="$(cat .deltaVersionId)"
-            fullVersionId="$(cat .fullVersionId)"
-            lastVersionId="$(cat .GetLastDownloadFileInfo | jq .VersionId)"
-            if [ "$deltaVersionId" == "$lastVersionId" ]; then exit; fi
-            if [ -n "$fullVersionId" ]; then
-                URL="$(cat .GetLastDownloadFileInfo | jq .GarXMLDeltaURL)"
-                echo "$lastVersionId" > .deltaVersionId
-            else
+            if [ -z "$deltaVersionId" ]; then
+                wget --continue --output-document=.GetLastDownloadFileInfo https://fias.nalog.ru/WebServices/Public/GetLastDownloadFileInfo
+                lastVersionId="$(cat .GetLastDownloadFileInfo | jq .VersionId)"
+                echo "$lastVersionId" >.deltaVersionId
+                echo "$lastVersionId" >.fullVersionId
                 URL="$(cat .GetLastDownloadFileInfo | jq .GarXMLFullURL)"
-                echo "$lastVersionId" > .fullVersionId
+                ZIP="$lastVersionId.zip"
+                wget --continue --output-document="$ZIP" "$URL"
+            else
+                wget --continue --output-document=.GetAllDownloadFileInfo https://fias.nalog.ru/WebServices/Public/GetAllDownloadFileInfo
+                cat GetAllDownloadFileInfo | jq --raw-output "sort_by(.VersionId) | .[] | select(.VersionId > $deltaVersionId) | [.VersionId, .GarXMLDeltaURL] | join(\";\")" | while IFS=';' read -r lastVersionId GarXMLDeltaURL; do
+                    URL="$GarXMLDeltaURL"
+                    ZIP="$lastVersionId.zip"
+                    wget --continue --output-document="$ZIP" "$URL"
+                    echo "$lastVersionId" >.deltaVersionId
+                done
             fi
-            wget --continue --output-document=gar.zip "$URL"
-            echo unzip > state
+            echo unzip >.state
         ;;
     esac
-    state="$(cat state)"
+    state="$(cat .state)"
     test "$state" != "done"
 do true; done
