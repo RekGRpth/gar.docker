@@ -1,7 +1,7 @@
 #!/bin/sh -eux
 
-xsd="$1"
-xml="$2"
-record="$(xmlstarlet select --text --noblanks --template --value-of /xs:schema/xs:element/@name --output / --value-of /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/@name "${xsd}")"
-fields="$(xmlstarlet select --text --noblanks --template --match /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:attribute --output " @" --value-of @name "${xsd}")"
-cat "${xml}" | xml2 | 2csv -q "" -d ";" "${record}"${fields} >"${xml%.*}.csv"
+XSD="$1"
+XML="$2"
+RECORD="$(xmlstarlet select --text --noblanks --template --value-of /xs:schema/xs:element/@name --output / --value-of /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/@name "$XSD")"
+FIELDS="$(xmlstarlet select --text --noblanks --template --match /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:attribute --output " @" --value-of @name "$XSD")"
+cat "$XML" | xml2 | 2csv -q "" -d ";" "${RECORD}"${FIELDS} >"${XML%.*}.csv"

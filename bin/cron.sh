@@ -28,18 +28,12 @@ EOF
             done
             echo drop > state
         ;;
-        "sql2pg" )
-            ls *.sql | xargs -r -n 1 -P "$(nproc)" sh /sql2pg.sh
-            echo update > state
-        ;;
-        "combine" )
-            ls *.sql | grep -P "\d{4}.sql" | grep -oP "\D+\d{2}" | sort -u | xargs -r -n 1 -P "$(nproc)" sh /combine.sh
-            echo sql2pg > state
-        ;;
-        "dbf2sql" )
-            ls *.dbf | grep -v nordoc | xargs -r -n 1 -P "$(nproc)" sh /dbf2sql.sh
-            rm -f *.dbf
-            echo combine > state
+        "csv2pg" )
+            find /usr/local/xsd -type f -name "*.xsd" | sort -u | while read -r XSD; do
+                CSV="$(basename -- "${XSD%.*}")"
+                find -type f -name "as_${CSV}_2*.csv" | sort -u | xargs -r -n 1 -P "$(nproc)" csv2pg.sh "$XSD"
+            done
+            echo update >.state
         ;;
         "unzip" )
             ls *.zip | sort -u | while read -r ZIP; do
