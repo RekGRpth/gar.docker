@@ -7,32 +7,30 @@
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="NDOCKIND" maxOccurs="unbounded">
+				<xs:element name="NDOCKIND" maxOccurs="unbounded">
 					<xs:annotation>
 						<xs:documentation>Сведения по видам нормативных документов</xs:documentation>
 					</xs:annotation>
+					<xs:complexType>
+						<xs:attribute name="ID" type="xs:integer" use="required">
+							<xs:annotation>
+								<xs:documentation>Идентификатор записи</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="NAME" use="required">
+							<xs:annotation>
+								<xs:documentation>Наименование</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="500"/>
+									<xs:minLength value="1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
 				</xs:element>
 			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="NDOCKIND">
-		<xs:complexType>
-			<xs:attribute name="ID" type="xs:integer" use="required">
-				<xs:annotation>
-					<xs:documentation>Идентификатор записи</xs:documentation>
-				</xs:annotation>
-			</xs:attribute>
-			<xs:attribute name="NAME" use="required">
-				<xs:annotation>
-					<xs:documentation>Наименование</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:string">
-						<xs:maxLength value="500"/>
-						<xs:minLength value="1"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
 </xs:schema>
