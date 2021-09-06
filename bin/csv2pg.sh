@@ -6,4 +6,4 @@ XSD="/usr/local/xsd/$TABLE.xsd"
 DIR="$(dirname -- "$CSV")"
 DIR="$(basename -- "$DIR")"
 if [ "$DIR" ~ [[:digit:]][[:digit:]] ]; then TABLE="${TABLE}_$DIR"; fi
-cat "$CSV" | psql -w -A -v ON_ERROR_STOP=1 -q -t -c "COPY $TABLE FROM stdin"
+cat "$CSV" | psql --no-password --variable=ON_ERROR_STOP=1 --command="COPY $TABLE FROM stdin"
