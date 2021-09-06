@@ -11,29 +11,12 @@ touch .state
 state="$(cat .state)"
 while
     case "$state" in
-        "drop" )
-            ls *.sql | xargs -r -n 1 -P "$(nproc)" sh /drop.sh
-            echo done > state
-        ;;
-        "update" )
-            for TABLE in "addrob\d\d" "stead\d\d" "house\d\d" "room\d\d"; do
-                psql -h /run/postgresql -d fias -U dbf -w -A -v ON_ERROR_STOP=1 -q -t -F ' ' <<EOF | xargs -r -n 1 -P "$(nproc)" sh /update.sh
-SELECT      tables.table_name
-FROM        information_schema.tables
-WHERE       tables.table_catalog = 'fias'
-AND         tables.table_schema = 'dbf'
-AND         tables.table_name ~ '^$TABLE'
-order by    1
-EOF
-            done
-            echo drop > state
-        ;;
         "csv2pg" )
             find /usr/local/xsd -type f -name "*.xsd" | sort -u | while read -r XSD; do
                 TABLE="$(basename -- "${XSD%.*}")"
                 find -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs -r -n 1 -P "$(nproc)" csv2pg.sh "$TABLE"
             done
-            echo update >.state
+            echo done >.state
         ;;
         "unzip" )
             ls *.zip | sort -u | while read -r ZIP; do
@@ -50,6 +33,7 @@ EOF
             echo csv2pg >.state
         ;;
         * )
+            echo done >.state
             deltaVersionId="$(cat .deltaVersionId)"
             if [ -z "$deltaVersionId" ]; then
                 wget --continue --output-document=.GetLastDownloadFileInfo https://fias.nalog.ru/WebServices/Public/GetLastDownloadFileInfo
@@ -61,14 +45,14 @@ EOF
                 wget --continue --output-document="$ZIP" "$URL"
             else
                 wget --continue --output-document=.GetAllDownloadFileInfo https://fias.nalog.ru/WebServices/Public/GetAllDownloadFileInfo
-                cat GetAllDownloadFileInfo | jq --raw-output "sort_by(.VersionId) | .[] | select(.VersionId > $deltaVersionId) | [.VersionId, .GarXMLDeltaURL] | join(\";\")" | while IFS=';' read -r lastVersionId GarXMLDeltaURL; do
+                cat .GetAllDownloadFileInfo | jq --raw-output "sort_by(.VersionId) | .[] | select(.VersionId > $deltaVersionId) | [.VersionId, .GarXMLDeltaURL] | join(\";\")" | while IFS=';' read -r lastVersionId GarXMLDeltaURL; do
                     URL="$GarXMLDeltaURL"
                     ZIP="$lastVersionId.zip"
                     wget --continue --output-document="$ZIP" "$URL"
                     echo "$lastVersionId" >.deltaVersionId
+                    echo unzip >.state
                 done
             fi
-            echo unzip >.state
         ;;
     esac
     state="$(cat .state)"
