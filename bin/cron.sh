@@ -20,10 +20,11 @@ while
                 find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs -r -P "$(nproc)" -I CSV csv2pg.sh "CSV" "$TABLE" "$FIELDS" "$FORCE_NOT_NULL" "$UPDATE" "$FULL" || exit 255
                 echo "$?"
             done
-            echo -n wget >state.txt
+            echo -n done >state.txt
         ;;
         "sql2pg" )
             find /usr/local/sql -type f -name "*.sql" | sort -u | xargs -r -P "$(nproc)" -I SQL psql --no-password --variable=ON_ERROR_STOP=1 --file="SQL" || exit 255
+            echo "$?"
             echo -n wget >fullVersionId.txt
             echo -n wget >state.txt
         ;;
@@ -45,7 +46,7 @@ while
             echo -n csv2pg >state.txt
         ;;
         * )
-            echo -n wget >state.txt
+            echo -n done >state.txt
             deltaVersionId="$(cat deltaVersionId.txt)"
             fullVersionId="$(cat fullVersionId.txt)"
             if [ -z "$fullVersionId" ]; then
@@ -72,5 +73,5 @@ while
         ;;
     esac
     state="$(cat state.txt)"
-    test "$state" != "wget"
+    test "$state" != "done"
 do true; done 2>&1 | tee cron.log
