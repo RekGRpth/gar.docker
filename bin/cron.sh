@@ -7,9 +7,16 @@ state="$(cat .state)"
 while
     case "$state" in
         "csv2pg" )
+            deltaVersionId="$(cat .deltaVersionId)"
+            fullVersionId="$(cat .fullVersionId)"
+            if [ "$deltaVersionId" = "$fullVersionId" ]; then
+                TRUNCATE=true
+            fi
             find /usr/local/xsd -type f -name "*.xsd" | sort -u | while read -r XSD; do
+                FIELDS="$(xmlstarlet select --text --noblanks --template --value-of /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:attribute/@name "$XSD" | sed -uE 's|^(.+)$|"\1"|' | sed 's/\(.*\)/\L\1/' | paste -sd ",")"
+                FORCE_NOT_NULL="$(xmlstarlet select --text --noblanks --template --match /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:attribute --value-of @use --output ";" --value-of @name --nl "$XSD" | grep -v optional | sed -uE 's|^required;||' | sed -uE 's|^(.+)$|"\1"|' | sed 's/\(.*\)/\L\1/' | paste -sd ",")"
                 TABLE="$(basename -- "${XSD%.*}")"
-                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs -r -n 1 -P "$(nproc)" csv2pg.sh "$TABLE" || exit 255
+                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs -r -n 1 -P "$(nproc)" csv2pg.sh "$TABLE" "$FIELDS" "$FORCE_NOT_NULL" "$TRUNCATE" || exit 255
                 echo "$?"
             done
             echo "done" >.state
@@ -29,8 +36,10 @@ while
         ;;
         "xml2csv" )
             find /usr/local/xsd -type f -name "*.xsd" | sort -u | while read -r XSD; do
+                RECORD="$(xmlstarlet select --text --noblanks --template --value-of /xs:schema/xs:element/@name --output / --value-of /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/@name "$XSD")"
+                FIELDS="$(xmlstarlet select --text --noblanks --template --match /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:attribute --output " @" --value-of @name "$XSD")"
                 TABLE="$(basename -- "${XSD%.*}")"
-                find . -type f -name "as_${TABLE}_2*.xml" | sort -u | xargs -r -n 1 -P "$(nproc)" xml2csv.sh "$TABLE" || exit 255
+                find . -type f -name "as_${TABLE}_2*.xml" | sort -u | xargs -r -n 1 -P "$(nproc)" xml2csv.sh "$TABLE" "$RECORD" "$FIELDS" || exit 255
                 echo "$?"
             done
             echo csv2pg >.state
