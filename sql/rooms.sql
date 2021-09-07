@@ -29,7 +29,6 @@ COMMENT ON COLUMN rooms.startdate IS 'Начало действия записи
 COMMENT ON COLUMN rooms.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN rooms.isactual IS 'Статус актуальности адресного объекта ФИАС';
 COMMENT ON COLUMN rooms.isactive IS 'Признак действующего адресного объекта';
-
 CREATE TABLE rooms_01 (CONSTRAINT rooms_01_pkey PRIMARY KEY (id)) INHERITS (rooms);
 CREATE TABLE rooms_02 (CONSTRAINT rooms_02_pkey PRIMARY KEY (id)) INHERITS (rooms);
 CREATE TABLE rooms_03 (CONSTRAINT rooms_03_pkey PRIMARY KEY (id)) INHERITS (rooms);

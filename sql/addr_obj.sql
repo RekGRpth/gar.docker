@@ -31,7 +31,6 @@ COMMENT ON COLUMN addr_obj.startdate IS 'Начало действия запи�
 COMMENT ON COLUMN addr_obj.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN addr_obj.isactual IS 'Статус актуальности адресного объекта ФИАС';
 COMMENT ON COLUMN addr_obj.isactive IS 'Признак действующего адресного объекта';
-
 CREATE TABLE addr_obj_01 (CONSTRAINT addr_obj_01_pkey PRIMARY KEY (id)) INHERITS (addr_obj);
 CREATE TABLE addr_obj_02 (CONSTRAINT addr_obj_02_pkey PRIMARY KEY (id)) INHERITS (addr_obj);
 CREATE TABLE addr_obj_03 (CONSTRAINT addr_obj_03_pkey PRIMARY KEY (id)) INHERITS (addr_obj);

@@ -9,7 +9,6 @@ COMMENT ON COLUMN addr_obj_division.id IS 'Уникальный идентифи
 COMMENT ON COLUMN addr_obj_division.parentid IS 'Родительский ID';
 COMMENT ON COLUMN addr_obj_division.childid IS 'Дочерний ID';
 COMMENT ON COLUMN addr_obj_division.changeid IS 'ID изменившей транзакции';
-
 CREATE TABLE addr_obj_division_01 (CONSTRAINT addr_obj_division_01_pkey PRIMARY KEY (id)) INHERITS (addr_obj_division);
 CREATE TABLE addr_obj_division_02 (CONSTRAINT addr_obj_division_02_pkey PRIMARY KEY (id)) INHERITS (addr_obj_division);
 CREATE TABLE addr_obj_division_03 (CONSTRAINT addr_obj_division_03_pkey PRIMARY KEY (id)) INHERITS (addr_obj_division);

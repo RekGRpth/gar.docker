@@ -27,7 +27,6 @@ COMMENT ON COLUMN steads.startdate IS 'Начало действия запис�
 COMMENT ON COLUMN steads.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN steads.isactual IS 'Статус актуальности адресного объекта ФИАС';
 COMMENT ON COLUMN steads.isactive IS 'Признак действующего адресного объекта';
-
 CREATE TABLE steads_01 (CONSTRAINT steads_01_pkey PRIMARY KEY (id)) INHERITS (steads);
 CREATE TABLE steads_02 (CONSTRAINT steads_02_pkey PRIMARY KEY (id)) INHERITS (steads);
 CREATE TABLE steads_03 (CONSTRAINT steads_03_pkey PRIMARY KEY (id)) INHERITS (steads);

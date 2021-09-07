@@ -23,7 +23,6 @@ COMMENT ON COLUMN mun_hierarchy.updatedate IS 'Дата внесения (обн
 COMMENT ON COLUMN mun_hierarchy.startdate IS 'Начало действия записи';
 COMMENT ON COLUMN mun_hierarchy.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN mun_hierarchy.isactive IS 'Признак действующего адресного объекта';
-
 CREATE TABLE mun_hierarchy_01 (CONSTRAINT mun_hierarchy_01_pkey PRIMARY KEY (id)) INHERITS (mun_hierarchy);
 CREATE TABLE mun_hierarchy_02 (CONSTRAINT mun_hierarchy_02_pkey PRIMARY KEY (id)) INHERITS (mun_hierarchy);
 CREATE TABLE mun_hierarchy_03 (CONSTRAINT mun_hierarchy_03_pkey PRIMARY KEY (id)) INHERITS (mun_hierarchy);

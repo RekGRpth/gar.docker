@@ -29,7 +29,6 @@ COMMENT ON COLUMN apartments.startdate IS 'Начало действия зап�
 COMMENT ON COLUMN apartments.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN apartments.isactual IS 'Статус актуальности адресного объекта ФИАС';
 COMMENT ON COLUMN apartments.isactive IS 'Признак действующего адресного объекта';
-
 CREATE TABLE apartments_01 (CONSTRAINT apartments_01_pkey PRIMARY KEY (id)) INHERITS (apartments);
 CREATE TABLE apartments_02 (CONSTRAINT apartments_02_pkey PRIMARY KEY (id)) INHERITS (apartments);
 CREATE TABLE apartments_03 (CONSTRAINT apartments_03_pkey PRIMARY KEY (id)) INHERITS (apartments);

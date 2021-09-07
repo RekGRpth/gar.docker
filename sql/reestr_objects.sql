@@ -15,7 +15,6 @@ COMMENT ON COLUMN reestr_objects.levelid IS 'Уровень объекта';
 COMMENT ON COLUMN reestr_objects.updatedate IS 'Дата обновления';
 COMMENT ON COLUMN reestr_objects.objectguid IS 'GUID объекта';
 COMMENT ON COLUMN reestr_objects.isactive IS 'Признак действующего объекта (1 - действующий, 0 - не действующий)';
-
 CREATE TABLE reestr_objects_01 (CONSTRAINT reestr_objects_01_pkey PRIMARY KEY (id)) INHERITS (reestr_objects);
 CREATE TABLE reestr_objects_02 (CONSTRAINT reestr_objects_02_pkey PRIMARY KEY (id)) INHERITS (reestr_objects);
 CREATE TABLE reestr_objects_03 (CONSTRAINT reestr_objects_03_pkey PRIMARY KEY (id)) INHERITS (reestr_objects);

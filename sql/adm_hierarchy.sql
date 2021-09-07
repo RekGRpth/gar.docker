@@ -33,7 +33,6 @@ COMMENT ON COLUMN adm_hierarchy.updatedate IS 'Дата внесения (обн
 COMMENT ON COLUMN adm_hierarchy.startdate IS 'Начало действия записи';
 COMMENT ON COLUMN adm_hierarchy.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN adm_hierarchy.isactive IS 'Признак действующего адресного объекта';
-
 CREATE TABLE adm_hierarchy_01 (CONSTRAINT adm_hierarchy_01_pkey PRIMARY KEY (id)) INHERITS (adm_hierarchy);
 CREATE TABLE adm_hierarchy_02 (CONSTRAINT adm_hierarchy_02_pkey PRIMARY KEY (id)) INHERITS (adm_hierarchy);
 CREATE TABLE adm_hierarchy_03 (CONSTRAINT adm_hierarchy_03_pkey PRIMARY KEY (id)) INHERITS (adm_hierarchy);

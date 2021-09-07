@@ -25,7 +25,6 @@ COMMENT ON COLUMN normative_docs.regnum IS 'Номер государствен�
 COMMENT ON COLUMN normative_docs.regdate IS 'Дата государственной регистрации';
 COMMENT ON COLUMN normative_docs.accdate IS 'Дата вступления в силу нормативного документа';
 COMMENT ON COLUMN normative_docs.comment IS 'Комментарий';
-
 CREATE TABLE normative_docs_01 (CONSTRAINT normative_docs_01_pkey PRIMARY KEY (id)) INHERITS (normative_docs);
 CREATE TABLE normative_docs_02 (CONSTRAINT normative_docs_02_pkey PRIMARY KEY (id)) INHERITS (normative_docs);
 CREATE TABLE normative_docs_03 (CONSTRAINT normative_docs_03_pkey PRIMARY KEY (id)) INHERITS (normative_docs);

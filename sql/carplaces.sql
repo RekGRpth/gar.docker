@@ -27,7 +27,6 @@ COMMENT ON COLUMN carplaces.startdate IS 'Начало действия запи
 COMMENT ON COLUMN carplaces.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN carplaces.isactual IS 'Статус актуальности адресного объекта ФИАС';
 COMMENT ON COLUMN carplaces.isactive IS 'Признак действующего адресного объекта';
-
 CREATE TABLE carplaces_01 (CONSTRAINT carplaces_01_pkey PRIMARY KEY (id)) INHERITS (carplaces);
 CREATE TABLE carplaces_02 (CONSTRAINT carplaces_02_pkey PRIMARY KEY (id)) INHERITS (carplaces);
 CREATE TABLE carplaces_03 (CONSTRAINT carplaces_03_pkey PRIMARY KEY (id)) INHERITS (carplaces);

@@ -13,7 +13,6 @@ COMMENT ON COLUMN change_history.adrobjectid IS 'Уникальный ID изм�
 COMMENT ON COLUMN change_history.opertypeid IS 'Тип операции';
 COMMENT ON COLUMN change_history.ndocid IS 'ID документа';
 COMMENT ON COLUMN change_history.changedate IS 'Дата изменения';
-
 CREATE TABLE change_history_01 (CONSTRAINT change_history_01_pkey PRIMARY KEY (id)) INHERITS (change_history);
 CREATE TABLE change_history_02 (CONSTRAINT change_history_02_pkey PRIMARY KEY (id)) INHERITS (change_history);
 CREATE TABLE change_history_03 (CONSTRAINT change_history_03_pkey PRIMARY KEY (id)) INHERITS (change_history);
