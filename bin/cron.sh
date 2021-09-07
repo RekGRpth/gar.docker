@@ -24,7 +24,7 @@ while
         ;;
         "sql2pg" )
             find /usr/local/sql -type f -name "*.sql" | sort -u | while read -r SQL; do
-                psql --no-password --variable=ON_ERROR_STOP=on --file="$SQL"
+                psql --no-password --file="$SQL"
             done
             echo -n wget >fullVersionId.txt
             echo -n wget >state.txt
