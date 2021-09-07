@@ -14,6 +14,12 @@ while
             done
             echo "done" >.state
         ;;
+        "sql2pg" )
+            find /usr/local/sql -type f -name "*.sql" | sort -u | while read -r SQL; do
+                psql --no-password --variable=ON_ERROR_STOP=1 --file="$SQL"
+            done
+            echo wget >.state
+        ;;
         "unzip" )
             find . -type f -name "*.zip" | sort -u | while read -r ZIP; do
                 unzip -ouLL "$ZIP" -d "${ZIP%.*}"
@@ -32,7 +38,10 @@ while
         * )
             echo "done" >.state
             deltaVersionId="$(cat .deltaVersionId)"
-            if [ -z "$deltaVersionId" ]; then
+            fullVersionId="$(cat .fullVersionId)"
+            if [ -z "$fullVersionId" ]; then
+                echo sql2pg >.state
+            elif [ -z "$deltaVersionId" ]; then
                 wget --continue --output-document=.GetLastDownloadFileInfo https://fias.nalog.ru/WebServices/Public/GetLastDownloadFileInfo
                 lastVersionId="$(jq --raw-output .VersionId <.GetLastDownloadFileInfo)"
                 URL="$(jq --raw-output .GarXMLFullURL <.GetLastDownloadFileInfo)"
