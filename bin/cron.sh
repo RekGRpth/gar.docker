@@ -63,6 +63,7 @@ while
             else
                 wget --continue --output-document=.GetAllDownloadFileInfo https://fias.nalog.ru/WebServices/Public/GetAllDownloadFileInfo
                 jq --raw-output "sort_by(.VersionId) | .[] | select(.VersionId > $deltaVersionId) | [.VersionId, .GarXMLDeltaURL] | join(\";\")" <.GetAllDownloadFileInfo | while IFS=';' read -r lastVersionId GarXMLDeltaURL; do
+                    if [ -z "$GarXMLDeltaURL" ]; then continue; fi
                     URL="$GarXMLDeltaURL"
                     ZIP="$lastVersionId.zip"
                     wget --continue --output-document="$ZIP" "$URL"
