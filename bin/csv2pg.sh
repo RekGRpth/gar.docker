@@ -1,11 +1,11 @@
 #!/bin/sh -eux
 
-TABLE="$1"
-FIELDS="$2"
-FORCE_NOT_NULL="$3"
-UPDATE="$4"
-FULL="$5"
-CSV="$6"
+CSV="$1"
+TABLE="$2"
+FIELDS="$3"
+FORCE_NOT_NULL="$4"
+UPDATE="$5"
+FULL="$6"
 if [ -n "$FULL" ]; then
     exec psql --no-password --variable=ON_ERROR_STOP=1 --command="COPY \"$TABLE\" ($FIELDS) FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ($FORCE_NOT_NULL));" <"$CSV"
 else

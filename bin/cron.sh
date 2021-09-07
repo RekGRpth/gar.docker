@@ -17,7 +17,7 @@ while
                 FORCE_NOT_NULL="$(xmlstarlet select --text --noblanks --template --match /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:attribute --value-of @use --output ";" --value-of @name --nl "$XSD" | grep -v optional | sed -uE 's|^required;||' | sed -uE 's|^(.+)$|"\1"|' | sed 's/\(.*\)/\L\1/' | paste -sd ",")"
                 UPDATE="$(xmlstarlet select --text --noblanks --template --value-of /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:attribute/@name "$XSD" | sed 's/\(.*\)/\L\1/' | sed -uE 's|^(.+)$|"\1"=EXCLUDED."\1"|' | paste -sd ",")"
                 TABLE="$(basename -- "${XSD%.*}")"
-                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs -r -n 1 -P "$(nproc)" csv2pg.sh "$TABLE" "$FIELDS" "$FORCE_NOT_NULL" "$UPDATE" "$FULL" || exit 255
+                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs -r -t -P "$(nproc)" -I CSV csv2pg.sh "CSV" "$TABLE" "$FIELDS" "$FORCE_NOT_NULL" "$UPDATE" "$FULL" || exit 255
                 echo "$?"
             done
             echo "done" >.state
@@ -41,7 +41,7 @@ while
                 RECORD="$(xmlstarlet select --text --noblanks --template --value-of /xs:schema/xs:element/@name --output / --value-of /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/@name "$XSD")"
                 FIELDS="$(xmlstarlet select --text --noblanks --template --match /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:attribute --output " @" --value-of @name "$XSD")"
                 TABLE="$(basename -- "${XSD%.*}")"
-                find . -type f -name "as_${TABLE}_2*.xml" | sort -u | xargs -r -n 1 -P "$(nproc)" xml2csv.sh "$RECORD" "$FIELDS" || exit 255
+                find . -type f -name "as_${TABLE}_2*.xml" | sort -u | xargs -r -t -P "$(nproc)" -I XML xml2csv.sh "XML" "$RECORD" "$FIELDS" || exit 255
                 echo "$?"
             done
             echo csv2pg >.state
