@@ -13,4 +13,4 @@ fullVersionId="$(cat .fullVersionId)"
 if [ "$deltaVersionId" = "$fullVersionId" ]; then
     psql --no-password --variable=ON_ERROR_STOP=1 --command="TRUNCATE TABLE ONLY \"$TABLE\" RESTART IDENTITY CASCADE"
 fi
-psql --no-password --variable=ON_ERROR_STOP=1 --command="COPY \"$TABLE\" ($FIELDS) FROM stdin WITH (FORMAT csv, DELIMITER E';', QUOTE E'\b', FORCE_NOT_NULL ($FORCE_NOT_NULL))" <"$CSV"
+psql --no-password --variable=ON_ERROR_STOP=1 --command="COPY \"$TABLE\" ($FIELDS) FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ($FORCE_NOT_NULL))" <"$CSV"
