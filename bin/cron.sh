@@ -1,14 +1,14 @@
 #!/bin/sh -eux
 
-touch .deltaVersionId
-touch .fullVersionId
-touch .state
-state="$(cat .state)"
+touch deltaVersionId.txt
+touch fullVersionId.txt
+touch state.txt
+state="$(cat state.txt)"
 while
     case "$state" in
         "csv2pg" )
-            deltaVersionId="$(cat .deltaVersionId)"
-            fullVersionId="$(cat .fullVersionId)"
+            deltaVersionId="$(cat deltaVersionId.txt)"
+            fullVersionId="$(cat fullVersionId.txt)"
             if [ "$deltaVersionId" = "$fullVersionId" ]; then
                 FULL=true
             fi
@@ -20,21 +20,21 @@ while
                 find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs -r -t -P "$(nproc)" -I CSV csv2pg.sh "CSV" "$TABLE" "$FIELDS" "$FORCE_NOT_NULL" "$UPDATE" "$FULL" || exit 255
                 echo "$?"
             done
-            echo "done" >.state
+            echo -n wget >state.txt
         ;;
         "sql2pg" )
             find /usr/local/sql -type f -name "*.sql" | sort -u | while read -r SQL; do
                 psql --no-password --variable=ON_ERROR_STOP=1 --file="$SQL"
             done
-            echo "done" >.fullVersionId
-            echo wget >.state
+            echo -n wget >fullVersionId.txt
+            echo -n wget >state.txt
         ;;
         "unzip" )
             find . -type f -name "*.zip" | sort -u | while read -r ZIP; do
                 unzip -ouLL "$ZIP" -d "${ZIP%.*}"
                 rm -f "$ZIP"
             done
-            echo xml2csv >.state
+            echo -n xml2csv >state.txt
         ;;
         "xml2csv" )
             find /usr/local/xsd -type f -name "*.xsd" | sort -u | while read -r XSD; do
@@ -44,35 +44,35 @@ while
                 find . -type f -name "as_${TABLE}_2*.xml" | sort -u | xargs -r -t -P "$(nproc)" -I XML xml2csv.sh "XML" "$RECORD" "$FIELDS" || exit 255
                 echo "$?"
             done
-            echo csv2pg >.state
+            echo -n csv2pg >state.txt
         ;;
         * )
-            echo "done" >.state
-            deltaVersionId="$(cat .deltaVersionId)"
-            fullVersionId="$(cat .fullVersionId)"
+            echo -n wget >state.txt
+            deltaVersionId="$(cat deltaVersionId.txt)"
+            fullVersionId="$(cat fullVersionId.txt)"
             if [ -z "$fullVersionId" ]; then
-                echo sql2pg >.state
+                echo -n sql2pg >state.txt
             elif [ -z "$deltaVersionId" ]; then
-                wget --continue --output-document=.GetLastDownloadFileInfo https://fias.nalog.ru/WebServices/Public/GetLastDownloadFileInfo
-                lastVersionId="$(jq --raw-output .VersionId <.GetLastDownloadFileInfo)"
-                URL="$(jq --raw-output .GarXMLFullURL <.GetLastDownloadFileInfo)"
+                wget --continue --output-document=GetLastDownloadFileInfo.json https://fias.nalog.ru/WebServices/Public/GetLastDownloadFileInfo
+                lastVersionId="$(jq --raw-output .VersionId <GetLastDownloadFileInfo.json)"
+                URL="$(jq --raw-output .GarXMLFullURL <GetLastDownloadFileInfo.json)"
                 ZIP="$lastVersionId.zip"
                 wget --continue --output-document="$ZIP" "$URL"
-                echo "$lastVersionId" >.deltaVersionId
-                echo "$lastVersionId" >.fullVersionId
+                echo -n "$lastVersionId" >deltaVersionId.txt
+                echo -n "$lastVersionId" >fullVersionId.txt
             else
-                wget --continue --output-document=.GetAllDownloadFileInfo https://fias.nalog.ru/WebServices/Public/GetAllDownloadFileInfo
-                jq --raw-output "sort_by(.VersionId) | .[] | select(.VersionId > $deltaVersionId) | [.VersionId, .GarXMLDeltaURL] | join(\";\")" <.GetAllDownloadFileInfo | while IFS=';' read -r lastVersionId GarXMLDeltaURL; do
+                wget --continue --output-document=GetAllDownloadFileInfo.json https://fias.nalog.ru/WebServices/Public/GetAllDownloadFileInfo
+                jq --raw-output "sort_by(.VersionId) | .[] | select(.VersionId > $deltaVersionId) | [.VersionId, .GarXMLDeltaURL] | join(\";\")" <GetAllDownloadFileInfo.json | while IFS=';' read -r lastVersionId GarXMLDeltaURL; do
                     if [ -z "$GarXMLDeltaURL" ]; then continue; fi
                     URL="$GarXMLDeltaURL"
                     ZIP="$lastVersionId.zip"
                     wget --continue --output-document="$ZIP" "$URL"
-                    echo "$lastVersionId" >.deltaVersionId
-                    echo unzip >.state
+                    echo -n "$lastVersionId" >deltaVersionId.txt
+                    echo -n unzip >state.txt
                 done
             fi
         ;;
     esac
-    state="$(cat .state)"
-    test "$state" != "done"
+    state="$(cat state.txt)"
+    test "$state" != "wget"
 do true; done 2>&1 | tee cron.log
