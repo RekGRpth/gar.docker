@@ -17,4 +17,3 @@ COMMENT ON COLUMN operation_types.updatedate IS 'Дата внесения (об
 COMMENT ON COLUMN operation_types.startdate IS 'Начало действия записи';
 COMMENT ON COLUMN operation_types.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN operation_types.isactive IS 'Статус активности';
-

@@ -17,4 +17,3 @@ COMMENT ON COLUMN param_types.updatedate IS 'Дата внесения (обно
 COMMENT ON COLUMN param_types.startdate IS 'Начало действия записи';
 COMMENT ON COLUMN param_types.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN param_types.isactive IS 'Статус активности';
-

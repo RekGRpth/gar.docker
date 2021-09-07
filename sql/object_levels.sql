@@ -15,4 +15,3 @@ COMMENT ON COLUMN object_levels.updatedate IS 'Дата внесения (обн
 COMMENT ON COLUMN object_levels.startdate IS 'Начало действия записи';
 COMMENT ON COLUMN object_levels.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN object_levels.isactive IS 'Признак действующего адресного объекта';
-

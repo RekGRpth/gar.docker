@@ -19,4 +19,3 @@ COMMENT ON COLUMN addr_obj_types.updatedate IS 'Дата внесения (об�
 COMMENT ON COLUMN addr_obj_types.startdate IS 'Начало действия записи';
 COMMENT ON COLUMN addr_obj_types.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN addr_obj_types.isactive IS 'Статус активности';
-

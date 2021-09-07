@@ -5,4 +5,3 @@ CREATE TABLE normative_docs_kinds (
 COMMENT ON TABLE normative_docs_kinds IS 'Сведения по видам нормативных документов';
 COMMENT ON COLUMN normative_docs_kinds.id IS 'Идентификатор записи';
 COMMENT ON COLUMN normative_docs_kinds.name IS 'Наименование';
-

@@ -9,4 +9,3 @@ COMMENT ON COLUMN normative_docs_types.id IS 'Идентификатор зап�
 COMMENT ON COLUMN normative_docs_types.name IS 'Наименование';
 COMMENT ON COLUMN normative_docs_types.startdate IS 'Дата начала действия записи';
 COMMENT ON COLUMN normative_docs_types.enddate IS 'Дата окончания действия записи';
-

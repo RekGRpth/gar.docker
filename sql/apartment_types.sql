@@ -17,4 +17,3 @@ COMMENT ON COLUMN apartment_types.updatedate IS 'Дата внесения (об
 COMMENT ON COLUMN apartment_types.startdate IS 'Начало действия записи';
 COMMENT ON COLUMN apartment_types.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN apartment_types.isactive IS 'Статус активности';
-
