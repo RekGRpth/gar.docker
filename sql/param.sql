@@ -18,7 +18,7 @@ CREATE TABLE param (
   enddate DATE NOT NULL,
   param param_type NOT NULL,
   dir SMALLINT NOT NULL
-) PARTITION BY LIST (param));
+) PARTITION BY LIST (param);
 COMMENT ON TABLE param IS 'Сведения о классификаторе параметров адресообразующих элементов и объектов недвижимости ';
 COMMENT ON COLUMN param.id IS 'Идентификатор записи';
 COMMENT ON COLUMN param.objectid IS 'Глобальный уникальный идентификатор адресного объекта ';

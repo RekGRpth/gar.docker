@@ -16,7 +16,7 @@ CREATE TABLE adm_hierarchy (
   enddate DATE NOT NULL,
   isactive SMALLINT NOT NULL,
   dir SMALLINT NOT NULL
-) PARTITION BY LIST (dir));
+) PARTITION BY LIST (dir);
 COMMENT ON TABLE adm_hierarchy IS 'Сведения по иерархии в административном делении';
 COMMENT ON COLUMN adm_hierarchy.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN adm_hierarchy.objectid IS 'Глобальный уникальный идентификатор объекта';

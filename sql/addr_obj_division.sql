@@ -4,7 +4,7 @@ CREATE TABLE addr_obj_division (
   childid BIGINT NOT NULL,
   changeid BIGINT NOT NULL,
   dir SMALLINT NOT NULL
-) PARTITION BY LIST (dir));
+) PARTITION BY LIST (dir);
 COMMENT ON TABLE addr_obj_division IS 'Сведения по операциям переподчинения';
 COMMENT ON COLUMN addr_obj_division.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN addr_obj_division.parentid IS 'Родительский ID';

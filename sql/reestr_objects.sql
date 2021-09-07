@@ -7,7 +7,7 @@ CREATE TABLE reestr_objects (
   objectguid UUID NOT NULL,
   isactive SMALLINT NOT NULL,
   dir SMALLINT NOT NULL
-) PARTITION BY LIST (dir));
+) PARTITION BY LIST (dir);
 COMMENT ON TABLE reestr_objects IS 'Сведения об адресном элементе в части его идентификаторов';
 COMMENT ON COLUMN reestr_objects.objectid IS 'Уникальный идентификатор объекта';
 COMMENT ON COLUMN reestr_objects.createdate IS 'Дата создания';
