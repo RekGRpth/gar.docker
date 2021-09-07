@@ -26,6 +26,7 @@ while
             find /usr/local/sql -type f -name "*.sql" | sort -u | while read -r SQL; do
                 psql --no-password --variable=ON_ERROR_STOP=1 --file="$SQL"
             done
+            echo "done" >.fullVersionId
             echo wget >.state
         ;;
         "unzip" )
