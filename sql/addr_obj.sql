@@ -15,7 +15,7 @@ CREATE TABLE addr_obj (
   isactual SMALLINT NOT NULL,
   isactive SMALLINT NOT NULL,
   dir SMALLINT NOT NULL
-) PARTITION BY LIST (dir, 1));
+) PARTITION BY LIST (dir));
 COMMENT ON TABLE addr_obj IS 'Сведения классификатора адресообразующих элементов';
 COMMENT ON COLUMN addr_obj.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN addr_obj.objectid IS 'Глобальный уникальный идентификатор адресного объекта типа INTEGER';

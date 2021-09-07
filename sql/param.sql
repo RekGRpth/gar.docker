@@ -18,7 +18,7 @@ CREATE TABLE param (
   enddate DATE NOT NULL,
   param param_type NOT NULL,
   dir SMALLINT NOT NULL
-) PARTITION BY LIST (param, 1));
+) PARTITION BY LIST (param));
 COMMENT ON TABLE param IS 'Сведения о классификаторе параметров адресообразующих элементов и объектов недвижимости ';
 COMMENT ON COLUMN param.id IS 'Идентификатор записи';
 COMMENT ON COLUMN param.objectid IS 'Глобальный уникальный идентификатор адресного объекта ';
@@ -30,7 +30,7 @@ COMMENT ON COLUMN param.updatedate IS 'Дата внесения (обновле
 COMMENT ON COLUMN param.startdate IS 'Дата начала действия записи';
 COMMENT ON COLUMN param.enddate IS 'Дата окончания действия записи';
 
-CREATE TABLE addr_obj_params PARTITION OF param FOR VALUES IN ('addr_obj') PARTITION BY LIST (dir, 1);
+CREATE TABLE addr_obj_params PARTITION OF param FOR VALUES IN ('addr_obj') PARTITION BY LIST (dir);
 CREATE TABLE addr_obj_params_01 PARTITION OF param FOR VALUES IN (01);
 CREATE TABLE addr_obj_params_02 PARTITION OF param FOR VALUES IN (02);
 CREATE TABLE addr_obj_params_03 PARTITION OF param FOR VALUES IN (03);
@@ -131,7 +131,7 @@ CREATE TABLE addr_obj_params_97 PARTITION OF param FOR VALUES IN (97);
 CREATE TABLE addr_obj_params_98 PARTITION OF param FOR VALUES IN (98);
 CREATE TABLE addr_obj_params_99 PARTITION OF param FOR VALUES IN (99);
 
-CREATE TABLE apartments_params PARTITION OF param FOR VALUES IN ('apartments') PARTITION BY LIST (dir, 1);
+CREATE TABLE apartments_params PARTITION OF param FOR VALUES IN ('apartments') PARTITION BY LIST (dir);
 CREATE TABLE apartments_params_01 PARTITION OF param FOR VALUES IN (01);
 CREATE TABLE apartments_params_02 PARTITION OF param FOR VALUES IN (02);
 CREATE TABLE apartments_params_03 PARTITION OF param FOR VALUES IN (03);
@@ -232,7 +232,7 @@ CREATE TABLE apartments_params_97 PARTITION OF param FOR VALUES IN (97);
 CREATE TABLE apartments_params_98 PARTITION OF param FOR VALUES IN (98);
 CREATE TABLE apartments_params_99 PARTITION OF param FOR VALUES IN (99);
 
-CREATE TABLE carplaces_params PARTITION OF param FOR VALUES IN ('carplaces') PARTITION BY LIST (dir, 1);
+CREATE TABLE carplaces_params PARTITION OF param FOR VALUES IN ('carplaces') PARTITION BY LIST (dir);
 CREATE TABLE carplaces_params_01 PARTITION OF param FOR VALUES IN (01);
 CREATE TABLE carplaces_params_02 PARTITION OF param FOR VALUES IN (02);
 CREATE TABLE carplaces_params_03 PARTITION OF param FOR VALUES IN (03);
@@ -333,7 +333,7 @@ CREATE TABLE carplaces_params_97 PARTITION OF param FOR VALUES IN (97);
 CREATE TABLE carplaces_params_98 PARTITION OF param FOR VALUES IN (98);
 CREATE TABLE carplaces_params_99 PARTITION OF param FOR VALUES IN (99);
 
-CREATE TABLE houses_params PARTITION OF param FOR VALUES IN ('houses') PARTITION BY LIST (dir, 1);
+CREATE TABLE houses_params PARTITION OF param FOR VALUES IN ('houses') PARTITION BY LIST (dir);
 CREATE TABLE houses_params_01 PARTITION OF param FOR VALUES IN (01);
 CREATE TABLE houses_params_02 PARTITION OF param FOR VALUES IN (02);
 CREATE TABLE houses_params_03 PARTITION OF param FOR VALUES IN (03);
@@ -435,7 +435,7 @@ CREATE TABLE houses_params_98 PARTITION OF param FOR VALUES IN (98);
 CREATE TABLE houses_params_99 PARTITION OF param FOR VALUES IN (99);
 
 
-CREATE TABLE rooms_params PARTITION OF param FOR VALUES IN ('rooms') PARTITION BY LIST (dir, 1);
+CREATE TABLE rooms_params PARTITION OF param FOR VALUES IN ('rooms') PARTITION BY LIST (dir);
 CREATE TABLE rooms_params_01 PARTITION OF param FOR VALUES IN (01);
 CREATE TABLE rooms_params_02 PARTITION OF param FOR VALUES IN (02);
 CREATE TABLE rooms_params_03 PARTITION OF param FOR VALUES IN (03);
@@ -537,7 +537,7 @@ CREATE TABLE rooms_params_98 PARTITION OF param FOR VALUES IN (98);
 CREATE TABLE rooms_params_99 PARTITION OF param FOR VALUES IN (99);
 
 
-CREATE TABLE steads_params PARTITION OF param FOR VALUES IN ('steads') PARTITION BY LIST (dir, 1);
+CREATE TABLE steads_params PARTITION OF param FOR VALUES IN ('steads') PARTITION BY LIST (dir);
 CREATE TABLE steads_params_01 PARTITION OF param FOR VALUES IN (01);
 CREATE TABLE steads_params_02 PARTITION OF param FOR VALUES IN (02);
 CREATE TABLE steads_params_03 PARTITION OF param FOR VALUES IN (03);

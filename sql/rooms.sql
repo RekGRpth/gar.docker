@@ -14,7 +14,7 @@ CREATE TABLE rooms (
   isactual SMALLINT NOT NULL,
   isactive SMALLINT NOT NULL,
   dir SMALLINT NOT NULL
-) PARTITION BY LIST (dir, 1));
+) PARTITION BY LIST (dir));
 COMMENT ON TABLE rooms IS 'Сведения по комнатам';
 COMMENT ON COLUMN rooms.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN rooms.objectid IS 'Глобальный уникальный идентификатор объекта типа INTEGER';

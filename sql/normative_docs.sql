@@ -12,7 +12,7 @@ CREATE TABLE normative_docs (
   accdate DATE,
   comment VARCHAR(8000),
   dir SMALLINT NOT NULL
-) PARTITION BY LIST (dir, 1));
+) PARTITION BY LIST (dir));
 COMMENT ON TABLE normative_docs IS 'Сведения о нормативном документе, являющемся основанием присвоения адресному элементу наименования';
 COMMENT ON COLUMN normative_docs.id IS 'Уникальный идентификатор документа';
 COMMENT ON COLUMN normative_docs.name IS 'Наименование документа';

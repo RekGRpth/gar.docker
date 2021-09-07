@@ -13,7 +13,7 @@ CREATE TABLE steads (
   isactual SMALLINT NOT NULL,
   isactive SMALLINT NOT NULL,
   dir SMALLINT NOT NULL
-) PARTITION BY LIST (dir, 1));
+) PARTITION BY LIST (dir));
 COMMENT ON TABLE steads IS 'Сведения по земельным участкам';
 COMMENT ON COLUMN steads.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN steads.objectid IS 'Глобальный уникальный идентификатор объекта типа INTEGER';

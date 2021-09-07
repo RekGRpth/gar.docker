@@ -6,7 +6,7 @@ CREATE TABLE change_history (
   ndocid BIGINT,
   changedate DATE NOT NULL,
   dir SMALLINT NOT NULL
-) PARTITION BY LIST (dir, 1));
+) PARTITION BY LIST (dir));
 COMMENT ON TABLE change_history IS 'Сведения по истории изменений';
 COMMENT ON COLUMN change_history.changeid IS 'ID изменившей транзакции';
 COMMENT ON COLUMN change_history.objectid IS 'Уникальный ID объекта';

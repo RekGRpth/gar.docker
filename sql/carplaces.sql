@@ -13,7 +13,7 @@ CREATE TABLE carplaces (
   isactual SMALLINT NOT NULL,
   isactive SMALLINT NOT NULL,
   dir SMALLINT NOT NULL
-) PARTITION BY LIST (dir, 1));
+) PARTITION BY LIST (dir));
 COMMENT ON TABLE carplaces IS 'Сведения по машино-местам';
 COMMENT ON COLUMN carplaces.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN carplaces.objectid IS 'Глобальный уникальный идентификатор объекта типа INTEGER';

@@ -18,7 +18,7 @@ CREATE TABLE houses (
   isactual SMALLINT NOT NULL,
   isactive SMALLINT NOT NULL,
   dir SMALLINT NOT NULL
-) PARTITION BY LIST (dir, 1));
+) PARTITION BY LIST (dir));
 COMMENT ON TABLE houses IS 'Сведения по номерам домов улиц городов и населенных пунктов';
 COMMENT ON COLUMN houses.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN houses.objectid IS 'Глобальный уникальный идентификатор объекта типа INTEGER';
