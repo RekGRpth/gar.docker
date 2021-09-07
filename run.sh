@@ -1,6 +1,7 @@
 #!/bin/sh -eux
 
 docker pull ghcr.io/rekgrpth/gar.docker
+docker volume create gar
 docker network create --attachable --opt com.docker.network.bridge.name=docker docker || echo $?
 docker stop gar || echo $?
 docker rm gar || echo $?
@@ -22,3 +23,4 @@ docker run \
     --rm \
     --tty \
     ghcr.io/rekgrpth/gar.docker su-exec gar:gar cron.sh
+#    --mount type=volume,source=gar,destination=/home \
