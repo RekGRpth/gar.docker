@@ -1,5 +1,5 @@
 CREATE TABLE object_levels (
-  level INT NOT NULL,
+  level INT NOT NULL PRIMARY KEY,
   name VARCHAR(250) NOT NULL,
   shortname VARCHAR(50),
   updatedate DATE NOT NULL,

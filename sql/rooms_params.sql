@@ -1,5 +1,6 @@
 CREATE TABLE rooms_params (
     param param_type NOT NULL DEFAULT 'rooms',
+    CONSTRAINT rooms_params_pkey PRIMARY KEY (id),
     CONSTRAINT rooms_params_param_check CHECK (param = 'rooms')
 ) INHERITS (param);
 COMMENT ON TABLE rooms_params IS 'Сведения о классификаторе параметров адресообразующих элементов и объектов недвижимости ';

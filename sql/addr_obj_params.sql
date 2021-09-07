@@ -1,5 +1,6 @@
 CREATE TABLE addr_obj_params (
     param param_type NOT NULL DEFAULT 'addr_obj',
+    CONSTRAINT addr_obj_params_pkey PRIMARY KEY (id),
     CONSTRAINT addr_obj_params_param_check CHECK (param = 'addr_obj')
 ) INHERITS (param);
 COMMENT ON TABLE addr_obj_params IS 'Сведения о классификаторе параметров адресообразующих элементов и объектов недвижимости ';

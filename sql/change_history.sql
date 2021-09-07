@@ -1,5 +1,5 @@
 CREATE TABLE change_history (
-  changeid BIGINT NOT NULL,
+  changeid BIGINT NOT NULL PRIMARY KEY,
   objectid BIGINT NOT NULL,
   adrobjectid UUID NOT NULL,
   opertypeid INT NOT NULL,
