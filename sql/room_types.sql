@@ -1,4 +1,4 @@
-CREATE TABLE room_types (
+CREATE TABLE IF NOT EXISTS room_types (
   id INT NOT NULL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   shortname VARCHAR(50),

@@ -1,4 +1,4 @@
-CREATE TABLE apartment_types (
+CREATE TABLE IF NOT EXISTS apartment_types (
   id INT NOT NULL PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
   shortname VARCHAR(50),

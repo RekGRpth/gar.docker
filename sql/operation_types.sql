@@ -1,4 +1,4 @@
-CREATE TABLE operation_types (
+CREATE TABLE IF NOT EXISTS operation_types (
   id INT NOT NULL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   shortname VARCHAR(100),

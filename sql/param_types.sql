@@ -1,4 +1,4 @@
-CREATE TABLE param_types (
+CREATE TABLE IF NOT EXISTS param_types (
   id INT NOT NULL PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
   code VARCHAR(50) NOT NULL,

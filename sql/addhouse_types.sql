@@ -1,4 +1,4 @@
-CREATE TABLE addhouse_types (
+CREATE TABLE IF NOT EXISTS addhouse_types (
   id INT NOT NULL PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
   shortname VARCHAR(50),

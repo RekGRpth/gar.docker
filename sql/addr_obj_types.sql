@@ -1,4 +1,4 @@
-CREATE TABLE addr_obj_types (
+CREATE TABLE IF NOT EXISTS addr_obj_types (
   id INT NOT NULL PRIMARY KEY,
   level INT NOT NULL,
   shortname VARCHAR(50) NOT NULL,

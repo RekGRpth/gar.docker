@@ -1,4 +1,4 @@
-CREATE TABLE gar (
+CREATE TABLE IF NOT EXISTS gar (
     uuid uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
     parent_uuid uuid,
     name text NOT NULL,

@@ -1,4 +1,4 @@
-CREATE TABLE normative_docs_kinds (
+CREATE TABLE IF NOT EXISTS normative_docs_kinds (
   id INT NOT NULL PRIMARY KEY,
   name VARCHAR(500) NOT NULL
 );
