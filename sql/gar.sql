@@ -50,3 +50,12 @@ CREATE OR REPLACE FUNCTION gar_select(parent_uuid uuid, name text, short text, t
     and (gar_select.mod is null or mod::text ilike gar_select.mod||'%')
     order by case when gar_select.full is not null then ts_rank(to_tsvector('russian', "full"), to_tsquery('russian', regexp_replace(plainto_tsquery('russian', regexp_replace(gar_select.full, E'[ \t\r\n\-\.\,\/]+', ' ', 'g'))::text, E'(\'\\w+\')', E'\\1:*', 'g'))) else null end desc, level, to_number('0'||name, '999999999'), name;
 $body$;
+CREATE OR REPLACE FUNCTION gar_text(uuid uuid[], post boolean DEFAULT NULL, "full" boolean DEFAULT NULL) RETURNS text LANGUAGE sql STABLE AS $body$
+    with _ as (
+        with _ as (
+            select * from gar_select(gar_text.uuid)
+        ), p as (
+            select post as text from _ where coalesce(gar_text.post, false) and post is not null order by level desc limit 1
+        ) select text from p union select string_agg(text, ', ') as text from _ where type not in ('Подъезд', 'Этаж') or coalesce(gar_text.full, false)
+    ) select string_agg(text, ', ') from _
+$body$;
