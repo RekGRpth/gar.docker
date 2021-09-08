@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS addr_obj (
   changeid BIGINT NOT NULL,
   name VARCHAR(250) NOT NULL,
   typename VARCHAR(50) NOT NULL,
-  level VARCHAR(10) NOT NULL,
+  level INT NOT NULL,
   opertypeid INT NOT NULL,
   previd BIGINT,
   nextid BIGINT,
