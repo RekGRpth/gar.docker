@@ -134,3 +134,6 @@ CREATE OR REPLACE FUNCTION gar_update(uuid uuid, parent_uuid uuid, name text, sh
         text = coalesce(gar_update.text, text)
     WHERE uuid = _uuid returning *;
 $body$;
+CREATE OR REPLACE FUNCTION gar_uuid(uuid uuid) RETURNS uuid[] LANGUAGE sql STABLE AS $body$
+    select array_agg(uuid) from gar_select(gar_uuid.uuid, null);
+$$;
