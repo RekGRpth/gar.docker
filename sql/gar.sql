@@ -206,6 +206,22 @@ begin
         left join param_types on param_types.name = 'Почтовый индекс' and isactive and current_timestamp between param_types.startdate and param_types.enddate
         left join addr_obj_params_$$||dir||$$ as addr_obj_params on addr_obj_params.objectid = addr_obj.objectid and addr_obj_params.typeid = param_types.id and current_timestamp between addr_obj_params.startdate and addr_obj_params.enddate
         WHERE addr_obj.isactive = 1 and addr_obj.isactual = 1 and current_timestamp between addr_obj.startdate and addr_obj.enddate $$;
+    elsif tbl ~ E'apartments_\d\d' then
+        execute $$ insert into tmp1 SELECT distinct
+            addr_obj.objectguid AS uuid,
+            addr_obj_parent.objectguid AS parent_uuid,
+            addr_obj.name AS name,
+            rtrim(addr_obj.typename, '.') AS short,
+            addr_obj_types.name AS type,
+            addr_obj.postalcode AS post/*,
+            socrbase.kod_t_st::integer AS level*/
+        FROM $$||gar_update.tbl||$$ as addr_obj
+        inner JOIN addr_obj_types ON addr_obj_types.level = addr_obj.level::int AND addr_obj_types.shortname = addr_obj.typename and addr_obj_types.isactive = 1 and current_timestamp between addr_obj_types.startdate and addr_obj_types.enddate
+        left join adm_hierarchy_$$||local.dir||$$ as adm_hierarchy on adm_hierarchy.objectid = addr_obj.objectid and adm_hierarchy.isactive = 1 and current_timestamp between adm_hierarchy.startdate and adm_hierarchy.enddate
+        left join $$||gar_update.tbl||$$ as addr_obj_parent on addr_obj_parent.objectid = adm_hierarchy.parentobjid and addr_obj_parent.isactive = 1 and addr_obj_parent.isactual = 1 and current_timestamp between addr_obj_parent.startdate and addr_obj_parent.enddate
+        left join param_types on param_types.name = 'Почтовый индекс' and isactive and current_timestamp between param_types.startdate and param_types.enddate
+        left join addr_obj_params_$$||dir||$$ as addr_obj_params on addr_obj_params.objectid = addr_obj.objectid and addr_obj_params.typeid = param_types.id and current_timestamp between addr_obj_params.startdate and addr_obj_params.enddate
+        WHERE addr_obj.isactive = 1 and addr_obj.isactual = 1 and current_timestamp between addr_obj.startdate and addr_obj.enddate $$;
     elsif tbl ~ 'house\d\d' then
         execute $$ with _fias as (SELECT distinct
             house.houseguid::uuid AS uuid,
