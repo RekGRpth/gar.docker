@@ -222,6 +222,22 @@ begin
         left join param_types on param_types.name = 'Почтовый индекс' and isactive and current_timestamp between param_types.startdate and param_types.enddate
         left join apartments_params_$$||local.dir||$$ as apartments_params on apartments_params.objectid = apartments.objectid and apartments_params.typeid = param_types.id and current_timestamp between apartments_params.startdate and apartments_params.enddate
         WHERE apartments.isactive = 1 and apartments.isactual = 1 and current_timestamp between apartments.startdate and apartments.enddate $$;
+    elsif tbl ~ E'houses_\d\d' then
+        execute $$ insert into tmp1 SELECT distinct
+            houses.objectguid AS uuid,
+            houses_parent.objectguid AS parent_uuid,
+            houses.number AS name,
+            rtrim(houses_types.shortname, '.') AS short,
+            houses_types.name AS type,
+            houses_params.value AS post/*,
+            socrbase.kod_t_st::integer AS level*/
+        FROM apartments_$$||local.dir||$$ as apartments
+        inner JOIN apartment_types ON apartment_types.level = apartments.aparttype and apartment_types.isactive = 1 and current_timestamp between apartment_types.startdate and apartment_types.enddate
+        left join adm_hierarchy_$$||local.dir||$$ as adm_hierarchy on adm_hierarchy.objectid = apartments.objectid and adm_hierarchy.isactive = 1 and current_timestamp between adm_hierarchy.startdate and adm_hierarchy.enddate
+        left join $$||gar_update.tbl||$$ as apartments_parent on apartments_parent.objectid = adm_hierarchy.parentobjid and apartments_parent.isactive = 1 and apartments_parent.isactual = 1 and current_timestamp between apartments_parent.startdate and apartments_parent.enddate
+        left join param_types on param_types.name = 'Почтовый индекс' and isactive and current_timestamp between param_types.startdate and param_types.enddate
+        left join apartments_params_$$||local.dir||$$ as apartments_params on apartments_params.objectid = apartments.objectid and apartments_params.typeid = param_types.id and current_timestamp between apartments_params.startdate and apartments_params.enddate
+        WHERE apartments.isactive = 1 and apartments.isactual = 1 and current_timestamp between apartments.startdate and apartments.enddate $$;
     elsif tbl ~ 'house\d\d' then
         execute $$ with _fias as (SELECT distinct
             house.houseguid::uuid AS uuid,
