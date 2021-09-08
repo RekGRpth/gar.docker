@@ -3,12 +3,12 @@
 touch deltaVersionId.txt
 touch fullVersionId.txt
 touch state.txt
-state="$(cat state.txt)"
+state="$(<state.txt)"
 while
     case "$state" in
         "csv2pg" )
-            deltaVersionId="$(cat deltaVersionId.txt)"
-            fullVersionId="$(cat fullVersionId.txt)"
+            deltaVersionId="$(<deltaVersionId.txt)"
+            fullVersionId="$(<fullVersionId.txt)"
             UPDATE=
             find /usr/local/xsd -type f -name "*.xsd" | sort -u | while read -r XSD; do
                 FIELDS="$(xmlstarlet select --text --noblanks --template --value-of /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:attribute/@name "$XSD" | sed 's/\(.*\)/\L\1/' | sed -uE 's|^(.+)$|"\1"|' | paste -sd ",")"
@@ -47,8 +47,8 @@ while
         ;;
         * )
             echo -n done >state.txt
-            deltaVersionId="$(cat deltaVersionId.txt)"
-            fullVersionId="$(cat fullVersionId.txt)"
+            deltaVersionId="$(<deltaVersionId.txt)"
+            fullVersionId="$(<fullVersionId.txt)"
             if [ -z "$fullVersionId" ]; then
                 echo -n sql2pg >state.txt
             elif [ -z "$deltaVersionId" ]; then
@@ -72,6 +72,6 @@ while
             fi
         ;;
     esac
-    state="$(cat state.txt)"
+    state="$(<state.txt)"
     test "$state" != "done"
 do true; done 2>&1 | tee cron.log
