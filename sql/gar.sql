@@ -71,3 +71,6 @@ CREATE OR REPLACE FUNCTION gar_text(uuid uuid, post boolean DEFAULT NULL, "full"
         ) select text from p union select string_agg(text, ', ') as text from _ where type not in ('Подъезд', 'Этаж') or coalesce(gar_text.full, false)
     ) select string_agg(text, ', ') from _
 $body$;
+CREATE OR REPLACE FUNCTION gar_full(uuid uuid) RETURNS text LANGUAGE sql STABLE AS $body$
+    select gar_text(gar_text.uuid, false, true);
+$body$;
