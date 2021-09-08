@@ -195,32 +195,32 @@ begin
             addr_obj.objectguid AS uuid,
             addr_obj_parent.objectguid AS parent_uuid,
             addr_obj.name AS name,
-            rtrim(addr_obj.typename, '.') AS short,
+            rtrim(addr_obj_types.shortname, '.') AS short,
             addr_obj_types.name AS type,
-            addr_obj.postalcode AS post/*,
+            addr_obj_params.value AS post/*,
             socrbase.kod_t_st::integer AS level*/
-        FROM $$||gar_update.tbl||$$ as addr_obj
+        FROM addr_obj_$$||local.dir||$$ as addr_obj
         inner JOIN addr_obj_types ON addr_obj_types.level = addr_obj.level::int AND addr_obj_types.shortname = addr_obj.typename and addr_obj_types.isactive = 1 and current_timestamp between addr_obj_types.startdate and addr_obj_types.enddate
         left join adm_hierarchy_$$||local.dir||$$ as adm_hierarchy on adm_hierarchy.objectid = addr_obj.objectid and adm_hierarchy.isactive = 1 and current_timestamp between adm_hierarchy.startdate and adm_hierarchy.enddate
-        left join $$||gar_update.tbl||$$ as addr_obj_parent on addr_obj_parent.objectid = adm_hierarchy.parentobjid and addr_obj_parent.isactive = 1 and addr_obj_parent.isactual = 1 and current_timestamp between addr_obj_parent.startdate and addr_obj_parent.enddate
+        left join addr_obj_$$||local.dir||$$ as addr_obj_parent on addr_obj_parent.objectid = adm_hierarchy.parentobjid and addr_obj_parent.isactive = 1 and addr_obj_parent.isactual = 1 and current_timestamp between addr_obj_parent.startdate and addr_obj_parent.enddate
         left join param_types on param_types.name = 'Почтовый индекс' and isactive and current_timestamp between param_types.startdate and param_types.enddate
-        left join addr_obj_params_$$||dir||$$ as addr_obj_params on addr_obj_params.objectid = addr_obj.objectid and addr_obj_params.typeid = param_types.id and current_timestamp between addr_obj_params.startdate and addr_obj_params.enddate
+        left join addr_obj_params_$$||local.dir||$$ as addr_obj_params on addr_obj_params.objectid = addr_obj.objectid and addr_obj_params.typeid = param_types.id and current_timestamp between addr_obj_params.startdate and addr_obj_params.enddate
         WHERE addr_obj.isactive = 1 and addr_obj.isactual = 1 and current_timestamp between addr_obj.startdate and addr_obj.enddate $$;
     elsif tbl ~ E'apartments_\d\d' then
         execute $$ insert into tmp1 SELECT distinct
-            addr_obj.objectguid AS uuid,
-            addr_obj_parent.objectguid AS parent_uuid,
-            addr_obj.name AS name,
-            rtrim(addr_obj.typename, '.') AS short,
-            addr_obj_types.name AS type,
-            addr_obj.postalcode AS post/*,
+            apartments.objectguid AS uuid,
+            apartments_parent.objectguid AS parent_uuid,
+            apartments.number AS name,
+            rtrim(apartment_types.shortname, '.') AS short,
+            apartments_types.name AS type,
+            apartments_params.value AS post/*,
             socrbase.kod_t_st::integer AS level*/
-        FROM $$||gar_update.tbl||$$ as apartments
-        inner JOIN apartment_types ON apartment_types.level = addr_obj.aparttype and apartment_types.isactive = 1 and current_timestamp between apartment_types.startdate and apartment_types.enddate
-        left join adm_hierarchy_$$||local.dir||$$ as adm_hierarchy on adm_hierarchy.objectid = addr_obj.objectid and adm_hierarchy.isactive = 1 and current_timestamp between adm_hierarchy.startdate and adm_hierarchy.enddate
-        left join $$||gar_update.tbl||$$ as addr_obj_parent on addr_obj_parent.objectid = adm_hierarchy.parentobjid and addr_obj_parent.isactive = 1 and addr_obj_parent.isactual = 1 and current_timestamp between addr_obj_parent.startdate and addr_obj_parent.enddate
+        FROM apartments_$$||local.dir||$$ as apartments
+        inner JOIN apartment_types ON apartment_types.level = apartments.aparttype and apartment_types.isactive = 1 and current_timestamp between apartment_types.startdate and apartment_types.enddate
+        left join adm_hierarchy_$$||local.dir||$$ as adm_hierarchy on adm_hierarchy.objectid = apartments.objectid and adm_hierarchy.isactive = 1 and current_timestamp between adm_hierarchy.startdate and adm_hierarchy.enddate
+        left join $$||gar_update.tbl||$$ as apartments_parent on apartments_parent.objectid = adm_hierarchy.parentobjid and apartments_parent.isactive = 1 and apartments_parent.isactual = 1 and current_timestamp between apartments_parent.startdate and apartments_parent.enddate
         left join param_types on param_types.name = 'Почтовый индекс' and isactive and current_timestamp between param_types.startdate and param_types.enddate
-        left join addr_obj_params_$$||dir||$$ as addr_obj_params on addr_obj_params.objectid = addr_obj.objectid and addr_obj_params.typeid = param_types.id and current_timestamp between addr_obj_params.startdate and addr_obj_params.enddate
+        left join apartments_params_$$||local.dir||$$ as apartments_params on apartments_params.objectid = apartments.objectid and apartments_params.typeid = param_types.id and current_timestamp between apartments_params.startdate and apartments_params.enddate
         WHERE apartments.isactive = 1 and apartments.isactual = 1 and current_timestamp between apartments.startdate and apartments.enddate $$;
     elsif tbl ~ 'house\d\d' then
         execute $$ with _fias as (SELECT distinct
