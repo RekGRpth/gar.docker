@@ -20,4 +20,10 @@ $body$;
 CREATE OR REPLACE FUNCTION gar_insert(uuid uuid, parent_uuid uuid, name text, short text, type text, post text, level integer, "user" text, text text) RETURNS gar LANGUAGE sql AS $body$
     insert into gar (uuid, parent_uuid, name, short, type, post, level, "user", text)
     values (coalesce(gar_insert.uuid, gen_random_uuid()), gar_insert.parent_uuid, gar_insert.name, gar_insert.short, gar_insert.type, gar_insert.post, gar_insert.level, gar_insert.user, gar_insert.text) returning *;
-end;$body$;
+$body$;
+CREATE OR REPLACE FUNCTION gar_select(uuid uuid[]) RETURNS SETOF gar LANGUAGE sql STABLE AS $body$
+    select gar.* from gar
+    --inner join (select unnest(gar_select.uuid) as uuid, generate_series(1, array_upper(gar_select.uuid, 1)) as num) as _ on _.uuid = gar.uuid
+    inner join (select unnest(gar_select.uuid) as uuid, generate_subscripts(gar_select.uuid, 1) as num) as _ on _.uuid = gar.uuid
+    where gar.uuid = any(gar_select.uuid) order by num
+$body$;
