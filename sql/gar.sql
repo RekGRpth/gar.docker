@@ -10,5 +10,7 @@ CREATE TABLE IF NOT EXISTS gar (
     "user" text DEFAULT current_user NOT NULL,
     text text NOT NULL,
     mod integer DEFAULT 0 NOT NULL,
-    "full" text NOT NULL
+    "full" text NOT NULL,
+    CONSTRAINT gar_parent_uuid_fkey FOREIGN KEY (parent_uuid) REFERENCES gar(uuid) ON UPDATE CASCADE ON DELETE RESTRICT
 );
+CREATE TABLE IF NOT EXISTS gar_log INHERITS (gar);
