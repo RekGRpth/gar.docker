@@ -17,3 +17,7 @@ CREATE TABLE IF NOT EXISTS gar_log INHERITS (gar);
 CREATE OR REPLACE FUNCTION gar_child(uuid uuid) RETURNS bigint LANGUAGE sql STABLE AS $body$
     select count(1) from gar where parent_uuid = gar_child.uuid;
 $body$;
+CREATE OR REPLACE FUNCTION gar_insert(uuid uuid, parent_uuid uuid, name text, short text, type text, post text, level integer, "user" text, text text) RETURNS gar LANGUAGE sql AS $body$
+    insert into gar (uuid, parent_uuid, name, short, type, post, level, "user", text)
+    values (coalesce(gar_insert.uuid, gen_random_uuid()), gar_insert.parent_uuid, gar_insert.name, gar_insert.short, gar_insert.type, gar_insert.post, gar_insert.level, gar_insert.user, gar_insert.text) returning *;
+end;$body$;
