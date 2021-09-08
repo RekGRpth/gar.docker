@@ -14,3 +14,6 @@ CREATE TABLE IF NOT EXISTS gar (
     CONSTRAINT gar_parent_uuid_fkey FOREIGN KEY (parent_uuid) REFERENCES gar(uuid) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 CREATE TABLE IF NOT EXISTS gar_log INHERITS (gar);
+CREATE OR REPLACE FUNCTION gar_child(uuid uuid) RETURNS bigint LANGUAGE sql STABLE AS $body$
+    select count(1) from gar where parent_uuid = gar_child.uuid;
+$body$;
