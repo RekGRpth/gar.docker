@@ -35,3 +35,18 @@ CREATE OR REPLACE FUNCTION gar_select(uuid uuid, parent_uuid uuid) RETURNS SETOF
         where gar_select.parent_uuid is null or _.parent_uuid != gar_select.parent_uuid
     ) select uuid, parent_uuid, name, short, type, post, level, dt, "user", text, mod, "full"/*, parent*/ from _ order by i desc;
 $body$;
+CREATE OR REPLACE FUNCTION gar_select(parent_uuid uuid, name text, short text, type text, post text, level integer, dt text, "user" text, text text, "full" text, mod integer) RETURNS SETOF gar LANGUAGE sql STABLE AS $body$
+    select * from gar where true
+    and (gar_select.full is not null or (gar_select.parent_uuid is null and parent_uuid is null) or parent_uuid = gar_select.parent_uuid)
+    and (gar_select.name is null or name ilike gar_select.name||'%' or name ilike '% '||gar_select.name||'%' or name ilike '%-'||gar_select.name||'%' or name ilike '%.'||gar_select.name||'%')
+    and (gar_select.short is null or short ilike gar_select.short)
+    and (gar_select.type is null or case when gar_select.type ilike '{%}' then type = any(gar_select.type::text[]) else type ilike gar_select.type||'%' end)
+    and (gar_select.post is null or post ilike gar_select.post||'%')
+    and (gar_select.level is null or level::text ilike gar_select.level::text||'%')
+    and (gar_select.dt is null or case when gar_select.dt ilike '{%}' then dt between (gar_select.dt::timestamp with time zone[])[1] and (gar_select.dt::timestamp with time zone[])[2] else dt::text ilike gar_select.dt||'%' end)
+    and (gar_select.user is null or user ilike gar_select.user||'%')
+    and (gar_select.text is null or text ilike gar_select.text||'%' or text ilike '% '||gar_select.text||'%' or text ilike '%-'||gar_select.text||'%' or text ilike '%.'||gar_select.text||'%')
+    and (gar_select.full is null or to_tsvector('russian', "full") @@ to_tsquery('russian', regexp_replace(plainto_tsquery('russian', regexp_replace(gar_select.full, E'[ \t\r\n\-\.\,\/]+', ' ', 'g'))::text, E'(\'\\w+\')', E'\\1:*', 'g')))
+    and (gar_select.mod is null or mod::text ilike gar_select.mod||'%')
+    order by case when gar_select.full is not null then ts_rank(to_tsvector('russian', "full"), to_tsquery('russian', regexp_replace(plainto_tsquery('russian', regexp_replace(gar_select.full, E'[ \t\r\n\-\.\,\/]+', ' ', 'g'))::text, E'(\'\\w+\')', E'\\1:*', 'g'))) else null end desc, level, to_number('0'||name, '999999999'), name;
+$body$;
