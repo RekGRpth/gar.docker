@@ -25,5 +25,13 @@ CREATE OR REPLACE FUNCTION gar_select(uuid uuid[]) RETURNS SETOF gar LANGUAGE sq
     select gar.* from gar
     --inner join (select unnest(gar_select.uuid) as uuid, generate_series(1, array_upper(gar_select.uuid, 1)) as num) as _ on _.uuid = gar.uuid
     inner join (select unnest(gar_select.uuid) as uuid, generate_subscripts(gar_select.uuid, 1) as num) as _ on _.uuid = gar.uuid
-    where gar.uuid = any(gar_select.uuid) order by num
+    where gar.uuid = any(gar_select.uuid) order by num;
+$body$;
+CREATE OR REPLACE FUNCTION gar_select(uuid uuid, parent_uuid uuid) RETURNS SETOF gar LANGUAGE sql STABLE AS $body$
+    with recursive _ as (
+        select gar.*, 0 as i from gar where uuid = gar_select.uuid
+        union
+        select gar.*, _.i + 1 as i from gar inner join _ on (_.parent_uuid = gar.uuid)
+        where gar_select.parent_uuid is null or _.parent_uuid != gar_select.parent_uuid
+    ) select uuid, parent_uuid, name, short, type, post, level, dt, "user", text, mod, "full"/*, parent*/ from _ order by i desc;
 $body$;
