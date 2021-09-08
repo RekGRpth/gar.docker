@@ -23,9 +23,9 @@ CREATE OR REPLACE FUNCTION gar_insert(uuid uuid, parent_uuid uuid, name text, sh
 $body$;
 CREATE OR REPLACE FUNCTION gar_select(uuid uuid[]) RETURNS SETOF gar LANGUAGE sql STABLE AS $body$
     select gar.* from gar
-    --inner join (select unnest(gar_select.uuid) as uuid, generate_series(1, array_upper(gar_select.uuid, 1)) as num) as _ on _.uuid = gar.uuid
-    inner join (select unnest(gar_select.uuid) as uuid, generate_subscripts(gar_select.uuid, 1) as num) as _ on _.uuid = gar.uuid
-    where gar.uuid = any(gar_select.uuid) order by num;
+    --inner join (select unnest(gar_select.uuid) as uuid, generate_series(1, array_upper(gar_select.uuid, 1)) as i) as _ on _.uuid = gar.uuid
+    inner join (select unnest(gar_select.uuid) as uuid, generate_subscripts(gar_select.uuid, 1) as i) as _ on _.uuid = gar.uuid
+    where gar.uuid = any(gar_select.uuid) order by i;
 $body$;
 CREATE OR REPLACE FUNCTION gar_select(uuid uuid, parent_uuid uuid) RETURNS SETOF gar LANGUAGE sql STABLE AS $body$
     with recursive _ as (
