@@ -52,7 +52,7 @@ while
             if [ -z "$fullVersionId" ]; then
                 echo sql2pg >state.txt
             elif [ -z "$deltaVersionId" ]; then
-                wget --continue --output-document=GetLastDownloadFileInfo.json https://fias.nalog.ru/WebServices/Public/GetLastDownloadFileInfo
+                wget --output-document=GetLastDownloadFileInfo.json https://fias.nalog.ru/WebServices/Public/GetLastDownloadFileInfo
                 lastVersionId="$(jq --raw-output .VersionId <GetLastDownloadFileInfo.json)"
                 URL="$(jq --raw-output .GarXMLFullURL <GetLastDownloadFileInfo.json)"
                 ZIP="$lastVersionId.zip"
@@ -60,7 +60,7 @@ while
                 echo "$lastVersionId" >deltaVersionId.txt
                 echo "$lastVersionId" >fullVersionId.txt
             else
-                wget --continue --output-document=GetAllDownloadFileInfo.json https://fias.nalog.ru/WebServices/Public/GetAllDownloadFileInfo
+                wget --output-document=GetAllDownloadFileInfo.json https://fias.nalog.ru/WebServices/Public/GetAllDownloadFileInfo
                 jq --raw-output "sort_by(.VersionId) | .[] | select(.VersionId > $deltaVersionId) | [.VersionId, .GarXMLDeltaURL] | join(\";\")" <GetAllDownloadFileInfo.json | while IFS=';' read -r lastVersionId GarXMLDeltaURL; do
                     if [ -z "$GarXMLDeltaURL" ]; then continue; fi
                     URL="$GarXMLDeltaURL"
