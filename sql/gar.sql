@@ -74,3 +74,51 @@ $body$;
 CREATE OR REPLACE FUNCTION gar_full(uuid uuid) RETURNS text LANGUAGE sql STABLE AS $body$
     select gar_text(gar_text.uuid, false, true);
 $body$;
+CREATE OR REPLACE FUNCTION gar_trigger() RETURNS trigger LANGUAGE plpgsql AS $body$ <<local>> declare
+BEGIN
+    case TG_WHEN
+        when 'BEFORE' then
+            case TG_OP
+                when 'INSERT' then
+                    new.text = gar_text(new.name, new.short, new.type);
+                    if new.user is null then new.user = current_user; end if;
+                    if new.parent_uuid is null then
+                        new.full = new.text;
+                    else
+                        select concat_ws(', ', "full", new.text) from gar where uuid = new.parent_uuid into new.full;
+                    end if;
+                    new.dt = clock_timestamp();
+                when 'UPDATE' then
+                    if (old.name, old.short, old.type) IS DISTINCT FROM (new.name, new.short, new.type) then new.text = gar_text(new.name, new.short, new.type); end if;
+                    if (old.parent_uuid, old.name, old.short, old.type, old.post, old.level) IS DISTINCT FROM (new.parent_uuid, new.name, new.short, new.type, new.post, new.level) then
+                        if new.parent_uuid is null then
+                            new.full = new.text;
+                        else
+                            select concat_ws(', ', "full", new.text) from gar where uuid = new.parent_uuid into new.full;
+                        end if;
+                    end if;
+                    if new.user is null then new.user = current_user; end if;
+                    if (old.parent_uuid, old.name, old.short, old.type, old.post, old.level, old.user) IS DISTINCT FROM (new.parent_uuid, new.name, new.short, new.type, new.post, new.level, new.user) then
+                        new.mod = new.mod + 1;
+                        new.dt = clock_timestamp();
+                        insert into gar_log select old.*;
+                    end if;
+                when 'DELETE' then
+                    insert into gar_log select old.*;
+            end case;
+        when 'AFTER' then
+            case TG_OP
+                when 'INSERT' then null;
+                when 'UPDATE' then
+                    if (old.parent_uuid, old.name, old.short, old.type, old.post, old.level) IS DISTINCT FROM (new.parent_uuid, new.name, new.short, new.type, new.post, new.level) then
+                        if old.full is distinct from new.full then
+                            update gar set "full" = concat_ws(', ', new.full, text), "user" = new.user where parent_uuid = new.uuid;
+                        end if;
+                    end if;
+                when 'DELETE' then null;
+            end case;
+    end case;
+    --if TG_OP in ('DELETE', 'UPDATE') then raise info '%.% % % old %', TG_TABLE_SCHEMA, TG_TABLE_NAME, TG_WHEN, TG_OP, old; end if;
+    --if TG_OP in ('INSERT', 'UPDATE') then raise info '%.% % % new %', TG_TABLE_SCHEMA, TG_TABLE_NAME, TG_WHEN, TG_OP, new; end if;
+    if TG_OP in ('INSERT', 'UPDATE') then RETURN new; elsif TG_OP = 'DELETE' then RETURN old; end if;
+END;$body$;
