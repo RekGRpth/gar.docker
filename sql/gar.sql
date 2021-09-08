@@ -215,8 +215,8 @@ begin
             addr_obj_types.name AS type,
             addr_obj.postalcode AS post/*,
             socrbase.kod_t_st::integer AS level*/
-        FROM $$||gar_update.tbl||$$ as addr_obj
-        inner JOIN addr_obj_types ON addr_obj_types.level = addr_obj.level::int AND addr_obj_types.shortname = addr_obj.typename and addr_obj_types.isactive = 1 and current_timestamp between addr_obj_types.startdate and addr_obj_types.enddate
+        FROM $$||gar_update.tbl||$$ as apartments
+        inner JOIN apartment_types ON apartment_types.level = addr_obj.level::int AND addr_obj_types.shortname = addr_obj.typename and addr_obj_types.isactive = 1 and current_timestamp between addr_obj_types.startdate and addr_obj_types.enddate
         left join adm_hierarchy_$$||local.dir||$$ as adm_hierarchy on adm_hierarchy.objectid = addr_obj.objectid and adm_hierarchy.isactive = 1 and current_timestamp between adm_hierarchy.startdate and adm_hierarchy.enddate
         left join $$||gar_update.tbl||$$ as addr_obj_parent on addr_obj_parent.objectid = adm_hierarchy.parentobjid and addr_obj_parent.isactive = 1 and addr_obj_parent.isactual = 1 and current_timestamp between addr_obj_parent.startdate and addr_obj_parent.enddate
         left join param_types on param_types.name = 'Почтовый индекс' and isactive and current_timestamp between param_types.startdate and param_types.enddate
