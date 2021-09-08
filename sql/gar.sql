@@ -122,3 +122,15 @@ BEGIN
     --if TG_OP in ('INSERT', 'UPDATE') then raise info '%.% % % new %', TG_TABLE_SCHEMA, TG_TABLE_NAME, TG_WHEN, TG_OP, new; end if;
     if TG_OP in ('INSERT', 'UPDATE') then RETURN new; elsif TG_OP = 'DELETE' then RETURN old; end if;
 END;$body$;
+CREATE OR REPLACE FUNCTION gar_update(uuid uuid, parent_uuid uuid, name text, short text, type text, post text, level integer, "user" text, text text) RETURNS gar LANGUAGE sql AS $body$
+    UPDATE gar SET
+        parent_uuid = coalesce(gar_update.parent_uuid, parent_uuid),
+        name = coalesce(gar_update.name, name),
+        short = coalesce(gar_update.short, short),
+        type = coalesce(gar_update.type, type),
+        post = coalesce(gar_update.post, post),
+        level = coalesce(gar_update.level, level),
+        "user" = coalesce(gar_update.user, "user"),
+        text = coalesce(gar_update.text, text)
+    WHERE uuid = _uuid returning *;
+$body$;
