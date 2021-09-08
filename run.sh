@@ -10,7 +10,7 @@ docker run \
     --env LANG=ru_RU.UTF-8 \
     --env PGDATABASE=gar \
     --env PGHOST=/run/postgresql \
-    --env PGUSER=cron \
+    --env PGUSER=gar \
     --env TZ=Asia/Yekaterinburg \
     --env USER_ID="$(id -u)" \
     --hostname gar \
