@@ -16,4 +16,6 @@ COMMENT ON COLUMN normative_docs_$DIR.regnum IS 'Номер государств
 COMMENT ON COLUMN normative_docs_$DIR.regdate IS 'Дата государственной регистрации';
 COMMENT ON COLUMN normative_docs_$DIR.accdate IS 'Дата вступления в силу нормативного документа';
 COMMENT ON COLUMN normative_docs_$DIR.comment IS 'Комментарий';
+CREATE INDEX IF NOT EXISTS normative_docs_${DIR}_type_idx ON normative_docs_$DIR USING btree (type);
+CREATE INDEX IF NOT EXISTS normative_docs_${DIR}_kind_idx ON normative_docs_$DIR USING btree (kind);
 EOF
