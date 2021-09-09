@@ -26,6 +26,9 @@ while
         ;;
         "sql2pg" )
             find /usr/local/sql -type f -name "*.sql" | sort -u | xargs -r -P "$(nproc)" -I SQL psql --no-password --variable=ON_ERROR_STOP=1 --file="SQL" || exit 255
+            find /usr/local/sql -type f -name "*.sh" | sort -u | while read -r SH; do
+                seq --format "%02.0f" 1 99 | xargs -r -P "$(nproc)" -I DIR sh -eux "$SH" "DIR" || exit 255
+            done
             echo "$?"
             echo wget >fullVersionId.txt
             echo wget >state.txt
