@@ -28,6 +28,7 @@ RUN set -eux; \
     cd /; \
     apk add --no-cache --virtual .gar-rundeps \
         $(scanelf --needed --nobanner --format '%n#p' --recursive /usr/local | tr ',' '\n' | sort -u | while read -r lib; do test ! -e "/usr/local/lib/$lib" && echo "so:$lib"; done) \
+        coreutils \
         findutils \
         grep \
         jq \
