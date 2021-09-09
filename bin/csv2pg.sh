@@ -8,7 +8,7 @@ UPDATE="$5"
 PRIMARY="$6"
 DIR="$(dirname -- "$CSV")"
 DIR="$(basename -- "$DIR")"
-if echo "$DIR" | grep -P "^\d\d$" >/dev/null; then TABLE="$DIR.$TABLE"; fi
+if echo "$DIR" | grep -P "^\d\d$" >/dev/null; then TABLE="\"${DIR}\".$TABLE"; fi
 if [ -n "$UPDATE" ]; then
     COMMAND="CREATE TEMP TABLE tmp (LIKE $TABLE INCLUDING ALL) ON COMMIT DROP;COPY tmp ($FIELDS) FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ($FORCE_NOT_NULL));INSERT INTO $TABLE SELECT $FIELDS FROM tmp ON CONFLICT ($PRIMARY) DO UPDATE SET $UPDATE;"
 else
