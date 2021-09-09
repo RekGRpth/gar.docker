@@ -9,17 +9,17 @@ while
         "csv2pg" )
             deltaVersionId="$(cat deltaVersionId.txt)"
             fullVersionId="$(cat fullVersionId.txt)"
-            UPDATE=
-            PRIMARY=
             find /usr/local/xsd -type f -name "*.xsd" | sort -u | while read -r XSD; do
                 FIELDS="$(xmlstarlet select --text --noblanks --template --value-of /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:attribute/@name "$XSD" | sed 's/\(.*\)/\L\1/' | sed -uE 's|^(.+)$|"\1"|' | paste -sd ",")"
                 FORCE_NOT_NULL="$(xmlstarlet select --text --noblanks --template --match /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:attribute --value-of @use --output ";" --value-of @name --nl "$XSD" | grep -v optional | sed -uE 's|^required;||' | sed -uE 's|^(.+)$|"\1"|' | sed 's/\(.*\)/\L\1/' | paste -sd ",")"
+                TABLE="$(basename -- "${XSD%.*}")"
                 if [ "$deltaVersionId" != "$fullVersionId" ]; then
                     UPDATE="$(xmlstarlet select --text --noblanks --template --value-of /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:attribute/@name "$XSD" | sed 's/\(.*\)/\L\1/' | sed -uE 's|^(.+)$|"\1"=EXCLUDED."\1"|' | paste -sd ",")"
                     PRIMARY="$(xmlstarlet select --text --noblanks --template --match /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:attribute --value-of @use --output ";" --value-of @name --nl "$XSD" | grep -v optional | sed -uE 's|^required;||' | sed -uE 's|^(.+)$|"\1"|' | sed 's/\(.*\)/\L\1/' | head -1)"
+                    find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs -r -P "$(nproc)" -I CSV delta2pg.sh "CSV" "$TABLE" "$FIELDS" "$FORCE_NOT_NULL" "$UPDATE" "$PRIMARY" || exit 255
+                else
+                    find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs -r -P "$(nproc)" -I CSV full2pg.sh "CSV" "$TABLE" "$FIELDS" "$FORCE_NOT_NULL" || exit 255
                 fi
-                TABLE="$(basename -- "${XSD%.*}")"
-                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs -r -P "$(nproc)" -I CSV csv2pg.sh "CSV" "$TABLE" "$FIELDS" "$FORCE_NOT_NULL" "$UPDATE" "$PRIMARY" || exit 255
                 echo "$?"
             done
             echo "done" >state.txt
