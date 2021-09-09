@@ -72,7 +72,7 @@ CREATE OR REPLACE FUNCTION gar_text(uuid uuid, post boolean DEFAULT NULL, "full"
     ) select string_agg(text, ', ') from _
 $body$;
 CREATE OR REPLACE FUNCTION gar_full(uuid uuid) RETURNS text LANGUAGE sql STABLE AS $body$
-    select gar_text(gar_text.uuid, false, true);
+    select gar_text(gar_full.uuid, false, true);
 $body$;
 CREATE OR REPLACE FUNCTION gar_trigger() RETURNS trigger LANGUAGE plpgsql AS $body$ <<local>> declare
 BEGIN
