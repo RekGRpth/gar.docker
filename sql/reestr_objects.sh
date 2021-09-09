@@ -12,5 +12,5 @@ COMMENT ON COLUMN ${DIR}.reestr_objects.levelid IS 'Уровень объект�
 COMMENT ON COLUMN ${DIR}.reestr_objects.updatedate IS 'Дата обновления';
 COMMENT ON COLUMN ${DIR}.reestr_objects.objectguid IS 'GUID объекта';
 COMMENT ON COLUMN ${DIR}.reestr_objects.isactive IS 'Признак действующего объекта (1 - действующий, 0 - не действующий)';
-CREATE INDEX IF NOT EXISTS ${DIR}.reestr_objects_isactive_idx ON param_types USING btree (${DIR}.reestr_objects);
+CREATE INDEX IF NOT EXISTS ${DIR}.reestr_objects_isactive_idx ON ${DIR}.reestr_objects USING btree (isactive);
 EOF
