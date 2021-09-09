@@ -1,12 +1,12 @@
 CREATE TABLE IF NOT EXISTS param_types (
-  id INT NOT NULL PRIMARY KEY,
-  name VARCHAR(50) NOT NULL,
-  code VARCHAR(50) NOT NULL,
-  "desc" VARCHAR(120),
-  updatedate DATE NOT NULL,
-  startdate DATE NOT NULL,
-  enddate DATE NOT NULL,
-  isactive BOOLEAN NOT NULL
+    id INT NOT NULL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    code VARCHAR(50) NOT NULL,
+    "desc" VARCHAR(120),
+    updatedate DATE NOT NULL,
+    startdate DATE NOT NULL,
+    enddate DATE NOT NULL,
+    isactive BOOLEAN NOT NULL
 );
 COMMENT ON TABLE param_types IS 'Сведения по типу параметра';
 COMMENT ON COLUMN param_types.id IS 'Идентификатор типа параметра (ключ)';
