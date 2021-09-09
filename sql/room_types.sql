@@ -1,12 +1,12 @@
 CREATE TABLE IF NOT EXISTS room_types (
-  id INT NOT NULL PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
-  shortname VARCHAR(50),
-  "desc" VARCHAR(250),
-  updatedate DATE NOT NULL,
-  startdate DATE NOT NULL,
-  enddate DATE NOT NULL,
-  isactive BOOLEAN NOT NULL
+    id INT NOT NULL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    shortname VARCHAR(50),
+    "desc" VARCHAR(250),
+    updatedate DATE NOT NULL,
+    startdate DATE NOT NULL,
+    enddate DATE NOT NULL,
+    isactive BOOLEAN NOT NULL
 );
 COMMENT ON TABLE room_types IS 'Сведения по типам комнат';
 COMMENT ON COLUMN room_types.id IS 'Идентификатор типа (ключ)';
