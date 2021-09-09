@@ -38,3 +38,23 @@ CREATE INDEX IF NOT EXISTS adm_hierarchy_parentobjid_idx ON adm_hierarchy USING 
 CREATE INDEX IF NOT EXISTS adm_hierarchy_startdate_idx ON adm_hierarchy USING btree (startdate);
 CREATE INDEX IF NOT EXISTS adm_hierarchy_enddate_idx ON adm_hierarchy USING btree (enddate);
 CREATE INDEX IF NOT EXISTS adm_hierarchy_isactive_idx ON adm_hierarchy USING btree (isactive);
+CREATE OR REPLACE FUNCTION adm_hierarchy_trigger() RETURNS trigger LANGUAGE plpgsql AS $body$ <<local>> declare
+BEGIN
+    insert into gar
+    SELECT --distinct
+        addr_obj.objectguid AS uuid,
+        addr_obj_parent.objectguid AS parent_uuid,
+        addr_obj.name AS name,
+        rtrim(addr_obj_types.shortname, '.') AS short,
+        addr_obj_types.name AS type,
+        addr_obj_params.value AS post
+    FROM addr_obj as addr_obj
+    inner JOIN addr_obj_types ON addr_obj_types.level = addr_obj.level::int AND addr_obj_types.shortname = addr_obj.typename and addr_obj_types.isactive and current_timestamp between addr_obj_types.startdate and addr_obj_types.enddate
+    left join addr_obj as addr_obj_parent on addr_obj_parent.objectid = new.parentobjid and addr_obj_parent.isactive = 1 and addr_obj_parent.isactual = 1 and current_timestamp between addr_obj_parent.startdate and addr_obj_parent.enddate
+    left join param_types on param_types.name = 'Почтовый индекс' and param_types.isactive and current_timestamp between param_types.startdate and param_types.enddate
+    left join addr_obj_params as addr_obj_params on addr_obj_params.objectid = addr_obj.objectid and addr_obj_params.typeid = param_types.id and current_timestamp between addr_obj_params.startdate and addr_obj_params.enddate
+    WHERE addr_obj.isactive = 1 and addr_obj.isactual = 1 and current_timestamp between addr_obj.startdate and addr_obj.enddate and addr_obj.objectid = new.objectid
+    on conflict (uuid) do update set parent_uuid = EXCLUDED.parent_uuid, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post;
+    if TG_OP in ('INSERT', 'UPDATE') then RETURN new; elsif TG_OP = 'DELETE' then RETURN old; end if;
+END;$body$;
+CREATE TRIGGER adm_hierarchy_after_trigger AFTER INSERT OR UPDATE ON adm_hierarchy FOR EACH ROW WHEN current_timestamp between new.startdate and new.enddate and new.isactive = 1 EXECUTE PROCEDURE adm_hierarchy_trigger();
