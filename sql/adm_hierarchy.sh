@@ -2,27 +2,28 @@
 
 DIR="$1"
 exec psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
-CREATE TABLE IF NOT EXISTS adm_hierarchy_$DIR (CONSTRAINT adm_hierarchy_${DIR}_pkey PRIMARY KEY (id)) INHERITS (adm_hierarchy);
-COMMENT ON TABLE adm_hierarchy_$DIR IS 'Сведения по иерархии в административном делении';
-COMMENT ON COLUMN adm_hierarchy_$DIR.id IS 'Уникальный идентификатор записи. Ключевое поле';
-COMMENT ON COLUMN adm_hierarchy_$DIR.objectid IS 'Глобальный уникальный идентификатор объекта';
-COMMENT ON COLUMN adm_hierarchy_$DIR.parentobjid IS 'Идентификатор родительского объекта';
-COMMENT ON COLUMN adm_hierarchy_$DIR.changeid IS 'ID изменившей транзакции';
-COMMENT ON COLUMN adm_hierarchy_$DIR.regioncode IS 'Код региона';
-COMMENT ON COLUMN adm_hierarchy_$DIR.areacode IS 'Код района';
-COMMENT ON COLUMN adm_hierarchy_$DIR.citycode IS 'Код города';
-COMMENT ON COLUMN adm_hierarchy_$DIR.placecode IS 'Код населенного пункта';
-COMMENT ON COLUMN adm_hierarchy_$DIR.plancode IS 'Код ЭПС';
-COMMENT ON COLUMN adm_hierarchy_$DIR.streetcode IS 'Код улицы';
-COMMENT ON COLUMN adm_hierarchy_$DIR.previd IS 'Идентификатор записи связывания с предыдущей исторической записью';
-COMMENT ON COLUMN adm_hierarchy_$DIR.nextid IS 'Идентификатор записи связывания с последующей исторической записью';
-COMMENT ON COLUMN adm_hierarchy_$DIR.updatedate IS 'Дата внесения (обновления) записи';
-COMMENT ON COLUMN adm_hierarchy_$DIR.startdate IS 'Начало действия записи';
-COMMENT ON COLUMN adm_hierarchy_$DIR.enddate IS 'Окончание действия записи';
-COMMENT ON COLUMN adm_hierarchy_$DIR.isactive IS 'Признак действующего адресного объекта';
-CREATE INDEX IF NOT EXISTS adm_hierarchy_${DIR}_objectid_idx ON adm_hierarchy_$DIR USING btree (objectid);
-CREATE INDEX IF NOT EXISTS adm_hierarchy_${DIR}_parentobjid_idx ON adm_hierarchy_$DIR USING btree (parentobjid);
-CREATE INDEX IF NOT EXISTS adm_hierarchy_${DIR}_startdate_idx ON adm_hierarchy_$DIR USING btree (startdate);
-CREATE INDEX IF NOT EXISTS adm_hierarchy_${DIR}_enddate_idx ON adm_hierarchy_$DIR USING btree (enddate);
-CREATE INDEX IF NOT EXISTS adm_hierarchy_${DIR}_isactive_idx ON adm_hierarchy_$DIR USING btree (isactive);
+CREATE SCHEMA IF NOT EXISTS $DIR;
+CREATE TABLE IF NOT EXISTS $DIR.adm_hierarchy (CONSTRAINT $DIR.adm_hierarchy_pkey PRIMARY KEY (id)) INHERITS (adm_hierarchy);
+COMMENT ON TABLE $DIR.adm_hierarchy IS 'Сведения по иерархии в административном делении';
+COMMENT ON COLUMN $DIR.adm_hierarchy.id IS 'Уникальный идентификатор записи. Ключевое поле';
+COMMENT ON COLUMN $DIR.adm_hierarchy.objectid IS 'Глобальный уникальный идентификатор объекта';
+COMMENT ON COLUMN $DIR.adm_hierarchy.parentobjid IS 'Идентификатор родительского объекта';
+COMMENT ON COLUMN $DIR.adm_hierarchy.changeid IS 'ID изменившей транзакции';
+COMMENT ON COLUMN $DIR.adm_hierarchy.regioncode IS 'Код региона';
+COMMENT ON COLUMN $DIR.adm_hierarchy.areacode IS 'Код района';
+COMMENT ON COLUMN $DIR.adm_hierarchy.citycode IS 'Код города';
+COMMENT ON COLUMN $DIR.adm_hierarchy.placecode IS 'Код населенного пункта';
+COMMENT ON COLUMN $DIR.adm_hierarchy.plancode IS 'Код ЭПС';
+COMMENT ON COLUMN $DIR.adm_hierarchy.streetcode IS 'Код улицы';
+COMMENT ON COLUMN $DIR.adm_hierarchy.previd IS 'Идентификатор записи связывания с предыдущей исторической записью';
+COMMENT ON COLUMN $DIR.adm_hierarchy.nextid IS 'Идентификатор записи связывания с последующей исторической записью';
+COMMENT ON COLUMN $DIR.adm_hierarchy.updatedate IS 'Дата внесения (обновления) записи';
+COMMENT ON COLUMN $DIR.adm_hierarchy.startdate IS 'Начало действия записи';
+COMMENT ON COLUMN $DIR.adm_hierarchy.enddate IS 'Окончание действия записи';
+COMMENT ON COLUMN $DIR.adm_hierarchy.isactive IS 'Признак действующего адресного объекта';
+CREATE INDEX IF NOT EXISTS $DIR.adm_hierarchy_objectid_idx ON $DIR.adm_hierarchy USING btree (objectid);
+CREATE INDEX IF NOT EXISTS $DIR.adm_hierarchy_parentobjid_idx ON $DIR.adm_hierarchy USING btree (parentobjid);
+CREATE INDEX IF NOT EXISTS $DIR.adm_hierarchy_startdate_idx ON $DIR.adm_hierarchy USING btree (startdate);
+CREATE INDEX IF NOT EXISTS $DIR.adm_hierarchy_enddate_idx ON $DIR.adm_hierarchy USING btree (enddate);
+CREATE INDEX IF NOT EXISTS $DIR.adm_hierarchy_isactive_idx ON $DIR.adm_hierarchy USING btree (isactive);
 EOF
