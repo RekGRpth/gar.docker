@@ -132,7 +132,7 @@ CREATE OR REPLACE FUNCTION gar_update(uuid uuid, parent_uuid uuid, name text, sh
         /*level = coalesce(gar_update.level, level),*/
         "user" = coalesce(gar_update.user, "user"),
         text = coalesce(gar_update.text, text)
-    WHERE uuid = _uuid returning *;
+    WHERE uuid = gar_update.uuid returning *;
 $body$;
 CREATE OR REPLACE FUNCTION gar_uuid(uuid uuid) RETURNS uuid[] LANGUAGE sql STABLE AS $body$
     select array_agg(uuid) from gar_select(gar_uuid.uuid, null);
