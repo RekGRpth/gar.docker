@@ -136,7 +136,7 @@ CREATE OR REPLACE FUNCTION gar_update(uuid uuid, parent_uuid uuid, name text, sh
 $body$;
 CREATE OR REPLACE FUNCTION gar_uuid(uuid uuid) RETURNS uuid[] LANGUAGE sql STABLE AS $body$
     select array_agg(uuid) from gar_select(gar_uuid.uuid, null);
-$$;
+$body$;
 CREATE INDEX IF NOT EXISTS gar_full_fts_idx ON gar USING gin (to_tsvector('russian'::regconfig, "full"));
 CREATE INDEX IF NOT EXISTS gar_name_idx ON gar USING btree (name);
 CREATE INDEX IF NOT EXISTS gar_parent_uuid_idx ON gar USING btree (parent_uuid);
