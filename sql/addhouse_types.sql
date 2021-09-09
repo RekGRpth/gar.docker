@@ -1,12 +1,12 @@
 CREATE TABLE IF NOT EXISTS addhouse_types (
-  id INT NOT NULL PRIMARY KEY,
-  name VARCHAR(50) NOT NULL,
-  shortname VARCHAR(50),
-  "desc" VARCHAR(250),
-  updatedate DATE NOT NULL,
-  startdate DATE NOT NULL,
-  enddate DATE NOT NULL,
-  isactive BOOLEAN NOT NULL
+    id INT NOT NULL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    shortname VARCHAR(50),
+    "desc" VARCHAR(250),
+    updatedate DATE NOT NULL,
+    startdate DATE NOT NULL,
+    enddate DATE NOT NULL,
+    isactive BOOLEAN NOT NULL
 );
 COMMENT ON TABLE addhouse_types IS 'Дополнительные сведения по типам домов';
 COMMENT ON COLUMN addhouse_types.id IS 'Идентификатор';
