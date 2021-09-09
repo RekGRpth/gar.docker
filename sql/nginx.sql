@@ -1,4 +1,5 @@
 \connect gar nginx
+CREATE SCHEMA IF NOT EXISTS nginx AUTHORIZATION nginx;
 CREATE OR REPLACE FUNCTION gar_insert(INOUT json json) RETURNS json LANGUAGE plpgsql AS $body$ <<local>> declare
     query json default gar_insert.json->'json_get_vars'; -- параметры запроса
     uuid uuid default nullif(trim(local.query->>'uuid'), '')::uuid; -- уид
