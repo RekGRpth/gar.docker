@@ -3,7 +3,7 @@
 DIR="$1"
 exec psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
 CREATE SCHEMA IF NOT EXISTS "${DIR}";
-CREATE TABLE IF NOT EXISTS "${DIR}".change_history (CONSTRAINT "${DIR}".change_history_pkey PRIMARY KEY (changeid)) INHERITS (change_history);
+CREATE TABLE IF NOT EXISTS "${DIR}".change_history (CONSTRAINT change_history_pkey PRIMARY KEY (changeid)) INHERITS (change_history);
 COMMENT ON TABLE "${DIR}".change_history IS 'Сведения по истории изменений';
 COMMENT ON COLUMN "${DIR}".change_history.changeid IS 'ID изменившей транзакции';
 COMMENT ON COLUMN "${DIR}".change_history.objectid IS 'Уникальный ID объекта';

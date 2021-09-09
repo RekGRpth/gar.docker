@@ -3,7 +3,7 @@
 DIR="$1"
 exec psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
 CREATE SCHEMA IF NOT EXISTS "${DIR}";
-CREATE TABLE IF NOT EXISTS "${DIR}".houses (CONSTRAINT "${DIR}".houses_pkey PRIMARY KEY (id)) INHERITS (houses);
+CREATE TABLE IF NOT EXISTS "${DIR}".houses (CONSTRAINT houses_pkey PRIMARY KEY (id)) INHERITS (houses);
 COMMENT ON TABLE "${DIR}".houses IS 'Сведения по номерам домов улиц городов и населенных пунктов';
 COMMENT ON COLUMN "${DIR}".houses.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN "${DIR}".houses.objectid IS 'Глобальный уникальный идентификатор объекта типа INTEGER';
@@ -23,10 +23,10 @@ COMMENT ON COLUMN "${DIR}".houses.startdate IS 'Начало действия з
 COMMENT ON COLUMN "${DIR}".houses.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN "${DIR}".houses.isactual IS 'Статус актуальности адресного объекта ФИАС';
 COMMENT ON COLUMN "${DIR}".houses.isactive IS 'Признак действующего адресного объекта';
-CREATE INDEX IF NOT EXISTS "${DIR}".houses_objectid_idx ON "${DIR}".houses USING btree (objectid);
-CREATE INDEX IF NOT EXISTS "${DIR}".houses_housetype_idx ON "${DIR}".houses USING btree (housetype);
-CREATE INDEX IF NOT EXISTS "${DIR}".houses_startdate_idx ON "${DIR}".houses USING btree (startdate);
-CREATE INDEX IF NOT EXISTS "${DIR}".houses_enddate_idx ON "${DIR}".houses USING btree (enddate);
-CREATE INDEX IF NOT EXISTS "${DIR}".houses_isactual_idx ON "${DIR}".houses USING btree (isactual);
-CREATE INDEX IF NOT EXISTS "${DIR}".houses_isactive_idx ON "${DIR}".houses USING btree (isactive);
+CREATE INDEX IF NOT EXISTS houses_objectid_idx ON "${DIR}".houses USING btree (objectid);
+CREATE INDEX IF NOT EXISTS houses_housetype_idx ON "${DIR}".houses USING btree (housetype);
+CREATE INDEX IF NOT EXISTS houses_startdate_idx ON "${DIR}".houses USING btree (startdate);
+CREATE INDEX IF NOT EXISTS houses_enddate_idx ON "${DIR}".houses USING btree (enddate);
+CREATE INDEX IF NOT EXISTS houses_isactual_idx ON "${DIR}".houses USING btree (isactual);
+CREATE INDEX IF NOT EXISTS houses_isactive_idx ON "${DIR}".houses USING btree (isactive);
 EOF

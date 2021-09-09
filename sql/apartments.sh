@@ -3,7 +3,7 @@
 DIR="$1"
 exec psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
 CREATE SCHEMA IF NOT EXISTS "${DIR}";
-CREATE TABLE IF NOT EXISTS "${DIR}".apartments (CONSTRAINT "${DIR}".apartments_pkey PRIMARY KEY (id)) INHERITS (apartments);
+CREATE TABLE IF NOT EXISTS "${DIR}".apartments (CONSTRAINT apartments_pkey PRIMARY KEY (id)) INHERITS (apartments);
 COMMENT ON TABLE "${DIR}".apartments IS 'Сведения по помещениям';
 COMMENT ON COLUMN "${DIR}".apartments.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN "${DIR}".apartments.objectid IS 'Глобальный уникальный идентификатор объекта типа INTEGER';
@@ -19,10 +19,10 @@ COMMENT ON COLUMN "${DIR}".apartments.startdate IS 'Начало действи�
 COMMENT ON COLUMN "${DIR}".apartments.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN "${DIR}".apartments.isactual IS 'Статус актуальности адресного объекта ФИАС';
 COMMENT ON COLUMN "${DIR}".apartments.isactive IS 'Признак действующего адресного объекта';
-CREATE INDEX IF NOT EXISTS "${DIR}".apartments_objectid_idx ON "${DIR}".apartments USING btree (objectid);
-CREATE INDEX IF NOT EXISTS "${DIR}".apartments_aparttype_idx ON "${DIR}".apartments USING btree (aparttype);
-CREATE INDEX IF NOT EXISTS "${DIR}".apartments_startdate_idx ON "${DIR}".apartments USING btree (startdate);
-CREATE INDEX IF NOT EXISTS "${DIR}".apartments_enddate_idx ON "${DIR}".apartments USING btree (enddate);
-CREATE INDEX IF NOT EXISTS "${DIR}".apartments_isactual_idx ON "${DIR}".apartments USING btree (isactual);
-CREATE INDEX IF NOT EXISTS "${DIR}".apartments_isactive_idx ON "${DIR}".apartments USING btree (isactive);
+CREATE INDEX IF NOT EXISTS apartments_objectid_idx ON "${DIR}".apartments USING btree (objectid);
+CREATE INDEX IF NOT EXISTS apartments_aparttype_idx ON "${DIR}".apartments USING btree (aparttype);
+CREATE INDEX IF NOT EXISTS apartments_startdate_idx ON "${DIR}".apartments USING btree (startdate);
+CREATE INDEX IF NOT EXISTS apartments_enddate_idx ON "${DIR}".apartments USING btree (enddate);
+CREATE INDEX IF NOT EXISTS apartments_isactual_idx ON "${DIR}".apartments USING btree (isactual);
+CREATE INDEX IF NOT EXISTS apartments_isactive_idx ON "${DIR}".apartments USING btree (isactive);
 EOF

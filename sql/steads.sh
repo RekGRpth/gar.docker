@@ -2,7 +2,7 @@
 
 DIR="$1"
 exec psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
-CREATE TABLE IF NOT EXISTS "${DIR}".steads (CONSTRAINT "${DIR}".steads_pkey PRIMARY KEY (id)) INHERITS (steads);
+CREATE TABLE IF NOT EXISTS "${DIR}".steads (CONSTRAINT steads_pkey PRIMARY KEY (id)) INHERITS (steads);
 COMMENT ON TABLE "${DIR}".steads IS 'Сведения по земельным участкам';
 COMMENT ON COLUMN "${DIR}".steads.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN "${DIR}".steads.objectid IS 'Глобальный уникальный идентификатор объекта типа INTEGER';
@@ -17,9 +17,9 @@ COMMENT ON COLUMN "${DIR}".steads.startdate IS 'Начало действия з
 COMMENT ON COLUMN "${DIR}".steads.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN "${DIR}".steads.isactual IS 'Статус актуальности адресного объекта ФИАС';
 COMMENT ON COLUMN "${DIR}".steads.isactive IS 'Признак действующего адресного объекта';
-CREATE INDEX IF NOT EXISTS "${DIR}".steads_objectid_idx ON "${DIR}".steads USING btree (objectid);
-CREATE INDEX IF NOT EXISTS "${DIR}".steads_startdate_idx ON "${DIR}".steads USING btree (startdate);
-CREATE INDEX IF NOT EXISTS "${DIR}".steads_enddate_idx ON "${DIR}".steads USING btree (enddate);
-CREATE INDEX IF NOT EXISTS "${DIR}".steads_isactual_idx ON "${DIR}".steads USING btree (isactual);
-CREATE INDEX IF NOT EXISTS "${DIR}".steads_isactive_idx ON "${DIR}".steads USING btree (isactive);
+CREATE INDEX IF NOT EXISTS steads_objectid_idx ON "${DIR}".steads USING btree (objectid);
+CREATE INDEX IF NOT EXISTS steads_startdate_idx ON "${DIR}".steads USING btree (startdate);
+CREATE INDEX IF NOT EXISTS steads_enddate_idx ON "${DIR}".steads USING btree (enddate);
+CREATE INDEX IF NOT EXISTS steads_isactual_idx ON "${DIR}".steads USING btree (isactual);
+CREATE INDEX IF NOT EXISTS steads_isactive_idx ON "${DIR}".steads USING btree (isactive);
 EOF
