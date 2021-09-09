@@ -1,13 +1,13 @@
 CREATE TABLE IF NOT EXISTS addr_obj_types (
-  id INT NOT NULL PRIMARY KEY,
-  level INT NOT NULL,
-  shortname VARCHAR(50) NOT NULL,
-  name VARCHAR(250) NOT NULL,
-  "desc" VARCHAR(250),
-  updatedate DATE NOT NULL,
-  startdate DATE NOT NULL,
-  enddate DATE NOT NULL,
-  isactive BOOLEAN NOT NULL
+    id INT NOT NULL PRIMARY KEY,
+    level INT NOT NULL,
+    shortname VARCHAR(50) NOT NULL,
+    name VARCHAR(250) NOT NULL,
+    "desc" VARCHAR(250),
+    updatedate DATE NOT NULL,
+    startdate DATE NOT NULL,
+    enddate DATE NOT NULL,
+    isactive BOOLEAN NOT NULL
 );
 COMMENT ON TABLE addr_obj_types IS 'Сведения по типам адресных объектов';
 COMMENT ON COLUMN addr_obj_types.id IS 'Идентификатор записи';

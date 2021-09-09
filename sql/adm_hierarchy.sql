@@ -1,20 +1,20 @@
 CREATE TABLE IF NOT EXISTS adm_hierarchy (
-  id BIGINT NOT NULL PRIMARY KEY,
-  objectid BIGINT NOT NULL,
-  parentobjid BIGINT,
-  changeid BIGINT NOT NULL,
-  regioncode VARCHAR(4),
-  areacode VARCHAR(4),
-  citycode VARCHAR(4),
-  placecode VARCHAR(4),
-  plancode VARCHAR(4),
-  streetcode VARCHAR(4),
-  previd BIGINT,
-  nextid BIGINT,
-  updatedate DATE NOT NULL,
-  startdate DATE NOT NULL,
-  enddate DATE NOT NULL,
-  isactive SMALLINT NOT NULL
+    id BIGINT NOT NULL PRIMARY KEY,
+    objectid BIGINT NOT NULL,
+    parentobjid BIGINT,
+    changeid BIGINT NOT NULL,
+    regioncode VARCHAR(4),
+    areacode VARCHAR(4),
+    citycode VARCHAR(4),
+    placecode VARCHAR(4),
+    plancode VARCHAR(4),
+    streetcode VARCHAR(4),
+    previd BIGINT,
+    nextid BIGINT,
+    updatedate DATE NOT NULL,
+    startdate DATE NOT NULL,
+    enddate DATE NOT NULL,
+    isactive SMALLINT NOT NULL
 );
 COMMENT ON TABLE adm_hierarchy IS 'Сведения по иерархии в административном делении';
 COMMENT ON COLUMN adm_hierarchy.id IS 'Уникальный идентификатор записи. Ключевое поле';
