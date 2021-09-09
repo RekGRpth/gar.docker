@@ -30,6 +30,7 @@ COMMENT ON COLUMN rooms.enddate IS 'Окончание действия запи
 COMMENT ON COLUMN rooms.isactual IS 'Статус актуальности адресного объекта ФИАС';
 COMMENT ON COLUMN rooms.isactive IS 'Признак действующего адресного объекта';
 CREATE INDEX IF NOT EXISTS rooms_objectid_idx ON rooms USING btree (objectid);
+CREATE INDEX IF NOT EXISTS rooms_objectguid_idx ON rooms USING btree (objectguid);
 CREATE INDEX IF NOT EXISTS rooms_roomtype_idx ON rooms USING btree (roomtype);
 CREATE INDEX IF NOT EXISTS rooms_startdate_idx ON rooms USING btree (startdate);
 CREATE INDEX IF NOT EXISTS rooms_enddate_idx ON rooms USING btree (enddate);

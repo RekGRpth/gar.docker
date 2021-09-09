@@ -28,6 +28,7 @@ COMMENT ON COLUMN steads.enddate IS 'Окончание действия зап�
 COMMENT ON COLUMN steads.isactual IS 'Статус актуальности адресного объекта ФИАС';
 COMMENT ON COLUMN steads.isactive IS 'Признак действующего адресного объекта';
 CREATE INDEX IF NOT EXISTS steads_objectid_idx ON steads USING btree (objectid);
+CREATE INDEX IF NOT EXISTS steads_objectguid_idx ON steads USING btree (objectguid);
 CREATE INDEX IF NOT EXISTS steads_startdate_idx ON steads USING btree (startdate);
 CREATE INDEX IF NOT EXISTS steads_enddate_idx ON steads USING btree (enddate);
 CREATE INDEX IF NOT EXISTS steads_isactual_idx ON steads USING btree (isactual);

@@ -38,6 +38,7 @@ COMMENT ON COLUMN houses.enddate IS 'Окончание действия зап�
 COMMENT ON COLUMN houses.isactual IS 'Статус актуальности адресного объекта ФИАС';
 COMMENT ON COLUMN houses.isactive IS 'Признак действующего адресного объекта';
 CREATE INDEX IF NOT EXISTS houses_objectid_idx ON houses USING btree (objectid);
+CREATE INDEX IF NOT EXISTS houses_objectguid_idx ON houses USING btree (objectguid);
 CREATE INDEX IF NOT EXISTS houses_housetype_idx ON houses USING btree (housetype);
 CREATE INDEX IF NOT EXISTS houses_startdate_idx ON houses USING btree (startdate);
 CREATE INDEX IF NOT EXISTS houses_enddate_idx ON houses USING btree (enddate);

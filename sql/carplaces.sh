@@ -19,6 +19,7 @@ COMMENT ON COLUMN "${DIR}".carplaces.enddate IS 'Окончание действ
 COMMENT ON COLUMN "${DIR}".carplaces.isactual IS 'Статус актуальности адресного объекта ФИАС';
 COMMENT ON COLUMN "${DIR}".carplaces.isactive IS 'Признак действующего адресного объекта';
 CREATE INDEX IF NOT EXISTS carplaces_objectid_idx ON "${DIR}".carplaces USING btree (objectid);
+CREATE INDEX IF NOT EXISTS carplaces_objectguid_idx ON "${DIR}".carplaces USING btree (objectguid);
 CREATE INDEX IF NOT EXISTS carplaces_startdate_idx ON "${DIR}".carplaces USING btree (startdate);
 CREATE INDEX IF NOT EXISTS carplaces_enddate_idx ON "${DIR}".carplaces USING btree (enddate);
 CREATE INDEX IF NOT EXISTS carplaces_isactual_idx ON "${DIR}".carplaces USING btree (isactual);

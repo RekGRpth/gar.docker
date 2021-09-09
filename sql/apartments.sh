@@ -20,6 +20,7 @@ COMMENT ON COLUMN "${DIR}".apartments.enddate IS 'Окончание дейст�
 COMMENT ON COLUMN "${DIR}".apartments.isactual IS 'Статус актуальности адресного объекта ФИАС';
 COMMENT ON COLUMN "${DIR}".apartments.isactive IS 'Признак действующего адресного объекта';
 CREATE INDEX IF NOT EXISTS apartments_objectid_idx ON "${DIR}".apartments USING btree (objectid);
+CREATE INDEX IF NOT EXISTS apartments_objectguid_idx ON "${DIR}".apartments USING btree (objectguid);
 CREATE INDEX IF NOT EXISTS apartments_aparttype_idx ON "${DIR}".apartments USING btree (aparttype);
 CREATE INDEX IF NOT EXISTS apartments_startdate_idx ON "${DIR}".apartments USING btree (startdate);
 CREATE INDEX IF NOT EXISTS apartments_enddate_idx ON "${DIR}".apartments USING btree (enddate);

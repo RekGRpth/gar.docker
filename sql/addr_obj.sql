@@ -31,9 +31,10 @@ COMMENT ON COLUMN addr_obj.startdate IS 'Начало действия запи�
 COMMENT ON COLUMN addr_obj.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN addr_obj.isactual IS 'Статус актуальности адресного объекта ФИАС';
 COMMENT ON COLUMN addr_obj.isactive IS 'Признак действующего адресного объекта';
+CREATE INDEX IF NOT EXISTS addr_obj_objectid_idx ON addr_obj USING btree (objectid);
+CREATE INDEX IF NOT EXISTS addr_obj_objectguid_idx ON addr_obj USING btree (objectguid);
 CREATE INDEX IF NOT EXISTS addr_obj_typename_idx ON addr_obj USING btree (typename);
 CREATE INDEX IF NOT EXISTS addr_obj_level_idx ON addr_obj USING btree (level);
-CREATE INDEX IF NOT EXISTS addr_obj_objectid_idx ON addr_obj USING btree (objectid);
 CREATE INDEX IF NOT EXISTS addr_obj_startdate_idx ON addr_obj USING btree (startdate);
 CREATE INDEX IF NOT EXISTS addr_obj_enddate_idx ON addr_obj USING btree (enddate);
 CREATE INDEX IF NOT EXISTS addr_obj_isactual_idx ON addr_obj USING btree (isactual);

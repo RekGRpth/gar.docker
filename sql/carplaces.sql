@@ -28,6 +28,7 @@ COMMENT ON COLUMN carplaces.enddate IS 'Окончание действия за
 COMMENT ON COLUMN carplaces.isactual IS 'Статус актуальности адресного объекта ФИАС';
 COMMENT ON COLUMN carplaces.isactive IS 'Признак действующего адресного объекта';
 CREATE INDEX IF NOT EXISTS carplaces_objectid_idx ON carplaces USING btree (objectid);
+CREATE INDEX IF NOT EXISTS carplaces_objectguid_idx ON carplaces USING btree (objectguid);
 CREATE INDEX IF NOT EXISTS carplaces_startdate_idx ON carplaces USING btree (startdate);
 CREATE INDEX IF NOT EXISTS carplaces_enddate_idx ON carplaces USING btree (enddate);
 CREATE INDEX IF NOT EXISTS carplaces_isactual_idx ON carplaces USING btree (isactual);
