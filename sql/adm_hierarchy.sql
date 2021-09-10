@@ -55,6 +55,6 @@ BEGIN
     left join addr_obj_params as addr_obj_params on addr_obj_params.objectid = addr_obj.objectid and addr_obj_params.typeid = param_types.id and current_timestamp between addr_obj_params.startdate and addr_obj_params.enddate
     WHERE addr_obj.isactive = 1 and addr_obj.isactual = 1 and current_timestamp between addr_obj.startdate and addr_obj.enddate and addr_obj.objectid = new.objectid
     on conflict (uuid) do update set parent_uuid = EXCLUDED.parent_uuid, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post;
-    if TG_OP in ('INSERT', 'UPDATE') then RETURN new; elsif TG_OP = 'DELETE' then RETURN old; end if;
+    return new;
 END;$body$;
-CREATE TRIGGER adm_hierarchy_after_trigger AFTER INSERT OR UPDATE ON adm_hierarchy FOR EACH ROW WHEN current_timestamp between new.startdate and new.enddate and new.isactive = 1 EXECUTE PROCEDURE adm_hierarchy_trigger();
+CREATE TRIGGER adm_hierarchy_after_trigger AFTER INSERT OR UPDATE ON adm_hierarchy FOR EACH ROW WHEN (now() between new.startdate and new.enddate and new.isactive = 1) EXECUTE PROCEDURE adm_hierarchy_trigger();
