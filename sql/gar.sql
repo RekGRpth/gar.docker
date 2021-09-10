@@ -61,10 +61,10 @@ $body$;
 CREATE OR REPLACE FUNCTION gar_full(id uuid) RETURNS text LANGUAGE sql STABLE AS $body$
     select gar_text(gar_full.id, true, true);
 $body$;
-CREATE OR REPLACE FUNCTION gar_trigger() RETURNS trigger LANGUAGE plpgsql AS $body$ <<local>> declare
+/*CREATE OR REPLACE FUNCTION gar_trigger() RETURNS trigger LANGUAGE plpgsql AS $body$ <<local>> declare
 BEGIN
     if TG_OP in ('INSERT', 'UPDATE') then RETURN new; elsif TG_OP = 'DELETE' then RETURN old; end if;
-END;$body$;
+END;$body$;*/
 CREATE OR REPLACE FUNCTION gar_update(id uuid, parent uuid, name text, short text, type text, post text) RETURNS gar LANGUAGE sql AS $body$
     UPDATE gar SET
         parent = coalesce(gar_update.parent, parent),
@@ -81,8 +81,8 @@ CREATE INDEX IF NOT EXISTS gar_parent_idx ON gar USING btree (parent);
 CREATE INDEX IF NOT EXISTS gar_name_idx ON gar USING btree (name);
 CREATE INDEX IF NOT EXISTS gar_short_idx ON gar USING btree (short);
 CREATE INDEX IF NOT EXISTS gar_type_idx ON gar USING btree (type);
-DO $body$ BEGIN
+/*DO $body$ BEGIN
     CREATE TRIGGER gar_after_trigger AFTER INSERT OR DELETE OR UPDATE ON gar FOR EACH ROW EXECUTE PROCEDURE gar_trigger();
     CREATE TRIGGER gar_before_trigger BEFORE INSERT OR DELETE OR UPDATE ON gar FOR EACH ROW EXECUTE PROCEDURE gar_trigger();
     EXCEPTION WHEN others THEN null;
-END $body$;
+END $body$;*/
