@@ -3,8 +3,9 @@
 set -eux
 DIR="$1"
 psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
+--truncate table gar
 with _ as (
-    SELECT distinct on (parent, name, type)
+    SELECT
         addr_obj.objectguid AS id,
         addr_obj_parent.objectguid AS parent,
         addr_obj.name AS name,
@@ -17,10 +18,12 @@ with _ as (
     left join "${DIR}".addr_obj as addr_obj_parent on addr_obj_parent.objectid = adm_hierarchy.parentobjid and addr_obj_parent.isactive = 1 and addr_obj_parent.isactual = 1 and current_timestamp between addr_obj_parent.startdate and addr_obj_parent.enddate
     left join param_types on param_types.name = 'Почтовый индекс' and param_types.isactive and current_timestamp between param_types.startdate and param_types.enddate
     left join "${DIR}".addr_obj_params as addr_obj_params on addr_obj_params.objectid = addr_obj.objectid and addr_obj_params.typeid = param_types.id and current_timestamp between addr_obj_params.startdate and addr_obj_params.enddate
+    left join gar on gar.parent = addr_obj_parent.objectguid and gar.name = addr_obj.name and gar.type = addr_obj_types.name
     WHERE addr_obj.isactive = 1 and addr_obj.isactual = 1 and current_timestamp between addr_obj.startdate and addr_obj.enddate and addr_obj.level = 1
-) insert into gar SELECT distinct on (parent, name, type) * from _ on conflict on CONSTRAINT gar_name_short_type_key do update set parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post;
+    and gar.id is null
+) insert into gar SELECT distinct on (parent, name, type) * from _ on conflict (id) do update set parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post;
 with _ as (
-    SELECT distinct on (parent, name, type)
+    SELECT
         addr_obj.objectguid AS id,
         addr_obj_parent.objectguid AS parent,
         addr_obj.name AS name,
@@ -33,9 +36,10 @@ with _ as (
     left join "${DIR}".addr_obj as addr_obj_parent on addr_obj_parent.objectid = adm_hierarchy.parentobjid and addr_obj_parent.isactive = 1 and addr_obj_parent.isactual = 1 and current_timestamp between addr_obj_parent.startdate and addr_obj_parent.enddate
     left join param_types on param_types.name = 'Почтовый индекс' and param_types.isactive and current_timestamp between param_types.startdate and param_types.enddate
     left join "${DIR}".addr_obj_params as addr_obj_params on addr_obj_params.objectid = addr_obj.objectid and addr_obj_params.typeid = param_types.id and current_timestamp between addr_obj_params.startdate and addr_obj_params.enddate
+    left join gar on gar.parent = addr_obj_parent.objectguid and gar.name = addr_obj.name and gar.type = addr_obj_types.name
     WHERE addr_obj.isactive = 1 and addr_obj.isactual = 1 and current_timestamp between addr_obj.startdate and addr_obj.enddate
-    --and (addr_obj_parent.objectguid, addr_obj.name, addr_obj_types.name) = ('04e7dde6-8500-4c9f-8e4b-e770fbbed01a', 'автодорога Тюмень-Салаирка', 'Территория')
-) insert into gar SELECT distinct on (parent, name, type) * from _ WHERE parent is not null on conflict on CONSTRAINT gar_name_short_type_key do update set parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post
+    and gar.id is null
+) insert into gar SELECT distinct on (parent, name, type) * from _ WHERE parent is not null on conflict (id) do update set parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post;
 EOF
 psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
 with _ as (
