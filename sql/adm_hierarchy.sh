@@ -37,7 +37,7 @@ BEGIN
         addr_obj_types.name AS type,
         addr_obj_params.value AS post
     FROM "${DIR}".addr_obj as addr_obj
-    inner JOIN addr_obj_types ON addr_obj_types.level = addr_obj.level::int AND addr_obj_types.shortname = addr_obj.typename and addr_obj_types.isactive and current_timestamp between addr_obj_types.startdate and addr_obj_types.enddate
+    inner JOIN addr_obj_types ON addr_obj_types.level = addr_obj.level::int AND addr_obj_types.shortname = addr_obj.typename and addr_obj_types.isactive-- and current_timestamp between addr_obj_types.startdate and addr_obj_types.enddate
     left join "${DIR}".addr_obj as addr_obj_parent on addr_obj_parent.objectid = new.parentobjid and addr_obj_parent.isactive = 1 and addr_obj_parent.isactual = 1 and current_timestamp between addr_obj_parent.startdate and addr_obj_parent.enddate
     left join param_types on param_types.name = 'Почтовый индекс' and param_types.isactive and current_timestamp between param_types.startdate and param_types.enddate
     left join "${DIR}".addr_obj_params as addr_obj_params on addr_obj_params.objectid = addr_obj.objectid and addr_obj_params.typeid = param_types.id and current_timestamp between addr_obj_params.startdate and addr_obj_params.enddate
