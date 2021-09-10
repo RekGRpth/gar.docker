@@ -14,7 +14,7 @@ while
                 TABLE="$(basename -- "${XSD%.*}")"
                 PRIMARY="$(xmlstarlet select --text --noblanks --template --match /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:attribute --value-of @use --output ";" --value-of @name --nl "$XSD" | grep -v optional | sed -uE 's|^required;||' | sed -uE 's|^(.+)$|"\1"|' | sed 's/\(.*\)/\L\1/' | head -1)"
                 UPDATE="$(xmlstarlet select --text --noblanks --template --value-of /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:attribute/@name "$XSD" | sed 's/\(.*\)/\L\1/' | sed -uE 's|^(.+)$|"\1"=EXCLUDED."\1"|' | tail -n+2 | paste -sd ",")"
-                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs -r -P "$(nproc)" -I CSV delta2pg.sh "CSV" "$TABLE" "$FIELDS" "$FORCE_NOT_NULL" "$UPDATE" "$PRIMARY" || exit 255
+                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV delta2pg.sh "CSV" "$TABLE" "$FIELDS" "$FORCE_NOT_NULL" "$UPDATE" "$PRIMARY" || exit 255
                 echo "$?"
             done
             echo update >state.txt
@@ -24,15 +24,15 @@ while
                 FIELDS="$(xmlstarlet select --text --noblanks --template --value-of /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:attribute/@name "$XSD" | sed 's/\(.*\)/\L\1/' | sed -uE 's|^(.+)$|"\1"|' | paste -sd ",")"
                 FORCE_NOT_NULL="$(xmlstarlet select --text --noblanks --template --match /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:attribute --value-of @use --output ";" --value-of @name --nl "$XSD" | grep -v optional | sed -uE 's|^required;||' | sed -uE 's|^(.+)$|"\1"|' | sed 's/\(.*\)/\L\1/' | paste -sd ",")"
                 TABLE="$(basename -- "${XSD%.*}")"
-                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs -r -P "$(nproc)" -I CSV full2pg.sh "CSV" "$TABLE" "$FIELDS" "$FORCE_NOT_NULL" || exit 255
+                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV full2pg.sh "CSV" "$TABLE" "$FIELDS" "$FORCE_NOT_NULL" || exit 255
                 echo "$?"
             done
             echo update >state.txt
         ;;
         "sql2pg" )
-            find /usr/local/sql -type f -name "*.sql" | sort -u | xargs -r -P "$(nproc)" -I SQL psql --no-password --variable=ON_ERROR_STOP=1 --file="SQL" || exit 255
+            find /usr/local/sql -type f -name "*.sql" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=SQL psql --no-password --variable=ON_ERROR_STOP=1 --file="SQL" || exit 255
             find /usr/local/sql -type f -name "*.sh" | sort -u | while read -r SH; do
-                seq --format "%02.0f" 1 99 | xargs -r -P "$(nproc)" -I DIR sh "$SH" "DIR" || exit 255
+                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=DIR sh "$SH" "DIR" || exit 255
             done
             echo "$?"
             echo wget >fullVersionId.txt
@@ -46,7 +46,7 @@ while
             echo xml2csv >state.txt
         ;;
         "update" )
-            seq --format "%02.0f" 1 99 | xargs -r -P "$(nproc)" -I DIR update.sh "DIR" || exit 255
+            seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=DIR update.sh "DIR" || exit 255
             echo "done" >state.txt
         ;;
         "xml2csv" )
@@ -54,7 +54,7 @@ while
                 FIELDS="$(xmlstarlet select --text --noblanks --template --match /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:attribute --output " @" --value-of @name "$XSD")"
                 RECORD="$(xmlstarlet select --text --noblanks --template --value-of /xs:schema/xs:element/@name --output / --value-of /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/@name "$XSD")"
                 TABLE="$(basename -- "${XSD%.*}")"
-                find . -type f -name "as_${TABLE}_2*.xml" | sort -u | xargs -r -P "$(nproc)" -I XML xml2csv.sh "XML" "$RECORD" "$FIELDS" || exit 255
+                find . -type f -name "as_${TABLE}_2*.xml" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=XML xml2csv.sh "XML" "$RECORD" "$FIELDS" || exit 255
                 echo "$?"
             done
             deltaVersionId="$(cat deltaVersionId.txt)"
