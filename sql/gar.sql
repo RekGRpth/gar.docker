@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS gar (
     type text NOT NULL,
     post text,
     CONSTRAINT gar_pkey PRIMARY KEY (uuid),
-    CONSTRAINT gar_name_short_type_key UNIQUE (name, short, type)
+    CONSTRAINT gar_name_short_type_key UNIQUE (parent_uuid, name, type)
 );
 CREATE OR REPLACE FUNCTION gar_child(uuid uuid) RETURNS bigint LANGUAGE sql STABLE AS $body$
     select count(1) from gar where parent_uuid = gar_child.uuid;
