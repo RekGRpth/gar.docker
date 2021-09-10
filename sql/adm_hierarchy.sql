@@ -59,12 +59,14 @@ BEGIN
     SELECT distinct on (parent, name, type)
         houses.objectguid AS id,
         houses_parent.objectguid AS parent,
-        houses.housenum AS name,
+        concat_ws(', ', houses.housenum, case when house_types1.id is not null then concat(case when house_types1.id = houses.housetype then 'корп' else rtrim(house_types1.shortname, '.') end, '.', houses.addnum1) end, case when house_types2.id is not null then concat(case when house_types1.id = houses.housetype then 'стр' else rtrim(house_types2.shortname, '.') end, '.', houses.addnum2) end) AS name,
         rtrim(house_types.shortname, '.') AS short,
         house_types.name AS type,
         houses_params.value AS post
     FROM houses as houses
     inner JOIN house_types ON house_types.id = houses.housetype and house_types.isactive --and current_timestamp between house_types.startdate and house_types.enddate
+    left JOIN house_types as house_types1 ON house_types1.id = houses.addtype1 and house_types1.isactive --and current_timestamp between house_types1.startdate and house_types1.enddate
+    left JOIN house_types as house_types2 ON house_types2.id = houses.addtype2 and house_types2.isactive --and current_timestamp between house_types2.startdate and house_types2.enddate
     left join addr_obj as houses_parent on houses_parent.objectid = new.parentobjid and houses_parent.isactive = 1 and houses_parent.isactual = 1 and current_timestamp between houses_parent.startdate and houses_parent.enddate
     left join param_types on param_types.name = 'Почтовый индекс' and param_types.isactive and current_timestamp between param_types.startdate and param_types.enddate
     left join houses_params as houses_params on houses_params.objectid = houses.objectid and houses_params.typeid = param_types.id and current_timestamp between houses_params.startdate and houses_params.enddate
