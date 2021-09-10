@@ -1,5 +1,6 @@
 #!/bin/sh -eux
 
+set -eux
 touch deltaVersionId.txt
 touch fullVersionId.txt
 touch state.txt
