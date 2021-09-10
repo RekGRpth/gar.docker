@@ -25,7 +25,6 @@ CREATE OR REPLACE FUNCTION gar_select(INOUT json json) RETURNS json LANGUAGE plp
     type text default nullif(trim(local.query->>'type'), ''); -- тип
     post text default nullif(trim(local.query->>'port'), ''); -- индекс
     text text default nullif(trim(local.query->>'text'), ''); -- текст
-    "full" text default nullif(trim(local.query->>'full'), ''); -- полно
     term text default nullif(trim(local.query->>'term'), ''); -- строка поиска
     offset int default coalesce(nullif(trim(local.query->>'offset'), '')::int, 0); -- офсет
     limit int default coalesce(nullif(trim(local.query->>'limit'), '')::int, 10); -- лимит
@@ -43,7 +42,7 @@ begin
                         with _ as (
                             select * from _ offset local.offset limit local.limit
                         ) select coalesce(json_agg((select json_agg(_) from (
-                            select *, /*case when local.full then gar_full(uuid) end as "full",*/ case when local.child then gar_child(uuid) end as child from gar_select(_.uuid::uuid)
+                            select *, case when local.child then gar_child(uuid) end as child from gar_select(_.uuid::uuid)
                         ) as _)), '[]'::json) from _
                     ) as data from _
                 ) select to_json(_) from _ into strict gar_select.json;
@@ -53,7 +52,7 @@ begin
                         select * from gar_select(local.uuid::uuid[])
                     ) select count(1), local.query, local.offset, local.limit, (
                         with _ as (
-                            select *, /*case when local.full then gar_full(uuid) end as "full",*/ case when local.child then gar_child(uuid) end as child from _ offset local.offset limit local.limit
+                            select *, case when local.child then gar_child(uuid) end as child from _ offset local.offset limit local.limit
                         ) select coalesce(json_agg(_), '[]'::json) from _
                     ) as data from _
                 ) select to_json(_) from _ into strict gar_select.json;
@@ -65,7 +64,7 @@ begin
                         select * from gar_select(local.uuid::uuid, null)
                     ) select count(1), local.query, local.offset, local.limit, (
                         with _ as (
-                            select *, /*case when local.full then gar_full(uuid) end as "full",*/ case when local.child then gar_child(uuid) end as child from _ offset local.offset limit local.limit
+                            select *, case when local.child then gar_child(uuid) end as child from _ offset local.offset limit local.limit
                         ) select coalesce(json_agg(_), '[]'::json) from _
                     ) as data from _
                 ) select to_json(_) from _ into strict gar_select.json;
@@ -75,7 +74,7 @@ begin
                         select * from gar_select(local.uuid::uuid)
                     ) select count(1), local.query, local.offset, local.limit, (
                         with _ as (
-                            select *, /*case when local.full then gar_full(uuid) end as "full",*/ case when local.child then gar_child(uuid) end as child from _ offset local.offset limit local.limit
+                            select *, case when local.child then gar_child(uuid) end as child from _ offset local.offset limit local.limit
                         ) select coalesce(json_agg(_), '[]'::json) from _
                     ) as data from _
                 ) select to_json(_) from _ into strict gar_select.json;
@@ -95,10 +94,10 @@ begin
         local.type = translate(local.type, '[]','{}');
         with _ as (
             with _ as (
-                select * from gar_select(local.parent_uuid, local.name, local.short, local.type, local.post, local.text, local.full)
+                select * from gar_select(local.parent_uuid, local.name, local.short, local.type, local.post, local.text)
             ) select count(1), local.query, local.offset, local.limit, (
                 with _ as (
-                    select *, /*case when local.full then gar_full(uuid) end as "full",*/ case when local.child then gar_child(uuid) end as child from _ offset local.offset limit local.limit
+                    select *, case when local.child then gar_child(uuid) end as child from _ offset local.offset limit local.limit
                 ) select coalesce(json_agg(_), '[]'::json) from _
             ) as data from _
         ) select to_json(_) from _ into strict gar_select.json;
