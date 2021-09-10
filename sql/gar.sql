@@ -28,7 +28,7 @@ CREATE OR REPLACE FUNCTION gar_select(id uuid, parent uuid) RETURNS SETOF gar LA
         where gar_select.parent is null or _.parent != gar_select.parent
     ) select id, parent, name, short, type, post from _ order by i desc;
 $body$;
-CREATE OR REPLACE FUNCTION gar_select(parent id, name text, short text, type text, post text) RETURNS SETOF gar LANGUAGE sql STABLE AS $body$
+CREATE OR REPLACE FUNCTION gar_select(parent uuid, name text, short text, type text, post text) RETURNS SETOF gar LANGUAGE sql STABLE AS $body$
     select * from gar where true
     and ((gar_select.parent is null and parent is null) or parent = gar_select.parent)
     and (gar_select.name is null or name ilike gar_select.name||'%' or name ilike '% '||gar_select.name||'%' or name ilike '%-'||gar_select.name||'%' or name ilike '%.'||gar_select.name||'%')
