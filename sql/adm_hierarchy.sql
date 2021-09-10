@@ -43,7 +43,7 @@ BEGIN
     insert into gar
     SELECT --distinct
         addr_obj.objectguid AS uuid,
-        addr_obj_parent.objectguid AS parent_uuid,
+        addr_obj_parent.objectguid AS parent,
         addr_obj.name AS name,
         rtrim(addr_obj_types.shortname, '.') AS short,
         addr_obj_types.name AS type,
@@ -54,7 +54,7 @@ BEGIN
     left join param_types on param_types.name = 'Почтовый индекс' and param_types.isactive and current_timestamp between param_types.startdate and param_types.enddate
     left join addr_obj_params as addr_obj_params on addr_obj_params.objectid = addr_obj.objectid and addr_obj_params.typeid = param_types.id and current_timestamp between addr_obj_params.startdate and addr_obj_params.enddate
     WHERE addr_obj.isactive = 1 and addr_obj.isactual = 1 and current_timestamp between addr_obj.startdate and addr_obj.enddate and addr_obj.objectid = new.objectid
-    on conflict (uuid) do update set parent_uuid = EXCLUDED.parent_uuid, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post;
+    on conflict (uuid) do update set parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post;
     return new;
 END;$body$;
 CREATE TRIGGER adm_hierarchy_after_trigger AFTER INSERT OR UPDATE ON adm_hierarchy FOR EACH ROW WHEN (now() between new.startdate and new.enddate and new.isactive = 1) EXECUTE PROCEDURE adm_hierarchy_trigger();
