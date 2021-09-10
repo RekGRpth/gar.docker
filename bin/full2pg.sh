@@ -1,4 +1,4 @@
-#!/bin/sh -eux
+#!/bin/sh
 
 set -eux
 CSV="$1"

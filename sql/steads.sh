@@ -1,5 +1,6 @@
-#!/bin/sh -eux
+#!/bin/sh
 
+set -eux
 DIR="$1"
 exec psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
 CREATE TABLE IF NOT EXISTS "${DIR}".steads (CONSTRAINT steads_pkey PRIMARY KEY (id)) INHERITS (steads);

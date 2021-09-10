@@ -1,5 +1,6 @@
-#!/bin/sh -eux
+#!/bin/sh
 
+set -eux
 DIR="$1"
 for TABLE in addr_obj_params apartments_params carplaces_params houses_params rooms_params steads_params; do
 psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
