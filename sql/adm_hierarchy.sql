@@ -41,7 +41,7 @@ CREATE INDEX IF NOT EXISTS adm_hierarchy_isactive_idx ON adm_hierarchy USING btr
 CREATE OR REPLACE FUNCTION adm_hierarchy_trigger() RETURNS trigger LANGUAGE plpgsql AS $body$ <<local>> declare
 BEGIN
     insert into gar
-    SELECT --distinct
+    SELECT distinct on (parent, name, type)
         addr_obj.objectguid AS id,
         addr_obj_parent.objectguid AS parent,
         addr_obj.name AS name,
