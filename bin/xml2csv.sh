@@ -1,5 +1,6 @@
 #!/bin/sh -eux
 
+set -eux
 XML="$1"
 RECORD="$2"
 FIELDS="$3"

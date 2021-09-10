@@ -1,5 +1,6 @@
 #!/bin/sh -eux
 
+set -eux
 CSV="$1"
 TABLE="$2"
 FIELDS="$3"
