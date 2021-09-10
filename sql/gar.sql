@@ -81,5 +81,8 @@ CREATE INDEX IF NOT EXISTS gar_parent_idx ON gar USING btree (parent);
 CREATE INDEX IF NOT EXISTS gar_name_idx ON gar USING btree (name);
 CREATE INDEX IF NOT EXISTS gar_short_idx ON gar USING btree (short);
 CREATE INDEX IF NOT EXISTS gar_type_idx ON gar USING btree (type);
-CREATE TRIGGER gar_after_trigger AFTER INSERT OR DELETE OR UPDATE ON gar FOR EACH ROW EXECUTE PROCEDURE gar_trigger();
-CREATE TRIGGER gar_before_trigger BEFORE INSERT OR DELETE OR UPDATE ON gar FOR EACH ROW EXECUTE PROCEDURE gar_trigger();
+DO $body$ BEGIN
+    CREATE TRIGGER gar_after_trigger AFTER INSERT OR DELETE OR UPDATE ON gar FOR EACH ROW EXECUTE PROCEDURE gar_trigger();
+    CREATE TRIGGER gar_before_trigger BEFORE INSERT OR DELETE OR UPDATE ON gar FOR EACH ROW EXECUTE PROCEDURE gar_trigger();
+    EXCEPTION WHEN others THEN null;
+END $body$;
