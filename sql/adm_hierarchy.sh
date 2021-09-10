@@ -26,7 +26,7 @@ CREATE INDEX IF NOT EXISTS adm_hierarchy_parentobjid_idx ON "${DIR}".adm_hierarc
 CREATE INDEX IF NOT EXISTS adm_hierarchy_startdate_idx ON "${DIR}".adm_hierarchy USING btree (startdate);
 CREATE INDEX IF NOT EXISTS adm_hierarchy_enddate_idx ON "${DIR}".adm_hierarchy USING btree (enddate);
 CREATE INDEX IF NOT EXISTS adm_hierarchy_isactive_idx ON "${DIR}".adm_hierarchy USING btree (isactive);
-CREATE OR REPLACE FUNCTION "${DIR}".adm_hierarchy_trigger() RETURNS trigger LANGUAGE plpgsql AS $body$ <<local>> declare
+CREATE OR REPLACE FUNCTION "${DIR}".adm_hierarchy_trigger() RETURNS trigger LANGUAGE plpgsql AS \$body\$ <<local>> declare
 BEGIN
     with _ as (
         SELECT
@@ -61,6 +61,6 @@ BEGIN
         WHERE houses.isactive = 1 and houses.isactual = 1 and current_timestamp between houses.startdate and houses.enddate
     ) insert into gar SELECT distinct on (parent, name, type) * from _ on conflict (id) do update set parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post;
     return new;
-END;$body$;
+END;\$body\$;
 CREATE TRIGGER adm_hierarchy_after_trigger AFTER INSERT OR UPDATE ON "${DIR}".adm_hierarchy FOR EACH ROW WHEN (now() between new.startdate and new.enddate and new.isactive = 1) EXECUTE PROCEDURE "${DIR}".adm_hierarchy_trigger();
 EOF
