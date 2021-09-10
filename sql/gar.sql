@@ -1,10 +1,12 @@
 CREATE TABLE IF NOT EXISTS gar (
-    uuid uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+    uuid uuid NOT NULL DEFAULT gen_random_uuid(),
     parent_uuid uuid,
     name text NOT NULL,
     short text NOT NULL,
     type text NOT NULL,
-    post text
+    post text,
+    CONSTRAINT gar_pkey PRIMARY KEY (uuid),
+    CONSTRAINT gar_name_short_type_key UNIQUE (name, short, type)
 );
 CREATE OR REPLACE FUNCTION gar_child(uuid uuid) RETURNS bigint LANGUAGE sql STABLE AS $body$
     select count(1) from gar where parent_uuid = gar_child.uuid;
