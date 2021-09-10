@@ -37,6 +37,9 @@ CREATE OR REPLACE FUNCTION gar_select(parent_uuid uuid, name text, short text, t
     and (gar_select.post is null or post ilike gar_select.post||'%')
     order by to_number('0'||name, '999999999'), name;
 $body$;
+CREATE OR REPLACE FUNCTION gar_text(name text, short text, type text) RETURNS text LANGUAGE sql IMMUTABLE AS $body$
+    select case when gar_text.type in ('Местность') then gar_text.name when gar_text.name ilike '%'||gar_text.type||'%' then gar_text.name else gar_text.short||'.'||gar_text.name end;
+$body$;
 CREATE OR REPLACE FUNCTION gar_text(uuid uuid[], post boolean DEFAULT NULL, "all" boolean DEFAULT NULL) RETURNS text LANGUAGE sql STABLE AS $body$
     with _ as (
         with _ as (
@@ -45,9 +48,6 @@ CREATE OR REPLACE FUNCTION gar_text(uuid uuid[], post boolean DEFAULT NULL, "all
             select post from _ where coalesce(gar_text.post, false) and post is not null limit 1
         ) select post as text from p union select string_agg(gar_text(name, short, type), ', ') as text from _ where type not in ('Подъезд', 'Этаж') or coalesce(gar_text.all, false)
     ) select string_agg(text, ', ') from _
-$body$;
-CREATE OR REPLACE FUNCTION gar_text(name text, short text, type text) RETURNS text LANGUAGE sql IMMUTABLE AS $body$
-    select case when gar_text.type in ('Местность') then gar_text.name when gar_text.name ilike '%'||gar_text.type||'%' then gar_text.name else gar_text.short||'.'||gar_text.name end;
 $body$;
 CREATE OR REPLACE FUNCTION gar_text(uuid uuid, post boolean DEFAULT NULL, "all" boolean DEFAULT NULL) RETURNS text LANGUAGE sql STABLE AS $body$
     with _ as (
