@@ -110,7 +110,7 @@ with _ as (
     FROM "${DIR}".rooms as rooms
     inner JOIN room_types ON room_types.id = rooms.roomtype and room_types.isactive --and current_timestamp between room_types.startdate and room_types.enddate
     left join "${DIR}".adm_hierarchy as adm_hierarchy on adm_hierarchy.objectid = rooms.objectid and adm_hierarchy.isactive = 1 and current_timestamp between adm_hierarchy.startdate and adm_hierarchy.enddate
-    left join "${DIR}".houses as rooms_parent on rooms_parent.objectid = adm_hierarchy.parentobjid and rooms_parent.isactive = 1 and rooms_parent.isactual = 1 and current_timestamp between rooms_parent.startdate and rooms_parent.enddate
+    left join "${DIR}".apartments as rooms_parent on rooms_parent.objectid = adm_hierarchy.parentobjid and rooms_parent.isactive = 1 and rooms_parent.isactual = 1 and current_timestamp between rooms_parent.startdate and rooms_parent.enddate
     left join param_types on param_types.name = 'Почтовый индекс' and param_types.isactive and current_timestamp between param_types.startdate and param_types.enddate
     left join "${DIR}".rooms_params as rooms_params on rooms_params.objectid = rooms.objectid and rooms_params.typeid = param_types.id and current_timestamp between rooms_params.startdate and rooms_params.enddate
     WHERE rooms.isactive = 1 and rooms.isactual = 1 and current_timestamp between rooms.startdate and rooms.enddate
