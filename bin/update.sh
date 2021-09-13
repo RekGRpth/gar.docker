@@ -2,6 +2,8 @@
 
 set -eux
 DIR="$1"
+exec > >(trap "" INT TERM; sed "s|^|$DIR: |")
+exec 2> >(trap "" INT TERM; sed "s|^|$DIR: (stderr) |" >&2)
 psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
 --truncate table gar
 with _ as (
