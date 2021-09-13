@@ -46,7 +46,9 @@ while
             echo xml2csv >state.txt
         ;;
         "update" )
-            seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=DIR update.sh "DIR" || exit 255
+            for TABLE in addr_obj apartments carplaces houses rooms steads; do
+                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=DIR "$TABLE.sh" "DIR" || exit 255
+            done
             echo "done" >state.txt
         ;;
         "xml2csv" )
