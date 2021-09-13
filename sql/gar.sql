@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS gar (
     CONSTRAINT gar_pkey PRIMARY KEY (id),
     CONSTRAINT gar_name_short_type_key UNIQUE (parent, name, type)
 );
+GRANT SELECT ON TABLE gar TO nginx;
 CREATE OR REPLACE FUNCTION gar_child(id uuid) RETURNS bigint LANGUAGE sql STABLE AS $body$
     select count(1) from gar where parent = gar_child.id;
 $body$;

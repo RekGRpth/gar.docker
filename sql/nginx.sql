@@ -44,7 +44,7 @@ begin
                         with _ as (
                             select * from _ offset local.offset limit local.limit
                         ) select coalesce(json_agg((select json_agg(_) from (
-                            select *, case when local.child then gar_child(id) end as child from gar_select(_.id::uuid)
+                            select *, case when local.child then gar_child(_.id) end as child from gar_select(_.id::uuid)
                         ) as _)), '[]'::json) from _
                     ) as data from _
                 ) select to_json(_) from _ into strict gar_select.json;
@@ -54,7 +54,7 @@ begin
                         select * from gar_select(local.id::uuid[])
                     ) select count(1), local.query, local.offset, local.limit, (
                         with _ as (
-                            select *, case when local.child then gar_child(id) end as child from _ offset local.offset limit local.limit
+                            select *, case when local.child then gar_child(_.id) end as child from _ offset local.offset limit local.limit
                         ) select coalesce(json_agg(_), '[]'::json) from _
                     ) as data from _
                 ) select to_json(_) from _ into strict gar_select.json;
@@ -66,7 +66,7 @@ begin
                         select * from gar_select(local.id::uuid, null)
                     ) select count(1), local.query, local.offset, local.limit, (
                         with _ as (
-                            select *, case when local.child then gar_child(id) end as child from _ offset local.offset limit local.limit
+                            select *, case when local.child then gar_child(_.id) end as child from _ offset local.offset limit local.limit
                         ) select coalesce(json_agg(_), '[]'::json) from _
                     ) as data from _
                 ) select to_json(_) from _ into strict gar_select.json;
@@ -76,7 +76,7 @@ begin
                         select * from gar_select(local.id::uuid)
                     ) select count(1), local.query, local.offset, local.limit, (
                         with _ as (
-                            select *, case when local.child then gar_child(id) end as child from _ offset local.offset limit local.limit
+                            select *, case when local.child then gar_child(_.id) end as child from _ offset local.offset limit local.limit
                         ) select coalesce(json_agg(_), '[]'::json) from _
                     ) as data from _
                 ) select to_json(_) from _ into strict gar_select.json;
@@ -99,7 +99,7 @@ begin
                 select * from gar_select(local.parent, local.name, local.short, local.type, local.post, local.object, local.region)
             ) select count(1), local.query, local.offset, local.limit, (
                 with _ as (
-                    select *, case when local.child then gar_child(id) end as child from _ offset local.offset limit local.limit
+                    select *, case when local.child then gar_child(_.id) end as child from _ offset local.offset limit local.limit
                 ) select coalesce(json_agg(_), '[]'::json) from _
             ) as data from _
         ) select to_json(_) from _ into strict gar_select.json;
