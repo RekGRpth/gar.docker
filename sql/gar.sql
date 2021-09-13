@@ -42,15 +42,15 @@ CREATE OR REPLACE FUNCTION gar_select(id uuid, parent uuid) RETURNS SETOF gar LA
         where gar_select.parent is null or _.parent != gar_select.parent
     ) select id, parent, name, short, type, post, object, region from _ order by i desc;
 $body$;
-CREATE OR REPLACE FUNCTION gar_select(parent uuid, name text, short text, type text, post text, object object, region smallint) RETURNS SETOF gar LANGUAGE sql STABLE AS $body$
+CREATE OR REPLACE FUNCTION gar_select(parent uuid, name text, short text, type text, post text, object text, region text) RETURNS SETOF gar LANGUAGE sql STABLE AS $body$
     select * from gar where true
     and ((gar_select.parent is null and parent is null) or parent = gar_select.parent)
     and (gar_select.name is null or name ilike gar_select.name||'%' or name ilike '% '||gar_select.name||'%' or name ilike '%-'||gar_select.name||'%' or name ilike '%.'||gar_select.name||'%')
     and (gar_select.short is null or short ilike gar_select.short)
     and (gar_select.type is null or case when gar_select.type ilike '{%}' then type = any(gar_select.type::text[]) else type ilike gar_select.type||'%' end)
     and (gar_select.post is null or post ilike gar_select.post||'%')
-    and (gar_select.object is null or case when gar_select.object ilike '{%}' then object = any(gar_select.object::object[]) else object = gar_select.object end)
-    and (gar_select.region is null or case when gar_select.region ilike '{%}' then region = any(gar_select.region::smallint[]) else region = gar_select.region end)
+    and (gar_select.object is null or case when gar_select.object ilike '{%}' then object = any(gar_select.object::object[]) else object = gar_select.object::object end)
+    and (gar_select.region is null or case when gar_select.region ilike '{%}' then region = any(gar_select.region::smallint[]) else region = gar_select.region::smallint end)
     order by to_number('0'||name, '999999999'), name;
 $body$;
 CREATE OR REPLACE FUNCTION gar_text(name text, short text, type text) RETURNS text LANGUAGE sql IMMUTABLE AS $body$
