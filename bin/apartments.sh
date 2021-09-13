@@ -2,8 +2,6 @@
 
 set -eux
 DIR="$1"
-exec > >(trap "" INT TERM; sed "s|^|$DIR.apartments: |")
-exec 2> >(trap "" INT TERM; sed "s|^|$DIR.apartments: (stderr) |" >&2)
 exec psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
 with g as (
     select * from gar where gar.object = 'apartments' and gar.region = ${DIR} for update of gar skip locked
