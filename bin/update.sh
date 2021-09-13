@@ -131,5 +131,5 @@ with _ as (
     left join param_types on param_types.name = 'Почтовый индекс' and param_types.isactive and current_timestamp between param_types.startdate and param_types.enddate
     left join "${DIR}".rooms_params as rooms_params on rooms_params.objectid = rooms.objectid and rooms_params.typeid = param_types.id and current_timestamp between rooms_params.startdate and rooms_params.enddate
     WHERE rooms.isactive = 1 and rooms.isactual = 1 and current_timestamp between rooms.startdate and rooms.enddate
-) insert into gar SELECT distinct on (parent, name, type) * from _ WHERE parent is not null on conflict (id) do update set parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post
+) insert into gar SELECT distinct on (parent, name, type) * from _ WHERE parent is not null and short is not null on conflict (id) do update set parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post
 EOF
