@@ -1,3 +1,15 @@
+-- drop table gar cascade
+DO $body$ BEGIN
+    CREATE TYPE object AS ENUM (
+        'addr_obj',
+        'apartments',
+        'carplaces',
+        'houses',
+        'rooms',
+        'steads'
+    );
+    EXCEPTION WHEN others THEN null;
+END $body$;
 CREATE TABLE IF NOT EXISTS gar (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     parent uuid,
@@ -5,6 +17,8 @@ CREATE TABLE IF NOT EXISTS gar (
     short text NOT NULL,
     type text NOT NULL,
     post text,
+    object object NOT NULL,
+    region smallint NOT NULL,
     CONSTRAINT gar_pkey PRIMARY KEY (id),
     CONSTRAINT gar_name_short_type_key UNIQUE (parent, name, type)
 );
@@ -26,7 +40,7 @@ CREATE OR REPLACE FUNCTION gar_select(id uuid, parent uuid) RETURNS SETOF gar LA
         union
         select gar.*, _.i + 1 as i from gar inner join _ on (_.parent = gar.id)
         where gar_select.parent is null or _.parent != gar_select.parent
-    ) select id, parent, name, short, type, post from _ order by i desc;
+    ) select id, parent, name, short, type, post, object, region from _ order by i desc;
 $body$;
 CREATE OR REPLACE FUNCTION gar_select(parent uuid, name text, short text, type text, post text) RETURNS SETOF gar LANGUAGE sql STABLE AS $body$
     select * from gar where true
@@ -81,6 +95,8 @@ CREATE INDEX IF NOT EXISTS gar_parent_idx ON gar USING btree (parent);
 CREATE INDEX IF NOT EXISTS gar_name_idx ON gar USING btree (name);
 CREATE INDEX IF NOT EXISTS gar_short_idx ON gar USING btree (short);
 CREATE INDEX IF NOT EXISTS gar_type_idx ON gar USING btree (type);
+CREATE INDEX IF NOT EXISTS gar_object_idx ON gar USING btree (object);
+CREATE INDEX IF NOT EXISTS gar_region_idx ON gar USING btree (region);
 /*DO $body$ BEGIN
     CREATE TRIGGER gar_after_trigger AFTER INSERT OR DELETE OR UPDATE ON gar FOR EACH ROW EXECUTE PROCEDURE gar_trigger();
     CREATE TRIGGER gar_before_trigger BEFORE INSERT OR DELETE OR UPDATE ON gar FOR EACH ROW EXECUTE PROCEDURE gar_trigger();
