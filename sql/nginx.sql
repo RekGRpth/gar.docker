@@ -17,8 +17,8 @@ begin
     ) select to_json(_) from _ into strict gar_insert.json;
 end;$body$;
 CREATE OR REPLACE FUNCTION gar_select(INOUT json json) RETURNS json LANGUAGE plpgsql STABLE AS $body$ <<local>> declare
-    id uuid default nullif(trim(gar_select.json->>'id'), '')::uuid; -- уид
-    parent uuid default nullif(trim(gar_select.json->>'parent'), '')::uuid; -- уид родителя
+    id text default nullif(trim(gar_select.json->>'id'), ''); -- уид
+    parent text default nullif(trim(gar_select.json->>'parent'), ''); -- уид родителя
     name text default nullif(trim(gar_select.json->>'name'), ''); -- наименование
     short text default nullif(trim(gar_select.json->>'short'), ''); -- кратко
     type text default nullif(trim(gar_select.json->>'type'), ''); -- тип
@@ -91,10 +91,10 @@ begin
             end if;
             local.name = ltrim(local.name, ' ');
         end if;
-        local.type = translate(local.type, '[]','{}');
+        --local.type = translate(local.type, '[]','{}');
         with _ as (
             with _ as (
-                select * from gar_select(local.parent, local.name, local.short, local.type, local.post, local.object, local.region)
+                select * from gar_select(local.parent::uuid, local.name, local.short, local.type, local.post, local.object::object, local.region::smallint)
             ) select count(1), gar_select.json as query, local.offset, local.limit, (
                 with _ as (
                     select *, case when local.child then gar_child(_.id) end as child from _ offset local.offset limit local.limit
