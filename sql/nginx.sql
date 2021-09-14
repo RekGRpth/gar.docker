@@ -91,10 +91,10 @@ begin
             end if;
             local.name = ltrim(local.name, ' ');
         end if;
-        --local.type = translate(local.type, '[]','{}');
+        local.type = translate(local.type, '[]','{}');
         with _ as (
             with _ as (
-                select * from gar_select(local.parent::uuid, local.name, local.short, local.type, local.post, local.object::object, local.region::smallint)
+                select * from gar_select(local.parent::uuid, local.name, local.short, local.type, local.post, local.object, local.region)
             ) select count(1), gar_select.json as query, local.offset, local.limit, (
                 with _ as (
                     select *, case when local.child then gar_child(_.id) end as child from _ offset local.offset limit local.limit
