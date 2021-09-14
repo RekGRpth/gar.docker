@@ -1,37 +1,35 @@
 CREATE SCHEMA IF NOT EXISTS nginx AUTHORIZATION nginx;
 \connect gar nginx
 CREATE OR REPLACE FUNCTION gar_insert(INOUT json json) RETURNS json LANGUAGE plpgsql AS $body$ <<local>> declare
-    query json default gar_insert.json->'json_get_vars'; -- параметры запроса
-    id uuid default nullif(trim(local.query->>'id'), '')::uuid; -- уид
-    parent uuid default nullif(trim(local.query->>'parent'), '')::uuid; -- уид родителя
-    name text default nullif(trim(local.query->>'name'), ''); -- наименование
-    short text default nullif(trim(local.query->>'short'), ''); -- кратко
-    type text default nullif(trim(local.query->>'type'), ''); -- тип
-    post text default nullif(trim(local.query->>'port'), ''); -- индекс
-    object text default nullif(trim(local.query->>'object'), ''); -- объект
-    region text default nullif(trim(local.query->>'region'), ''); -- регион
+    id uuid default nullif(trim(gar_insert.json->>'id'), '')::uuid; -- уид
+    parent uuid default nullif(trim(gar_insert.json->>'parent'), '')::uuid; -- уид родителя
+    name text default nullif(trim(gar_insert.json->>'name'), ''); -- наименование
+    short text default nullif(trim(gar_insert.json->>'short'), ''); -- кратко
+    type text default nullif(trim(gar_insert.json->>'type'), ''); -- тип
+    post text default nullif(trim(gar_insert.json->>'port'), ''); -- индекс
+    object text default nullif(trim(gar_insert.json->>'object'), ''); -- объект
+    region text default nullif(trim(gar_insert.json->>'region'), ''); -- регион
 begin
     with _ as (
         with _ as (
             select * from gar_insert(local.id, local.parent, local.name, local.short, local.type, local.post, local.object, local.region)
-        ) select local.query, to_json(_) as data from _
+        ) select gar_insert.json as query, to_json(_) as data from _
     ) select to_json(_) from _ into strict gar_insert.json;
 end;$body$;
 CREATE OR REPLACE FUNCTION gar_select(INOUT json json) RETURNS json LANGUAGE plpgsql STABLE AS $body$ <<local>> declare
-    query json default gar_select.json->'json_get_vars'; -- параметры запроса
-    id uuid default nullif(trim(local.query->>'id'), '')::uuid; -- уид
-    parent uuid default nullif(trim(local.query->>'parent'), '')::uuid; -- уид родителя
-    name text default nullif(trim(local.query->>'name'), ''); -- наименование
-    short text default nullif(trim(local.query->>'short'), ''); -- кратко
-    type text default nullif(trim(local.query->>'type'), ''); -- тип
-    post text default nullif(trim(local.query->>'port'), ''); -- индекс
-    object text default nullif(trim(local.query->>'object'), ''); -- объект
-    region text default nullif(trim(local.query->>'region'), ''); -- регион
-    term text default nullif(trim(local.query->>'term'), ''); -- строка поиска
-    offset int default coalesce(nullif(trim(local.query->>'offset'), '')::int, 0); -- офсет
-    limit int default coalesce(nullif(trim(local.query->>'limit'), '')::int, 10); -- лимит
-    "all" boolean default coalesce(nullif(trim(local.query->>'all'), '')::boolean, false); -- все?
-    child boolean default coalesce(nullif(trim(local.query->>'child'), '')::boolean, false); -- дети?
+    id uuid default nullif(trim(gar_select.json->>'id'), '')::uuid; -- уид
+    parent uuid default nullif(trim(gar_select.json->>'parent'), '')::uuid; -- уид родителя
+    name text default nullif(trim(gar_select.json->>'name'), ''); -- наименование
+    short text default nullif(trim(gar_select.json->>'short'), ''); -- кратко
+    type text default nullif(trim(gar_select.json->>'type'), ''); -- тип
+    post text default nullif(trim(gar_select.json->>'port'), ''); -- индекс
+    object text default nullif(trim(gar_select.json->>'object'), ''); -- объект
+    region text default nullif(trim(gar_select.json->>'region'), ''); -- регион
+    term text default nullif(trim(gar_select.json->>'term'), ''); -- строка поиска
+    offset int default coalesce(nullif(trim(gar_select.json->>'offset'), '')::int, 0); -- офсет
+    limit int default coalesce(nullif(trim(gar_select.json->>'limit'), '')::int, 10); -- лимит
+    "all" boolean default coalesce(nullif(trim(gar_select.json->>'all'), '')::boolean, false); -- все?
+    child boolean default coalesce(nullif(trim(gar_select.json->>'child'), '')::boolean, false); -- дети?
 begin
     if local.id is not null then -- если задан id
         local.id = translate(local.id, '[]','{}');
@@ -40,7 +38,7 @@ begin
                 with _ as (
                     with _ as (
                         select * from gar_select(local.id::uuid[])
-                    ) select count(1), local.query, local.offset, local.limit, (
+                    ) select count(1), gar_select.json as query, local.offset, local.limit, (
                         with _ as (
                             select * from _ offset local.offset limit local.limit
                         ) select coalesce(json_agg((select json_agg(_) from (
@@ -52,7 +50,7 @@ begin
                 with _ as (
                     with _ as (
                         select * from gar_select(local.id::uuid[])
-                    ) select count(1), local.query, local.offset, local.limit, (
+                    ) select count(1), gar_select.json as query, local.offset, local.limit, (
                         with _ as (
                             select *, case when local.child then gar_child(_.id) end as child from _ offset local.offset limit local.limit
                         ) select coalesce(json_agg(_), '[]'::json) from _
@@ -64,7 +62,7 @@ begin
                 with _ as (
                     with _ as (
                         select * from gar_select(local.id::uuid, null)
-                    ) select count(1), local.query, local.offset, local.limit, (
+                    ) select count(1), gar_select.json as query, local.offset, local.limit, (
                         with _ as (
                             select *, case when local.child then gar_child(_.id) end as child from _ offset local.offset limit local.limit
                         ) select coalesce(json_agg(_), '[]'::json) from _
@@ -74,7 +72,7 @@ begin
                 with _ as (
                     with _ as (
                         select * from gar_select(local.id::uuid)
-                    ) select count(1), local.query, local.offset, local.limit, (
+                    ) select count(1), gar_select.json as query, local.offset, local.limit, (
                         with _ as (
                             select *, case when local.child then gar_child(_.id) end as child from _ offset local.offset limit local.limit
                         ) select coalesce(json_agg(_), '[]'::json) from _
@@ -97,7 +95,7 @@ begin
         with _ as (
             with _ as (
                 select * from gar_select(local.parent, local.name, local.short, local.type, local.post, local.object, local.region)
-            ) select count(1), local.query, local.offset, local.limit, (
+            ) select count(1), gar_select.json as query, local.offset, local.limit, (
                 with _ as (
                     select *, case when local.child then gar_child(_.id) end as child from _ offset local.offset limit local.limit
                 ) select coalesce(json_agg(_), '[]'::json) from _
@@ -106,19 +104,18 @@ begin
     end if;
 end;$body$;
 CREATE OR REPLACE FUNCTION gar_update(INOUT json json) RETURNS json LANGUAGE plpgsql AS $body$ <<local>> declare
-    query json default gar_update.json->'json_get_vars'; -- параметры запроса
-    id uuid default nullif(trim(local.query->>'id'), '')::uuid; -- уид
-    parent uuid default nullif(trim(local.query->>'parent'), '')::uuid; -- уид родителя
-    name text default nullif(trim(local.query->>'name'), ''); -- наименование
-    short text default nullif(trim(local.query->>'short'), ''); -- кратко
-    type text default nullif(trim(local.query->>'type'), ''); -- тип
-    post text default nullif(trim(local.query->>'port'), ''); -- индекс
-    object text default nullif(trim(local.query->>'object'), ''); -- объект
-    region text default nullif(trim(local.query->>'region'), ''); -- регион
+    id uuid default nullif(trim(gar_update.json->>'id'), '')::uuid; -- уид
+    parent uuid default nullif(trim(gar_update.json->>'parent'), '')::uuid; -- уид родителя
+    name text default nullif(trim(gar_update.json->>'name'), ''); -- наименование
+    short text default nullif(trim(gar_update.json->>'short'), ''); -- кратко
+    type text default nullif(trim(gar_update.json->>'type'), ''); -- тип
+    post text default nullif(trim(gar_update.json->>'port'), ''); -- индекс
+    object text default nullif(trim(gar_update.json->>'object'), ''); -- объект
+    region text default nullif(trim(gar_update.json->>'region'), ''); -- регион
 begin
     with _ as (
         with _ as (
             select * from gar_update(local.id, local.parent, local.name, local.short, local.type, local.post, local.object, local.region)
-        ) select local.query, to_json(_) as data from _
+        ) select gar_update.json as query, to_json(_) as data from _
     ) select to_json(_) from _ into strict gar_update.json;
 end;$body$;
