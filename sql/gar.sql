@@ -54,6 +54,27 @@ CREATE OR REPLACE FUNCTION gar_select(parent uuid, name text, short text, type t
     and (gar_select.region is null or case when gar_select.region ilike '{%}' then region = any(gar_select.region::smallint[]) else region = gar_select.region::smallint end)
     order by to_number('0'||name, '999999999'), name;
 $body$;
+CREATE OR REPLACE FUNCTION gar_select_child(parent uuid, name text, short text, type text, post text, object text, region text) RETURNS SETOF gar LANGUAGE sql STABLE AS $body$
+    with _ as (
+        with recursive _ as (
+            select gar.*, 0 as i from gar where (gar_select_child.parent is null and parent is null) or id = gar_select_child.parent
+            union
+            select gar.*, _.i + 1 as i from gar inner join _ on _.id = gar.parent
+        ) select * from _ where i > 0
+        and (gar_select_child.name is null or name ilike gar_select_child.name||'%' or name ilike '% '||gar_select_child.name||'%' or name ilike '%-'||gar_select_child.name||'%' or name ilike '%.'||gar_select_child.name||'%')
+        and (gar_select_child.short is null or short ilike gar_select_child.short)
+        and (gar_select_child.type is null or case when gar_select_child.type ilike '{%}' then type = any(gar_select_child.type::text[]) else type ilike gar_select_child.type||'%' end)
+        and (gar_select_child.post is null or post ilike gar_select_child.post||'%')
+        and (gar_select_child.object is null or case when gar_select_child.object ilike '{%}' then object = any(gar_select_child.object::object[]) else object = gar_select_child.object::object end)
+        and (gar_select_child.region is null or case when gar_select_child.region ilike '{%}' then region = any(gar_select_child.region::smallint[]) else region = gar_select_child.region::smallint end)
+        order by    i
+    ) select id, parent, name, short, type, post, object, region from _ order by to_number('0'||name, '999999999'), name;
+$body$;
+CREATE OR REPLACE FUNCTION gar_select_parent(parent uuid, name text, short text, type text, post text, object text, region text) RETURNS SETOF gar LANGUAGE sql STABLE AS $body$
+    select * from gar where type = any(gar_select_parent.type::text[])
+    and (gar_select_parent.name is null or name ilike gar_select_parent.name||'%' or name ilike '% '||gar_select_parent.name||'%' or name ilike '%-'||gar_select_parent.name||'%' or name ilike '%.'||gar_select_parent.name||'%')
+    order by to_number('0'||name, '999999999'), name;
+$body$;
 CREATE OR REPLACE FUNCTION gar_text(name text, short text, type text) RETURNS text LANGUAGE sql IMMUTABLE AS $body$
     select case when gar_text.type in ('Местность') then gar_text.name when gar_text.name ilike '%'||gar_text.type||'%' then gar_text.name else gar_text.short||'.'||gar_text.name end;
 $body$;
