@@ -45,7 +45,7 @@ CREATE OR REPLACE FUNCTION gar_select(id uuid, parent uuid) RETURNS SETOF gar LA
         union
         select gar.*, _.i + 1 as i from gar inner join _ on (_.parent = gar.id)
         where gar_select.parent is null or _.parent != gar_select.parent
-    ) select id, parent, name, short, type, post, object, region from _ order by i desc;
+    ) select id, parent, name, short, type, post, object, region, text from _ order by i desc;
 $body$;
 CREATE OR REPLACE FUNCTION gar_select(parent uuid, name text, short text, type text, post text, object text, region text) RETURNS SETOF gar LANGUAGE sql STABLE AS $body$
     select * from gar where true
@@ -71,8 +71,8 @@ CREATE OR REPLACE FUNCTION gar_select_child(parent uuid, name text, short text, 
         and (gar_select_child.post is null or post ilike gar_select_child.post||'%')
         and (gar_select_child.object is null or case when gar_select_child.object ilike '{%}' then object = any(gar_select_child.object::object[]) else object = gar_select_child.object::object end)
         and (gar_select_child.region is null or case when gar_select_child.region ilike '{%}' then region = any(gar_select_child.region::smallint[]) else region = gar_select_child.region::smallint end)
-        order by    i
-    ) select id, parent, name, short, type, post, object, region from _ order by to_number('0'||name, '999999999'), name;
+        order by i
+    ) select id, parent, name, short, type, post, object, region, text from _ order by to_number('0'||name, '999999999'), name;
 $body$;
 CREATE OR REPLACE FUNCTION gar_select_parent(parent uuid, name text, short text, type text, post text, object text, region text) RETURNS SETOF gar LANGUAGE sql STABLE AS $body$
     select * from gar where type = any(gar_select_parent.type::text[])
