@@ -8,9 +8,14 @@ FORCE_NOT_NULL="$4"
 UPDATE="$5"
 PRIMARY="$6"
 ISACTIVE="$7"
+DATE="$8"
 DIR="$(dirname -- "$CSV")"
 DIR="$(basename -- "$DIR")"
 if echo "$DIR" | grep -P "^\d\d$" >/dev/null; then TABLE="\"${DIR}\".$TABLE"; fi
 COMMAND="CREATE TEMP TABLE tmp (LIKE $TABLE INCLUDING ALL) ON COMMIT DROP;COPY tmp ($FIELDS) FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ($FORCE_NOT_NULL));INSERT INTO $TABLE SELECT $FIELDS FROM tmp ON CONFLICT ($PRIMARY) DO UPDATE SET $UPDATE;"
-if [ -n "$ISACTIVE" ]; then COMMAND="${COMMAND}DELETE FROM $TABLE WHERE NOT isactive;"; fi
+if [ -n "$ISACTIVE" ]; then
+    COMMAND="${COMMAND}DELETE FROM $TABLE WHERE NOT isactive;"
+elif [ -n "$DATE" ]; then
+    COMMAND="${COMMAND}DELETE FROM $TABLE WHERE NOT current_timestamp between startdate and enddate;"
+fi
 exec psql --no-password --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
