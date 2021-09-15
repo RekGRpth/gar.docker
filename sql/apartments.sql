@@ -32,4 +32,4 @@ COMMENT ON COLUMN apartments.isactive IS 'Признак действующег�
 CREATE INDEX IF NOT EXISTS apartments_objectid_idx ON apartments USING btree (objectid);
 CREATE INDEX IF NOT EXISTS apartments_objectguid_idx ON apartments USING btree (objectguid);
 CREATE INDEX IF NOT EXISTS apartments_aparttype_idx ON apartments USING btree (aparttype);
-CREATE INDEX IF NOT EXISTS apartments_isactive_idx ON apartments USING btree (isactive);
+CREATE INDEX IF NOT EXISTS apartments_isactive_idx ON apartments USING btree (isactive) WHERE NOT isactive;

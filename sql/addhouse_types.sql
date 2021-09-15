@@ -17,4 +17,4 @@ COMMENT ON COLUMN addhouse_types.updatedate IS 'Дата внесения (об�
 COMMENT ON COLUMN addhouse_types.startdate IS 'Начало действия записи';
 COMMENT ON COLUMN addhouse_types.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN addhouse_types.isactive IS 'Статус активности';
-CREATE INDEX IF NOT EXISTS addhouse_types_isactive_idx ON addhouse_types USING btree (isactive);
+CREATE INDEX IF NOT EXISTS addhouse_types_isactive_idx ON addhouse_types USING btree (isactive) WHERE NOT isactive;

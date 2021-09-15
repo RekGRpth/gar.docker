@@ -21,5 +21,5 @@ COMMENT ON COLUMN "${DIR}".carplaces.isactual IS 'Статус актуальн�
 COMMENT ON COLUMN "${DIR}".carplaces.isactive IS 'Признак действующего адресного объекта';
 CREATE INDEX IF NOT EXISTS carplaces_objectid_idx ON "${DIR}".carplaces USING btree (objectid);
 CREATE INDEX IF NOT EXISTS carplaces_objectguid_idx ON "${DIR}".carplaces USING btree (objectguid);
-CREATE INDEX IF NOT EXISTS carplaces_isactive_idx ON "${DIR}".carplaces USING btree (isactive);
+CREATE INDEX IF NOT EXISTS carplaces_isactive_idx ON "${DIR}".carplaces USING btree (isactive) WHERE NOT isactive;
 EOF

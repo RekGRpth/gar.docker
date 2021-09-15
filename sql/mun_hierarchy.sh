@@ -19,5 +19,5 @@ COMMENT ON COLUMN "${DIR}".mun_hierarchy.enddate IS 'Окончание дейс
 COMMENT ON COLUMN "${DIR}".mun_hierarchy.isactive IS 'Признак действующего адресного объекта';
 CREATE INDEX IF NOT EXISTS mun_hierarchy_objectid_idx ON "${DIR}".mun_hierarchy USING btree (objectid);
 CREATE INDEX IF NOT EXISTS mun_hierarchy_parentobjid_idx ON "${DIR}".mun_hierarchy USING btree (parentobjid);
-CREATE INDEX IF NOT EXISTS mun_hierarchy_isactive_idx ON "${DIR}".mun_hierarchy USING btree (isactive);
+CREATE INDEX IF NOT EXISTS mun_hierarchy_isactive_idx ON "${DIR}".mun_hierarchy USING btree (isactive) WHERE NOT isactive;
 EOF

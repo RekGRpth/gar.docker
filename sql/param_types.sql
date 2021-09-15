@@ -18,4 +18,4 @@ COMMENT ON COLUMN param_types.startdate IS 'Начало действия зап
 COMMENT ON COLUMN param_types.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN param_types.isactive IS 'Статус активности';
 CREATE INDEX IF NOT EXISTS param_types_name_idx ON param_types USING btree (name);
-CREATE INDEX IF NOT EXISTS param_types_isactive_idx ON param_types USING btree (isactive);
+CREATE INDEX IF NOT EXISTS param_types_isactive_idx ON param_types USING btree (isactive) WHERE NOT isactive;

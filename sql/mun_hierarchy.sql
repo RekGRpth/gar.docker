@@ -25,4 +25,4 @@ COMMENT ON COLUMN mun_hierarchy.enddate IS 'Окончание действия 
 COMMENT ON COLUMN mun_hierarchy.isactive IS 'Признак действующего адресного объекта';
 CREATE INDEX IF NOT EXISTS mun_hierarchy_objectid_idx ON mun_hierarchy USING btree (objectid);
 CREATE INDEX IF NOT EXISTS mun_hierarchy_parentobjid_idx ON mun_hierarchy USING btree (parentobjid);
-CREATE INDEX IF NOT EXISTS mun_hierarchy_isactive_idx ON mun_hierarchy USING btree (isactive);
+CREATE INDEX IF NOT EXISTS mun_hierarchy_isactive_idx ON mun_hierarchy USING btree (isactive) WHERE NOT isactive;

@@ -29,4 +29,4 @@ COMMENT ON COLUMN steads.isactual IS 'Статус актуальности ад
 COMMENT ON COLUMN steads.isactive IS 'Признак действующего адресного объекта';
 CREATE INDEX IF NOT EXISTS steads_objectid_idx ON steads USING btree (objectid);
 CREATE INDEX IF NOT EXISTS steads_objectguid_idx ON steads USING btree (objectguid);
-CREATE INDEX IF NOT EXISTS steads_isactive_idx ON steads USING btree (isactive);
+CREATE INDEX IF NOT EXISTS steads_isactive_idx ON steads USING btree (isactive) WHERE NOT isactive;

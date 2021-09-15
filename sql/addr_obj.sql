@@ -35,4 +35,4 @@ CREATE INDEX IF NOT EXISTS addr_obj_objectid_idx ON addr_obj USING btree (object
 CREATE INDEX IF NOT EXISTS addr_obj_objectguid_idx ON addr_obj USING btree (objectguid);
 CREATE INDEX IF NOT EXISTS addr_obj_typename_idx ON addr_obj USING btree (typename);
 CREATE INDEX IF NOT EXISTS addr_obj_level_idx ON addr_obj USING btree (level);
-CREATE INDEX IF NOT EXISTS addr_obj_isactive_idx ON addr_obj USING btree (isactive);
+CREATE INDEX IF NOT EXISTS addr_obj_isactive_idx ON addr_obj USING btree (isactive) WHERE NOT isactive;

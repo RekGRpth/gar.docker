@@ -17,4 +17,4 @@ COMMENT ON COLUMN operation_types.updatedate IS 'Дата внесения (об
 COMMENT ON COLUMN operation_types.startdate IS 'Начало действия записи';
 COMMENT ON COLUMN operation_types.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN operation_types.isactive IS 'Статус активности';
-CREATE INDEX IF NOT EXISTS operation_types_isactive_idx ON operation_types USING btree (isactive);
+CREATE INDEX IF NOT EXISTS operation_types_isactive_idx ON operation_types USING btree (isactive) WHERE NOT isactive;
