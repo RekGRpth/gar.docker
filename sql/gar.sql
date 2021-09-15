@@ -10,6 +10,9 @@ DO $body$ BEGIN
     );
     EXCEPTION WHEN others THEN null;
 END $body$;
+CREATE OR REPLACE FUNCTION gar_text(name text, short text, type text) RETURNS text LANGUAGE sql IMMUTABLE AS $body$
+    select case when gar_text.type in ('Местность') then gar_text.name when gar_text.name ilike '%'||gar_text.type||'%' then gar_text.name else gar_text.short||'.'||gar_text.name end;
+$body$;
 CREATE TABLE IF NOT EXISTS gar (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     parent uuid,
@@ -19,6 +22,7 @@ CREATE TABLE IF NOT EXISTS gar (
     post text,
     object object NOT NULL,
     region smallint NOT NULL,
+    text text NOT NULL GENERATED ALWAYS AS (gar_text(name, short, type)) STORED,
     CONSTRAINT gar_pkey PRIMARY KEY (id),
     CONSTRAINT gar_name_short_type_key UNIQUE (parent, name, type)
 );
@@ -74,9 +78,6 @@ CREATE OR REPLACE FUNCTION gar_select_parent(parent uuid, name text, short text,
     select * from gar where type = any(gar_select_parent.type::text[])
     and (gar_select_parent.name is null or name ilike gar_select_parent.name||'%' or name ilike '% '||gar_select_parent.name||'%' or name ilike '%-'||gar_select_parent.name||'%' or name ilike '%.'||gar_select_parent.name||'%')
     order by to_number('0'||name, '999999999'), name;
-$body$;
-CREATE OR REPLACE FUNCTION gar_text(name text, short text, type text) RETURNS text LANGUAGE sql IMMUTABLE AS $body$
-    select case when gar_text.type in ('Местность') then gar_text.name when gar_text.name ilike '%'||gar_text.type||'%' then gar_text.name else gar_text.short||'.'||gar_text.name end;
 $body$;
 CREATE OR REPLACE FUNCTION gar_text(id uuid[], post boolean DEFAULT NULL, "all" boolean DEFAULT NULL) RETURNS text LANGUAGE sql STABLE AS $body$
     with _ as (
