@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS addr_obj (
     updatedate DATE NOT NULL,
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,
-    isactual SMALLINT NOT NULL,
-    isactive SMALLINT NOT NULL
+    isactual BOOLEAN NOT NULL,
+    isactive BOOLEAN NOT NULL
 );
 COMMENT ON TABLE addr_obj IS 'Сведения классификатора адресообразующих элементов';
 COMMENT ON COLUMN addr_obj.id IS 'Уникальный идентификатор записи. Ключевое поле';
@@ -35,7 +35,4 @@ CREATE INDEX IF NOT EXISTS addr_obj_objectid_idx ON addr_obj USING btree (object
 CREATE INDEX IF NOT EXISTS addr_obj_objectguid_idx ON addr_obj USING btree (objectguid);
 CREATE INDEX IF NOT EXISTS addr_obj_typename_idx ON addr_obj USING btree (typename);
 CREATE INDEX IF NOT EXISTS addr_obj_level_idx ON addr_obj USING btree (level);
-CREATE INDEX IF NOT EXISTS addr_obj_startdate_idx ON addr_obj USING btree (startdate);
-CREATE INDEX IF NOT EXISTS addr_obj_enddate_idx ON addr_obj USING btree (enddate);
-CREATE INDEX IF NOT EXISTS addr_obj_isactual_idx ON addr_obj USING btree (isactual);
 CREATE INDEX IF NOT EXISTS addr_obj_isactive_idx ON addr_obj USING btree (isactive);

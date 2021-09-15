@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS houses (
     updatedate DATE NOT NULL,
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,
-    isactual SMALLINT NOT NULL,
-    isactive SMALLINT NOT NULL
+    isactual BOOLEAN NOT NULL,
+    isactive BOOLEAN NOT NULL
 );
 COMMENT ON TABLE houses IS 'Сведения по номерам домов улиц городов и населенных пунктов';
 COMMENT ON COLUMN houses.id IS 'Уникальный идентификатор записи. Ключевое поле';
@@ -40,7 +40,4 @@ COMMENT ON COLUMN houses.isactive IS 'Признак действующего а
 CREATE INDEX IF NOT EXISTS houses_objectid_idx ON houses USING btree (objectid);
 CREATE INDEX IF NOT EXISTS houses_objectguid_idx ON houses USING btree (objectguid);
 CREATE INDEX IF NOT EXISTS houses_housetype_idx ON houses USING btree (housetype);
-CREATE INDEX IF NOT EXISTS houses_startdate_idx ON houses USING btree (startdate);
-CREATE INDEX IF NOT EXISTS houses_enddate_idx ON houses USING btree (enddate);
-CREATE INDEX IF NOT EXISTS houses_isactual_idx ON houses USING btree (isactual);
 CREATE INDEX IF NOT EXISTS houses_isactive_idx ON houses USING btree (isactive);

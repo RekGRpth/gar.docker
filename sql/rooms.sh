@@ -22,8 +22,5 @@ COMMENT ON COLUMN "${DIR}".rooms.isactive IS 'Признак действующ�
 CREATE INDEX IF NOT EXISTS rooms_objectid_idx ON "${DIR}".rooms USING btree (objectid);
 CREATE INDEX IF NOT EXISTS rooms_objectguid_idx ON "${DIR}".rooms USING btree (objectguid);
 CREATE INDEX IF NOT EXISTS rooms_roomtype_idx ON "${DIR}".rooms USING btree (roomtype);
-CREATE INDEX IF NOT EXISTS rooms_startdate_idx ON "${DIR}".rooms USING btree (startdate);
-CREATE INDEX IF NOT EXISTS rooms_enddate_idx ON "${DIR}".rooms USING btree (enddate);
-CREATE INDEX IF NOT EXISTS rooms_isactual_idx ON "${DIR}".rooms USING btree (isactual);
 CREATE INDEX IF NOT EXISTS rooms_isactive_idx ON "${DIR}".rooms USING btree (isactive);
 EOF

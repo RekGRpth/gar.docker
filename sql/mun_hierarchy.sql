@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS mun_hierarchy (
     updatedate DATE NOT NULL,
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,
-    isactive SMALLINT NOT NULL
+    isactive BOOLEAN NOT NULL
 );
 COMMENT ON TABLE mun_hierarchy IS 'Сведения по иерархии в муниципальном делении';
 COMMENT ON COLUMN mun_hierarchy.id IS 'Уникальный идентификатор записи. Ключевое поле';
@@ -25,6 +25,4 @@ COMMENT ON COLUMN mun_hierarchy.enddate IS 'Окончание действия 
 COMMENT ON COLUMN mun_hierarchy.isactive IS 'Признак действующего адресного объекта';
 CREATE INDEX IF NOT EXISTS mun_hierarchy_objectid_idx ON mun_hierarchy USING btree (objectid);
 CREATE INDEX IF NOT EXISTS mun_hierarchy_parentobjid_idx ON mun_hierarchy USING btree (parentobjid);
-CREATE INDEX IF NOT EXISTS mun_hierarchy_startdate_idx ON mun_hierarchy USING btree (startdate);
-CREATE INDEX IF NOT EXISTS mun_hierarchy_enddate_idx ON mun_hierarchy USING btree (enddate);
 CREATE INDEX IF NOT EXISTS mun_hierarchy_isactive_idx ON mun_hierarchy USING btree (isactive);

@@ -17,6 +17,4 @@ COMMENT ON COLUMN apartment_types.updatedate IS 'Дата внесения (об
 COMMENT ON COLUMN apartment_types.startdate IS 'Начало действия записи';
 COMMENT ON COLUMN apartment_types.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN apartment_types.isactive IS 'Статус активности';
-CREATE INDEX IF NOT EXISTS apartment_types_startdate_idx ON apartment_types USING btree (startdate);
-CREATE INDEX IF NOT EXISTS apartment_types_enddate_idx ON apartment_types USING btree (enddate);
 CREATE INDEX IF NOT EXISTS apartment_types_isactive_idx ON apartment_types USING btree (isactive);

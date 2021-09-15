@@ -20,8 +20,5 @@ COMMENT ON COLUMN "${DIR}".steads.isactual IS 'Статус актуальнос
 COMMENT ON COLUMN "${DIR}".steads.isactive IS 'Признак действующего адресного объекта';
 CREATE INDEX IF NOT EXISTS steads_objectid_idx ON "${DIR}".steads USING btree (objectid);
 CREATE INDEX IF NOT EXISTS steads_objectguid_idx ON "${DIR}".steads USING btree (objectguid);
-CREATE INDEX IF NOT EXISTS steads_startdate_idx ON "${DIR}".steads USING btree (startdate);
-CREATE INDEX IF NOT EXISTS steads_enddate_idx ON "${DIR}".steads USING btree (enddate);
-CREATE INDEX IF NOT EXISTS steads_isactual_idx ON "${DIR}".steads USING btree (isactual);
 CREATE INDEX IF NOT EXISTS steads_isactive_idx ON "${DIR}".steads USING btree (isactive);
 EOF

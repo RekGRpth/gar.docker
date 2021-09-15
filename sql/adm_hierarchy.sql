@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS adm_hierarchy (
     updatedate DATE NOT NULL,
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,
-    isactive SMALLINT NOT NULL
+    isactive BOOLEAN NOT NULL
 );
 COMMENT ON TABLE adm_hierarchy IS 'Сведения по иерархии в административном делении';
 COMMENT ON COLUMN adm_hierarchy.id IS 'Уникальный идентификатор записи. Ключевое поле';
@@ -35,6 +35,4 @@ COMMENT ON COLUMN adm_hierarchy.enddate IS 'Окончание действия 
 COMMENT ON COLUMN adm_hierarchy.isactive IS 'Признак действующего адресного объекта';
 CREATE INDEX IF NOT EXISTS adm_hierarchy_objectid_idx ON adm_hierarchy USING btree (objectid);
 CREATE INDEX IF NOT EXISTS adm_hierarchy_parentobjid_idx ON adm_hierarchy USING btree (parentobjid);
-CREATE INDEX IF NOT EXISTS adm_hierarchy_startdate_idx ON adm_hierarchy USING btree (startdate);
-CREATE INDEX IF NOT EXISTS adm_hierarchy_enddate_idx ON adm_hierarchy USING btree (enddate);
 CREATE INDEX IF NOT EXISTS adm_hierarchy_isactive_idx ON adm_hierarchy USING btree (isactive);

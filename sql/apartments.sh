@@ -23,8 +23,5 @@ COMMENT ON COLUMN "${DIR}".apartments.isactive IS 'Признак действу
 CREATE INDEX IF NOT EXISTS apartments_objectid_idx ON "${DIR}".apartments USING btree (objectid);
 CREATE INDEX IF NOT EXISTS apartments_objectguid_idx ON "${DIR}".apartments USING btree (objectguid);
 CREATE INDEX IF NOT EXISTS apartments_aparttype_idx ON "${DIR}".apartments USING btree (aparttype);
-CREATE INDEX IF NOT EXISTS apartments_startdate_idx ON "${DIR}".apartments USING btree (startdate);
-CREATE INDEX IF NOT EXISTS apartments_enddate_idx ON "${DIR}".apartments USING btree (enddate);
-CREATE INDEX IF NOT EXISTS apartments_isactual_idx ON "${DIR}".apartments USING btree (isactual);
 CREATE INDEX IF NOT EXISTS apartments_isactive_idx ON "${DIR}".apartments USING btree (isactive);
 EOF

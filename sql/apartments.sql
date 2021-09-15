@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS apartments (
     updatedate DATE NOT NULL,
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,
-    isactual SMALLINT NOT NULL,
-    isactive SMALLINT NOT NULL
+    isactual BOOLEAN NOT NULL,
+    isactive BOOLEAN NOT NULL
 );
 COMMENT ON TABLE apartments IS 'Сведения по помещениям';
 COMMENT ON COLUMN apartments.id IS 'Уникальный идентификатор записи. Ключевое поле';
@@ -32,7 +32,4 @@ COMMENT ON COLUMN apartments.isactive IS 'Признак действующег�
 CREATE INDEX IF NOT EXISTS apartments_objectid_idx ON apartments USING btree (objectid);
 CREATE INDEX IF NOT EXISTS apartments_objectguid_idx ON apartments USING btree (objectguid);
 CREATE INDEX IF NOT EXISTS apartments_aparttype_idx ON apartments USING btree (aparttype);
-CREATE INDEX IF NOT EXISTS apartments_startdate_idx ON apartments USING btree (startdate);
-CREATE INDEX IF NOT EXISTS apartments_enddate_idx ON apartments USING btree (enddate);
-CREATE INDEX IF NOT EXISTS apartments_isactual_idx ON apartments USING btree (isactual);
 CREATE INDEX IF NOT EXISTS apartments_isactive_idx ON apartments USING btree (isactive);

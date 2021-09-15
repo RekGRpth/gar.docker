@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS steads (
     updatedate DATE NOT NULL,
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,
-    isactual SMALLINT NOT NULL,
-    isactive SMALLINT NOT NULL
+    isactual BOOLEAN NOT NULL,
+    isactive BOOLEAN NOT NULL
 );
 COMMENT ON TABLE steads IS 'Сведения по земельным участкам';
 COMMENT ON COLUMN steads.id IS 'Уникальный идентификатор записи. Ключевое поле';
@@ -29,7 +29,4 @@ COMMENT ON COLUMN steads.isactual IS 'Статус актуальности ад
 COMMENT ON COLUMN steads.isactive IS 'Признак действующего адресного объекта';
 CREATE INDEX IF NOT EXISTS steads_objectid_idx ON steads USING btree (objectid);
 CREATE INDEX IF NOT EXISTS steads_objectguid_idx ON steads USING btree (objectguid);
-CREATE INDEX IF NOT EXISTS steads_startdate_idx ON steads USING btree (startdate);
-CREATE INDEX IF NOT EXISTS steads_enddate_idx ON steads USING btree (enddate);
-CREATE INDEX IF NOT EXISTS steads_isactual_idx ON steads USING btree (isactual);
 CREATE INDEX IF NOT EXISTS steads_isactive_idx ON steads USING btree (isactive);

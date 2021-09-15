@@ -16,6 +16,4 @@ COMMENT ON COLUMN object_levels.startdate IS 'Начало действия за
 COMMENT ON COLUMN object_levels.enddate IS 'Окончание действия записи';
 COMMENT ON COLUMN object_levels.isactive IS 'Признак действующего адресного объекта';
 CREATE INDEX IF NOT EXISTS object_levels_shortname_idx ON object_levels USING btree (shortname);
-CREATE INDEX IF NOT EXISTS object_levels_startdate_idx ON object_levels USING btree (startdate);
-CREATE INDEX IF NOT EXISTS object_levels_enddate_idx ON object_levels USING btree (enddate);
 CREATE INDEX IF NOT EXISTS object_levels_isactive_idx ON object_levels USING btree (isactive);

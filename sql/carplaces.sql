@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS carplaces (
     updatedate DATE NOT NULL,
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,
-    isactual SMALLINT NOT NULL,
-    isactive SMALLINT NOT NULL
+    isactual BOOLEAN NOT NULL,
+    isactive BOOLEAN NOT NULL
 );
 COMMENT ON TABLE carplaces IS 'Сведения по машино-местам';
 COMMENT ON COLUMN carplaces.id IS 'Уникальный идентификатор записи. Ключевое поле';
@@ -29,7 +29,4 @@ COMMENT ON COLUMN carplaces.isactual IS 'Статус актуальности �
 COMMENT ON COLUMN carplaces.isactive IS 'Признак действующего адресного объекта';
 CREATE INDEX IF NOT EXISTS carplaces_objectid_idx ON carplaces USING btree (objectid);
 CREATE INDEX IF NOT EXISTS carplaces_objectguid_idx ON carplaces USING btree (objectguid);
-CREATE INDEX IF NOT EXISTS carplaces_startdate_idx ON carplaces USING btree (startdate);
-CREATE INDEX IF NOT EXISTS carplaces_enddate_idx ON carplaces USING btree (enddate);
-CREATE INDEX IF NOT EXISTS carplaces_isactual_idx ON carplaces USING btree (isactual);
 CREATE INDEX IF NOT EXISTS carplaces_isactive_idx ON carplaces USING btree (isactive);

@@ -25,8 +25,5 @@ CREATE INDEX IF NOT EXISTS addr_obj_objectid_idx ON "${DIR}".addr_obj USING btre
 CREATE INDEX IF NOT EXISTS addr_obj_objectguid_idx ON "${DIR}".addr_obj USING btree (objectguid);
 CREATE INDEX IF NOT EXISTS addr_obj_typename_idx ON "${DIR}".addr_obj USING btree (typename);
 CREATE INDEX IF NOT EXISTS addr_obj_level_idx ON "${DIR}".addr_obj USING btree (level);
-CREATE INDEX IF NOT EXISTS addr_obj_startdate_idx ON "${DIR}".addr_obj USING btree (startdate);
-CREATE INDEX IF NOT EXISTS addr_obj_enddate_idx ON "${DIR}".addr_obj USING btree (enddate);
-CREATE INDEX IF NOT EXISTS addr_obj_isactual_idx ON "${DIR}".addr_obj USING btree (isactual);
 CREATE INDEX IF NOT EXISTS addr_obj_isactive_idx ON "${DIR}".addr_obj USING btree (isactive);
 EOF
