@@ -20,7 +20,7 @@ with g as (
     left join "${DIR}".adm_hierarchy as adm_hierarchy on adm_hierarchy.objectid = apartments.objectid
     left join "${DIR}".houses as apartments_parent on apartments_parent.objectid = adm_hierarchy.parentobjid
     left join param_types on param_types.name = 'Почтовый индекс'
-    left join "${DIR}".apartments_params as apartments_params on apartments_params.objectid = apartments.objectid and apartments_params.typeid = param_types.id and current_timestamp between apartments_params.startdate and apartments_params.enddate
+    left join "${DIR}".apartments_params as apartments_params on apartments_params.objectid = apartments.objectid and apartments_params.typeid = param_types.id
     left join g on g.parent = apartments_parent.objectguid and g.name = apartments.number and g.type = apartment_types.name
     WHERE g.id is null
 ) insert into gar SELECT distinct on (parent, name, type) * from _ WHERE parent is not null on conflict (id) do update set parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post, object = EXCLUDED.object, region = EXCLUDED.region;
