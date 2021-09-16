@@ -47,7 +47,7 @@ while
         ;;
         "update" )
             for TABLE in addr_obj1 addr_obj apartments carplaces houses rooms steads; do
-                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=DIR "$TABLE.sh" "DIR" || exit 255
+                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=DIR sh "/usr/local/update/$TABLE.sh" "DIR" || exit 255
             done
             echo "done" >state.txt
         ;;
