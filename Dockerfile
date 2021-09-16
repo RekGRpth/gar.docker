@@ -1,5 +1,7 @@
 FROM ghcr.io/rekgrpth/gost.docker
 ADD bin /usr/local/bin
+ADD bin /usr/local/full2pg
+ADD bin /usr/local/update
 ADD sql /usr/local/sql
 ADD xsd /usr/local/xsd
 ENV GROUP=gar \
