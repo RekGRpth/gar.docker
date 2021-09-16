@@ -34,8 +34,8 @@ while
             echo update >state.txt
         ;;
         "sql2pg" )
-            find /usr/local/sql -type f -name "*.sql" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=SQL psql --no-password --variable=ON_ERROR_STOP=1 --file="SQL" || exit 255
-            find /usr/local/sql -type f -name "*.sh" | sort -u | while read -r SH; do
+            find /usr/local/sql2pg -type f -name "*.sql" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=SQL psql --no-password --variable=ON_ERROR_STOP=1 --file="SQL" || exit 255
+            find /usr/local/sql2pg -type f -name "*.sh" | sort -u | while read -r SH; do
                 seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=DIR sh "$SH" "DIR" || exit 255
             done
             echo "$?"
