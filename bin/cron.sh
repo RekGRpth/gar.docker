@@ -53,10 +53,8 @@ while
         ;;
         "xml2csv" )
             find /usr/local/xsd -type f -name "*.xsd" | sort -u | while read -r XSD; do
-                FIELDS="$(xmlstarlet select --text --noblanks --template --match /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:attribute --output " @" --value-of @name "$XSD")"
-                RECORD="$(xmlstarlet select --text --noblanks --template --value-of /xs:schema/xs:element/@name --output / --value-of /xs:schema/xs:element/xs:complexType/xs:sequence/xs:element/@name "$XSD")"
                 TABLE="$(basename -- "${XSD%.*}")"
-                find . -type f -name "as_${TABLE}_2*.xml" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=XML xml2csv.sh "XML" "$RECORD" "$FIELDS" || exit 255
+                find . -type f -name "as_${TABLE}_2*.xml" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=XML sh "/usr/local/xml2csv/$TABLE.sh" "XML" || exit 255
                 echo "$?"
             done
             deltaVersionId="$(cat deltaVersionId.txt)"
