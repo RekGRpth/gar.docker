@@ -3,6 +3,7 @@ ADD bin /usr/local/bin
 ADD bin /usr/local/full2pg
 ADD bin /usr/local/update
 ADD sql /usr/local/sql
+ADD xsd /usr/local/delta2pg
 ADD xsd /usr/local/xml2csv
 ADD xsd /usr/local/xsd
 ENV GROUP=gar \
