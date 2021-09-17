@@ -1,11 +1,10 @@
 FROM ghcr.io/rekgrpth/gost.docker
 ADD bin /usr/local/bin
-ADD bin /usr/local/full2pg
-ADD bin /usr/local/update
+ADD delta2pg /usr/local/delta2pg
+ADD full2pg /usr/local/full2pg
 ADD sql /usr/local/sql
-ADD xsd /usr/local/delta2pg
-ADD xsd /usr/local/xml2csv
-ADD xsd /usr/local/xsd
+ADD update /usr/local/update
+ADD xml2csv /usr/local/xml2csv
 ENV GROUP=gar \
     USER=gar
 RUN set -eux; \
@@ -36,13 +35,11 @@ RUN set -eux; \
         findutils \
         grep \
         jq \
-        libxslt \
         postgresql-client \
         sed \
         su-exec \
         unzip \
         wget \
-        xmlstarlet \
     ; \
     find /usr/local/bin -type f -exec strip '{}' \;; \
     find /usr/local/lib -type f -name "*.so" -exec strip '{}' \;; \

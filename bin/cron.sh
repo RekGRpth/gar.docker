@@ -8,17 +8,17 @@ state="$(cat state.txt)"
 while
     case "$state" in
         "delta2pg" )
-            find /usr/local/xsd -type f -name "*.xsd" | sort -u | while read -r XSD; do
-                TABLE="$(basename -- "${XSD%.*}")"
-                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV sh "/usr/local/delta2pg/$TABLE.sh" "CSV" || exit 255
+            find /usr/local/delta2pg -type f -name "*.sh" | sort -u | while read -r SH; do
+                TABLE="$(basename -- "${SH%.*}")"
+                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV sh "$SH" "CSV" || exit 255
                 echo "$?"
             done
             echo update >state.txt
         ;;
         "full2pg" )
-            find /usr/local/xsd -type f -name "*.xsd" | sort -u | while read -r XSD; do
-                TABLE="$(basename -- "${XSD%.*}")"
-                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV sh "/usr/local/full2pg/$TABLE.sh" "CSV" || exit 255
+            find /usr/local/full2pg -type f -name "*.sh" | sort -u | while read -r SH; do
+                TABLE="$(basename -- "${SH%.*}")"
+                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV sh "$SH" "CSV" || exit 255
                 echo "$?"
             done
             echo update >state.txt
@@ -46,9 +46,9 @@ while
             echo "done" >state.txt
         ;;
         "xml2csv" )
-            find /usr/local/xsd -type f -name "*.xsd" | sort -u | while read -r XSD; do
-                TABLE="$(basename -- "${XSD%.*}")"
-                find . -type f -name "as_${TABLE}_2*.xml" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=XML sh "/usr/local/xml2csv/$TABLE.sh" "XML" || exit 255
+            find /usr/local/xml2csv -type f -name "*.sh" | sort -u | while read -r SH; do
+                TABLE="$(basename -- "${SH%.*}")"
+                find . -type f -name "as_${TABLE}_2*.xml" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=XML sh "$SH" "XML" || exit 255
                 echo "$?"
             done
             deltaVersionId="$(cat deltaVersionId.txt)"
