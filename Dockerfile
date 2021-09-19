@@ -2,7 +2,7 @@ FROM ghcr.io/rekgrpth/gost.docker
 ADD bin /usr/local/bin
 ADD delta2pg /usr/local/delta2pg
 ADD full2pg /usr/local/full2pg
-ADD sql /usr/local/sql
+ADD sql2pg /usr/local/sql2pg
 ADD update /usr/local/update
 ADD xml2csv /usr/local/xml2csv
 ENV GROUP=gar \
