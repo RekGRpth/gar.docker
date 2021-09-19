@@ -13,6 +13,7 @@ while
                 find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV sh "$SH" "CSV" || exit 255
                 echo "$?"
             done
+            echo "$?"
             echo update >state.txt
         ;;
         "full2pg" )
@@ -21,12 +22,14 @@ while
                 find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV sh "$SH" "CSV" || exit 255
                 echo "$?"
             done
+            echo "$?"
             echo update >state.txt
         ;;
         "sql2pg" )
             find /usr/local/sql2pg -type f -name "*.sql" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=SQL psql --no-password --variable=ON_ERROR_STOP=1 --file="SQL" || exit 255
             find /usr/local/sql2pg -type f -name "*.sh" | sort -u | while read -r SH; do
                 seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=DIR sh "$SH" "DIR" || exit 255
+                echo "$?"
             done
             echo "$?"
             echo wget >fullVersionId.txt
@@ -40,9 +43,11 @@ while
             echo xml2csv >state.txt
         ;;
         "update" )
-            for TABLE in addr_obj1 addr_obj apartments carplaces houses rooms steads; do
-                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=DIR sh "/usr/local/update/$TABLE.sh" "DIR" || exit 255
+            find /usr/local/update -type f -name "*.sh" | sort -u | while read -r SH; do
+                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=DIR sh "$SH" "DIR" || exit 255
+                echo "$?"
             done
+            echo "$?"
             echo "done" >state.txt
         ;;
         "xml2csv" )
@@ -51,6 +56,7 @@ while
                 find . -type f -name "as_${TABLE}_2*.xml" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=XML sh "$SH" "XML" || exit 255
                 echo "$?"
             done
+            echo "$?"
             deltaVersionId="$(cat deltaVersionId.txt)"
             fullVersionId="$(cat fullVersionId.txt)"
             if [ "$deltaVersionId" != "$fullVersionId" ]; then
