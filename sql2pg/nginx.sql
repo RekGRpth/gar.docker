@@ -61,7 +61,7 @@ begin
             if "all" then -- если все результаты
                 with _ as (
                     with _ as (
-                        select * from gar_select(local.id::uuid/*, null*/)
+                        select * from gar_select(local.id::uuid)
                     ) select count(1), gar_select.json as query, local.offset, local.limit, (
                         with _ as (
                             select *, case when local.child then gar_child(_.id) end as child from _ offset local.offset limit local.limit

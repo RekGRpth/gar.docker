@@ -39,7 +39,7 @@ CREATE OR REPLACE FUNCTION gar_select(id uuid[]) RETURNS SETOF gar LANGUAGE sql 
     inner join (select unnest(gar_select.id) as id, generate_subscripts(gar_select.id, 1) as i) as _ on _.id = gar.id
     where gar.id = any(gar_select.id) order by i;
 $body$;
-CREATE OR REPLACE FUNCTION gar_select(id uuid, parent uuid) RETURNS SETOF gar LANGUAGE sql STABLE AS $body$
+CREATE OR REPLACE FUNCTION gar_select(id uuid, parent uuid DEFAULT NULL) RETURNS SETOF gar LANGUAGE sql STABLE AS $body$
     with recursive _ as (
         select gar.*, 0 as i from gar where id = gar_select.id
         union
@@ -91,7 +91,7 @@ $body$;
 CREATE OR REPLACE FUNCTION gar_text(id uuid, post boolean DEFAULT NULL, "all" boolean DEFAULT NULL) RETURNS text LANGUAGE sql STABLE AS $body$
     with _ as (
         with _ as (
-            select * from gar_select(gar_text.id, null)
+            select * from gar_select(gar_text.id)
         ), p as (
             select unnest(array_agg(post)) as post, generate_subscripts(array_agg(post), 1) as i from _ where coalesce(true, false) and post is not null order by i desc limit 1
         ) select post as text from p union select string_agg(gar_text(name, short, type), ', ') as text from _ where type not in ('Подъезд', 'Этаж') or coalesce(gar_text.all, false)
@@ -116,7 +116,7 @@ CREATE OR REPLACE FUNCTION gar_update(id uuid, parent uuid, name text, short tex
     WHERE id = gar_update.id returning *;
 $body$;
 /*CREATE OR REPLACE FUNCTION gar_id(id uuid) RETURNS uuid[] LANGUAGE sql STABLE AS $body$
-    select array_agg(id) from gar_select(gar_id.id, null);
+    select array_agg(id) from gar_select(gar_id.id);
 $body$;*/
 CREATE INDEX IF NOT EXISTS gar_parent_idx ON gar USING btree (parent);
 CREATE INDEX IF NOT EXISTS gar_name_idx ON gar USING btree (name);
