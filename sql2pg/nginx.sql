@@ -96,7 +96,7 @@ begin
         if local.text is not null and local.parent is null then -- если искать что-то и родитель не задан
             with _ as (
                 with _ as (
-                    select * from gar_select_parent(local.parent, local.name, local.short, array['Город', 'Поселок', 'Поселение', 'Деревня', 'Населенный пункт', 'Село', 'Рабочий поселок', 'Поселок городского типа']::text, local.post, local.object, local.region)
+                    select * from gar_select_parent(local.parent::uuid, local.name, local.short, array['Город', 'Поселок', 'Поселение', 'Деревня', 'Населенный пункт', 'Село', 'Рабочий поселок', 'Поселок городского типа']::text, local.post, local.object, local.region)
                 ) select count(1), gar_widget.json as query, local.offset, local.limit, (
                     with _ as (
                         select * from _ offset local.offset limit local.limit
