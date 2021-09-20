@@ -25,7 +25,7 @@ CREATE OR REPLACE FUNCTION gar_select(INOUT json json) RETURNS json LANGUAGE plp
     post text default nullif(trim(gar_select.json->>'port'), ''); -- индекс
     object text default nullif(trim(gar_select.json->>'object'), ''); -- объект
     region text default nullif(trim(gar_select.json->>'region'), ''); -- регион
-    teem text default nullif(trim(gar_select.json->>'term'), ''); -- строка поиска
+    term text default nullif(trim(gar_select.json->>'term'), ''); -- строка поиска
     offset int default coalesce(nullif(trim(gar_select.json->>'offset'), '')::int, 0); -- офсет
     limit int default coalesce(nullif(trim(gar_select.json->>'limit'), '')::int, 10); -- лимит
     "all" boolean default coalesce(nullif(trim(gar_select.json->>'all'), '')::boolean, false); -- все?
