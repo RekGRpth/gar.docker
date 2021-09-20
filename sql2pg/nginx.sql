@@ -101,7 +101,7 @@ begin
                     with _ as (
                         select * from _ offset local.offset limit local.limit
                     ) select coalesce(json_agg((select json_agg(_) from (
-                        select * from gar_select(_.id, local.parent)
+                        select * from gar_select(_.id, local.parent::uuid)
                     ) as _)), '[]'::json) from _
                 ) as data from _
             ) select to_json(_) from _ into strict json;
