@@ -107,15 +107,29 @@ begin
             ) select to_json(_) from _ into strict json;
         else
             local.type = translate(local.type, '[]','{}');
-            with _ as (
+            if "all" then -- если все результаты
                 with _ as (
-                    select * from gar_select(local.parent::uuid, local.name, local.short, local.type, local.post, local.object, local.region)
-                ) select count(1), gar_select.json as query, local.offset, local.limit, (
                     with _ as (
-                        select *, case when local.child then gar_child(_.id) end as child from _ offset local.offset limit local.limit
-                    ) select coalesce(json_agg(_), '[]'::json) from _
-                ) as data from _
-            ) select to_json(_) from _ into strict gar_select.json;
+                        select * from gar_select(local.parent::uuid, local.name, local.short, local.type, local.post, local.object, local.region)
+                    ) select count(1), gar_select.json as query, local.offset, local.limit, (
+                        with _ as (
+                            select * from _ offset local.offset limit local.limit
+                        ) select coalesce(json_agg((select json_agg(_) from (
+                            select *, case when local.child then gar_child(_.id) end as child from gar_select(_.id::uuid)
+                        ) as _)), '[]'::json) from _
+                    ) as data from _
+                ) select to_json(_) from _ into strict gar_select.json;
+            else -- иначе - не все результаты
+                with _ as (
+                    with _ as (
+                        select * from gar_select(local.parent::uuid, local.name, local.short, local.type, local.post, local.object, local.region)
+                    ) select count(1), gar_select.json as query, local.offset, local.limit, (
+                        with _ as (
+                            select *, case when local.child then gar_child(_.id) end as child from _ offset local.offset limit local.limit
+                        ) select coalesce(json_agg(_), '[]'::json) from _
+                    ) as data from _
+                ) select to_json(_) from _ into strict gar_select.json;
+            end if;
         end if;
     end if;
 end;$body$;
