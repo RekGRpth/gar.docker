@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS gar (
     CONSTRAINT gar_pkey PRIMARY KEY (id),
     CONSTRAINT gar_name_short_type_key UNIQUE (parent, name, type)
 );
+CREATE OR REPLACE VIEW gar_view AS SELECT *, gar_text(name, short, type) AS text from gar;
 GRANT SELECT ON TABLE gar TO nginx;
 CREATE OR REPLACE FUNCTION gar_child(id uuid) RETURNS bigint LANGUAGE sql STABLE AS $body$
     select count(1) from gar where parent = gar_child.id;
