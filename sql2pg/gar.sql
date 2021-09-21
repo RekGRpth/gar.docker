@@ -78,7 +78,7 @@ $body$;
 CREATE OR REPLACE FUNCTION gar_select_parent(parent uuid, name text, short text, type text, post text, object text, region text) RETURNS SETOF gar_view LANGUAGE sql STABLE AS $body$
     select *, gar_text(gar.name, gar.short, gar.type) AS text from gar where type = any(gar_select_parent.type::text[])
     and (gar_select_parent.name is null or name ilike gar_select_parent.name||'%' or name ilike '% '||gar_select_parent.name||'%' or name ilike '%-'||gar_select_parent.name||'%' or name ilike '%.'||gar_select_parent.name||'%')
-    order by to_number('0'||name, '999999999'), name;
+    order by (select count(id) from gar_select(id, gar_select_parent.parent)), to_number('0'||name, '999999999'), name;
 $body$;
 CREATE OR REPLACE FUNCTION gar_text(id uuid[], post boolean DEFAULT NULL, "full" boolean DEFAULT NULL) RETURNS text LANGUAGE sql STABLE AS $body$
     with _ as (
