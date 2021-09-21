@@ -80,22 +80,22 @@ CREATE OR REPLACE FUNCTION gar_select_parent(parent uuid, name text, short text,
     and (gar_select_parent.name is null or name ilike gar_select_parent.name||'%' or name ilike '% '||gar_select_parent.name||'%' or name ilike '%-'||gar_select_parent.name||'%' or name ilike '%.'||gar_select_parent.name||'%')
     order by to_number('0'||name, '999999999'), name;
 $body$;
-CREATE OR REPLACE FUNCTION gar_text(id uuid[], post boolean DEFAULT NULL, "all" boolean DEFAULT NULL) RETURNS text LANGUAGE sql STABLE AS $body$
+CREATE OR REPLACE FUNCTION gar_text(id uuid[], post boolean DEFAULT NULL, "full" boolean DEFAULT NULL) RETURNS text LANGUAGE sql STABLE AS $body$
     with _ as (
         with _ as (
             select * from gar_select(gar_text.id)
         ), p as (
             select post from _ where coalesce(gar_text.post, false) and post is not null limit 1
-        ) select post as text from p union select string_agg(gar_text(name, short, type), ', ') as text from _ where type not in ('Подъезд', 'Этаж') or coalesce(gar_text.all, false)
+        ) select post as text from p union select string_agg(gar_text(name, short, type), ', ') as text from _ where type not in ('Подъезд', 'Этаж') or coalesce(gar_text.full, false)
     ) select string_agg(text, ', ') from _
 $body$;
-CREATE OR REPLACE FUNCTION gar_text(id uuid, post boolean DEFAULT NULL, "all" boolean DEFAULT NULL) RETURNS text LANGUAGE sql STABLE AS $body$
+CREATE OR REPLACE FUNCTION gar_text(id uuid, post boolean DEFAULT NULL, "full" boolean DEFAULT NULL) RETURNS text LANGUAGE sql STABLE AS $body$
     with _ as (
         with _ as (
             select * from gar_select(gar_text.id)
         ), p as (
             select unnest(array_agg(post)) as post, generate_subscripts(array_agg(post), 1) as i from _ where coalesce(true, false) and post is not null order by i desc limit 1
-        ) select post as text from p union select string_agg(gar_text(name, short, type), ', ') as text from _ where type not in ('Подъезд', 'Этаж') or coalesce(gar_text.all, false)
+        ) select post as text from p union select string_agg(gar_text(name, short, type), ', ') as text from _ where type not in ('Подъезд', 'Этаж') or coalesce(gar_text.full, false)
     ) select string_agg(text, ', ') from _
 $body$;
 CREATE OR REPLACE FUNCTION gar_full(id uuid) RETURNS text LANGUAGE sql STABLE AS $body$

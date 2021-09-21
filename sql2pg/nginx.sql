@@ -28,13 +28,13 @@ CREATE OR REPLACE FUNCTION gar_select(INOUT json json) RETURNS json LANGUAGE plp
     term text default nullif(trim(gar_select.json->>'term'), ''); -- строка поиска
     offset int default coalesce(nullif(trim(gar_select.json->>'offset'), '')::int, 0); -- офсет
     limit int default coalesce(nullif(trim(gar_select.json->>'limit'), '')::int, 10); -- лимит
-    "all" boolean default coalesce(nullif(trim(gar_select.json->>'all'), '')::boolean, false); -- все?
+    "full" boolean default coalesce(nullif(trim(gar_select.json->>'full'), '')::boolean, false); -- все?
     child boolean default coalesce(nullif(trim(gar_select.json->>'child'), '')::boolean, false); -- дети?
 begin
     if local.id is not null then -- если задан id
         local.id = translate(local.id, '[]','{}');
         if local.id ilike '{%}' then -- если id - массив
-            if "all" then -- если все результаты
+            if local.full then -- если все результаты
                 with _ as (
                     with _ as (
                         select * from gar_select(local.id::uuid[])
@@ -58,7 +58,7 @@ begin
                 ) select to_json(_) from _ into strict gar_select.json;
             end if;
         else  -- иначе id - не массив
-            if "all" then -- если все результаты
+            if local.full then -- если все результаты
                 with _ as (
                     with _ as (
                         select * from gar_select(local.id::uuid)
@@ -107,7 +107,7 @@ begin
             ) select to_json(_) from _ into strict json;
         else
             local.type = translate(local.type, '[]','{}');
-            if "all" then -- если все результаты
+            if local.full then -- если все результаты
                 with _ as (
                     with _ as (
                         select * from gar_select(local.parent::uuid, local.name, local.short, local.type, local.post, local.object, local.region)
