@@ -25,7 +25,7 @@ CREATE OR REPLACE FUNCTION gar_select(INOUT json json) RETURNS json LANGUAGE plp
     post text default nullif(trim(gar_select.json->>'port'), ''); -- индекс
     object text default nullif(trim(gar_select.json->>'object'), ''); -- объект
     region text default nullif(trim(gar_select.json->>'region'), ''); -- регион
-    term text default nullif(trim(gar_select.json->>'term'), ''); -- строка поиска
+    text text default nullif(trim(gar_select.json->>'text'), ''); -- строка поиска
     offset int default coalesce(nullif(trim(gar_select.json->>'offset'), '')::int, 0); -- офсет
     limit int default coalesce(nullif(trim(gar_select.json->>'limit'), '')::int, 10); -- лимит
     "full" boolean default coalesce(nullif(trim(gar_select.json->>'full'), '')::boolean, false); -- все?
@@ -83,8 +83,8 @@ begin
             end if;
         end if;
     else -- иначе - не задан id
-        if local.term is not null then -- если искать что-то
-            local.name = local.term;
+        if local.text is not null then -- если искать что-то
+            local.name = local.text;
             local.short = split_part(local.name, '.', 1);
             if local.short = local.name or position(' ' in local.short) > 0 or position(',' in local.short) > 0 then
                 local.short = null;
@@ -93,7 +93,7 @@ begin
             end if;
             local.name = ltrim(local.name, ' ');
         end if;
-        if local.term is not null and local.parent is null then -- если искать что-то и родитель не задан
+        if local.text is not null and local.parent is null then -- если искать что-то и родитель не задан
             with _ as (
                 with _ as (
                     select * from gar_select_parent(local.parent::uuid, local.name, local.short, array['Город', 'Поселок', 'Поселение', 'Деревня', 'Населенный пункт', 'Село', 'Рабочий поселок', 'Поселок городского типа']::text, local.post, local.object, local.region)
