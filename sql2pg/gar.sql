@@ -11,7 +11,12 @@ DO $body$ BEGIN
     EXCEPTION WHEN others THEN null;
 END $body$;
 CREATE OR REPLACE FUNCTION gar_text(name text, short text, type text) RETURNS text LANGUAGE sql IMMUTABLE AS $body$
-    select case when gar_text.type in ('Местность') then gar_text.name when gar_text.name ilike '%'||gar_text.type||'%' then gar_text.name else gar_text.short||'.'||gar_text.name end;
+    select case
+        when gar_text.type in ('Местность') then gar_text.name
+        when gar_text.type in ('Чувашия') then gar_text.name||' '||gar_text.type
+        when gar_text.name ilike '%'||gar_text.type||'%' then gar_text.name
+        else gar_text.short||'.'||gar_text.name
+    end;
 $body$;
 CREATE TABLE IF NOT EXISTS gar (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
