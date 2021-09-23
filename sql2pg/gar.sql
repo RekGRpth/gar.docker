@@ -19,7 +19,6 @@ CREATE TABLE IF NOT EXISTS gar (
     post text,
     object object NOT NULL,
     region smallint NOT NULL,
-    text text NOT NULL GENERATED ALWAYS AS (gar_text(name, short, type)) STORED,
     CONSTRAINT gar_pkey PRIMARY KEY (id),
     CONSTRAINT gar_name_short_type_key UNIQUE (parent, name, type)
 );
