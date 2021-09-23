@@ -2,7 +2,7 @@
 
 set -eux
 DIR="$1"
-exec psql --no-password --variable=ON_ERROR_STOP="$DIR" <<EOF
+exec psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" <<EOF
 with _ as (
     SELECT
         apartments.objectguid AS id,
