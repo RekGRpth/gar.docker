@@ -15,4 +15,4 @@ INSERT INTO $TABLE SELECT "changeid","objectid","adrobjectid","opertypeid","ndoc
 
 EOF
 )"
-exec psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" --command="$COMMAND" <"$CSV"
+psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" --command="$COMMAND" <"$CSV"

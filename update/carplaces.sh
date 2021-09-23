@@ -3,7 +3,7 @@
 set -eux
 trap "exit 255" ERR
 DIR="$1"
-exec psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" <<EOF
+psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" <<EOF
 with _ as (
     SELECT
         carplaces.objectguid AS id,

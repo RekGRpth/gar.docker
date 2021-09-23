@@ -15,4 +15,4 @@ INSERT INTO $TABLE SELECT "id","name","code","desc","updatedate","startdate","en
 DELETE FROM $TABLE WHERE NOT isactive;
 EOF
 )"
-exec psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" --command="$COMMAND" <"$CSV"
+psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" --command="$COMMAND" <"$CSV"

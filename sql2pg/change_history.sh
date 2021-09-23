@@ -3,7 +3,7 @@
 set -eux
 trap "exit 255" ERR
 DIR="$1"
-exec psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" <<EOF
+psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" <<EOF
 CREATE SCHEMA IF NOT EXISTS "${DIR}";
 CREATE TABLE IF NOT EXISTS "${DIR}".change_history (CONSTRAINT change_history_pkey PRIMARY KEY (changeid)) INHERITS (change_history);
 COMMENT ON TABLE "${DIR}".change_history IS 'Сведения по истории изменений';

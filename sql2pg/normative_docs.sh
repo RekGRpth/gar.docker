@@ -3,7 +3,7 @@
 set -eux
 trap "exit 255" ERR
 DIR="$1"
-exec psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" <<EOF
+psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" <<EOF
 CREATE SCHEMA IF NOT EXISTS "${DIR}";
 CREATE TABLE IF NOT EXISTS "${DIR}".normative_docs (CONSTRAINT normative_docs_pkey PRIMARY KEY (id)) INHERITS (normative_docs);
 COMMENT ON TABLE "${DIR}".normative_docs IS 'Сведения о нормативном документе, являющемся основанием присвоения адресному элементу наименования';

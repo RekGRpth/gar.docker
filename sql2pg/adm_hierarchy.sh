@@ -3,7 +3,7 @@
 set -eux
 trap "exit 255" ERR
 DIR="$1"
-exec psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" <<EOF
+psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" <<EOF
 CREATE SCHEMA IF NOT EXISTS "${DIR}";
 CREATE TABLE IF NOT EXISTS "${DIR}".adm_hierarchy (CONSTRAINT adm_hierarchy_pkey PRIMARY KEY (id)) INHERITS (adm_hierarchy);
 COMMENT ON TABLE "${DIR}".adm_hierarchy IS 'Сведения по иерархии в административном делении';
