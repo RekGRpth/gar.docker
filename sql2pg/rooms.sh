@@ -1,6 +1,7 @@
 #!/bin/sh
 
 set -eux
+trap "exit 255" ERR
 DIR="$1"
 exec psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" <<EOF
 CREATE TABLE IF NOT EXISTS "${DIR}".rooms (CONSTRAINT rooms_pkey PRIMARY KEY (id)) INHERITS (rooms);

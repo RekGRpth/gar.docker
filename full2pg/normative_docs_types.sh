@@ -1,6 +1,7 @@
 #!/bin/sh
 
 set -eux
+trap "exit 255" ERR
 CSV="$1"
 TABLE="${0%.*}"
 DIR="$(dirname -- "$CSV")"

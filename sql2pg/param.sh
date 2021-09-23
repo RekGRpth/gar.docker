@@ -1,6 +1,7 @@
 #!/bin/sh
 
 set -eux
+trap "exit 255" ERR
 DIR="$1"
 for TABLE in addr_obj_params apartments_params carplaces_params houses_params rooms_params steads_params; do
 psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" <<EOF
