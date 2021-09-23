@@ -10,14 +10,6 @@ DO $body$ BEGIN
     );
     EXCEPTION WHEN others THEN null;
 END $body$;
-CREATE OR REPLACE FUNCTION gar_text(name text, short text, type text) RETURNS text LANGUAGE sql IMMUTABLE AS $body$
-    select case
-        when gar_text.type in ('Местность') then gar_text.name
-        when gar_text.type in ('Чувашия') then gar_text.name||' '||gar_text.type
-        when gar_text.name ilike '%'||gar_text.type||'%' then gar_text.name
-        else gar_text.short||'.'||gar_text.name
-    end;
-$body$;
 CREATE TABLE IF NOT EXISTS gar (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     parent uuid,
@@ -31,8 +23,16 @@ CREATE TABLE IF NOT EXISTS gar (
     CONSTRAINT gar_pkey PRIMARY KEY (id),
     CONSTRAINT gar_name_short_type_key UNIQUE (parent, name, type)
 );
+CREATE OR REPLACE FUNCTION gar_text(name text, short text, type text) RETURNS text LANGUAGE sql IMMUTABLE AS $body$
+    select case
+        --when gar_text.type in ('Местность') then gar_text.name
+        when gar_text.type in ('Чувашия') then gar_text.name||' '||gar_text.type
+        when gar_text.name ilike '%'||gar_text.type||'%' then gar_text.name
+        else gar_text.short||'.'||gar_text.name
+    end;
+$body$;
 --drop view gar_view;
-CREATE OR REPLACE VIEW gar_view AS SELECT id, parent, name, short, type, post, object, region, gar_text(name, short, type) AS text from gar;
+CREATE OR REPLACE VIEW gar_view AS SELECT gar.*, gar_text(name, short, type) AS text from gar;
 GRANT SELECT ON TABLE gar TO nginx;
 CREATE OR REPLACE FUNCTION gar_child(id uuid) RETURNS bigint LANGUAGE sql STABLE AS $body$
     select count(1) from gar where parent = gar_child.id;
@@ -40,10 +40,10 @@ $body$;
 CREATE OR REPLACE FUNCTION gar_insert(id uuid, parent uuid, name text, short text, type text, post text, object object, region smallint) RETURNS gar_view LANGUAGE sql AS $body$
     insert into gar (id, parent, name, short, type, post, object, region)
     values (coalesce(gar_insert.id, gen_random_uuid()), gar_insert.parent, gar_insert.name, gar_insert.short, gar_insert.type, gar_insert.post, gar_insert.object, gar_insert.region)
-    returning gar.id, gar.parent, gar.name, gar.short, gar.type, gar.post, gar.object, gar.region, gar_text(gar.name, gar.short, gar.type) AS text;
+    returning gar.*, gar_text(gar.name, gar.short, gar.type) AS text;
 $body$;
 CREATE OR REPLACE FUNCTION gar_select(id uuid[]) RETURNS SETOF gar_view LANGUAGE sql STABLE AS $body$
-    select gar.id, parent, name, short, type, post, object, region, gar_text(name, short, type) AS text from gar
+    select gar.*, gar_text(name, short, type) AS text from gar
     inner join (select unnest(gar_select.id) as id, generate_subscripts(gar_select.id, 1) as i) as _ on _.id = gar.id
     where gar.id = any(gar_select.id) order by i;
 $body$;
@@ -56,7 +56,7 @@ CREATE OR REPLACE FUNCTION gar_select(id uuid, parent uuid DEFAULT NULL) RETURNS
     ) select id, parent, name, short, type, post, object, region, gar_text(name, short, type) AS text from _ order by i desc;
 $body$;
 CREATE OR REPLACE FUNCTION gar_select(parent uuid, name text, short text, type text, post text, object text, region text) RETURNS SETOF gar_view LANGUAGE sql STABLE AS $body$
-    select gar.id, gar.parent, gar.name, gar.short, gar.type, gar.post, gar.object, gar.region, gar_text(gar.name, gar.short, gar.type) AS text from gar where true
+    select gar.*, gar_text(gar.name, gar.short, gar.type) AS text from gar where true
     and ((gar_select.parent is null and parent is null) or parent = gar_select.parent)
     and (gar_select.name is null or name ilike gar_select.name||'%' or name ilike '% '||gar_select.name||'%' or name ilike '%-'||gar_select.name||'%' or name ilike '%.'||gar_select.name||'%')
     and (gar_select.short is null or short ilike gar_select.short)
@@ -83,7 +83,7 @@ CREATE OR REPLACE FUNCTION gar_select_child(parent uuid, name text, short text, 
     ) select id, parent, name, short, type, post, object, region, gar_text(name, short, type) AS text from _ order by to_number('0'||name, '999999999'), name;
 $body$;
 CREATE OR REPLACE FUNCTION gar_select_parent(parent uuid, name text, short text, type text, post text, object text, region text) RETURNS SETOF gar_view LANGUAGE sql STABLE AS $body$
-    select gar.id, gar.parent, gar.name, gar.short, gar.type, gar.post, gar.object, gar.region, gar_text(gar.name, gar.short, gar.type) AS text from gar where type = any(gar_select_parent.type::text[])
+    select gar.*, gar_text(gar.name, gar.short, gar.type) AS text from gar where type = any(gar_select_parent.type::text[])
     and (gar_select_parent.name is null or name ilike gar_select_parent.name||'%' or name ilike '% '||gar_select_parent.name||'%' or name ilike '%-'||gar_select_parent.name||'%' or name ilike '%.'||gar_select_parent.name||'%')
     order by (select count(id) from gar_select(id, gar_select_parent.parent)), to_number('0'||name, '999999999'), name;
 $body$;
@@ -121,7 +121,7 @@ CREATE OR REPLACE FUNCTION gar_update(id uuid, parent uuid, name text, short tex
         post = coalesce(gar_update.post, post),
         object = coalesce(gar_update.object, object),
         region = coalesce(gar_update.region, region)
-    WHERE id = gar_update.id returning gar.id, gar.parent, gar.name, gar.short, gar.type, gar.post, gar.object, gar.region, gar_text(gar.name, gar.short, gar.type) AS text;
+    WHERE id = gar_update.id returning gar.*, gar_text(gar.name, gar.short, gar.type) AS text;
 $body$;
 /*CREATE OR REPLACE FUNCTION gar_id(id uuid) RETURNS uuid[] LANGUAGE sql STABLE AS $body$
     select array_agg(id) from gar_select(gar_id.id);
