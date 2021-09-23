@@ -2,10 +2,8 @@
 
 set -eux
 DIR="$1"
-exec psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
-with g as (
-    select * from gar where gar.object = 'rooms' and gar.region = ${DIR} for update of gar skip locked
-), _ as (
+exec psql --no-password --variable=ON_ERROR_STOP="$DIR" <<EOF
+with _ as (
     SELECT
         rooms.objectguid AS id,
         rooms_parent.objectguid AS parent,
@@ -21,7 +19,8 @@ with g as (
     left join "${DIR}".apartments as rooms_parent on rooms_parent.objectid = adm_hierarchy.parentobjid
     left join param_types on param_types.name = 'Почтовый индекс'
     left join "${DIR}".rooms_params as rooms_params on rooms_params.objectid = rooms.objectid and rooms_params.typeid = param_types.id
-    left join g on g.parent = rooms_parent.objectguid and g.name = rooms.number and g.type = room_types.name
-    WHERE g.id is null
-) insert into gar SELECT distinct on (parent, name, type) * from _ WHERE parent is not null and short is not null on conflict (id) do update set parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post, object = EXCLUDED.object, region = EXCLUDED.region;
+    left join gar on gar.object = 'rooms' and gar.region = ${DIR} and gar.parent = rooms_parent.objectguid and gar.name = rooms.number and gar.type = room_types.name
+    WHERE gar.id is null
+) insert into gar SELECT distinct on (parent, name, type) * from _ WHERE parent is not null and short is not null on conflict (id) do update set
+parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post, object = EXCLUDED.object, region = EXCLUDED.region;
 EOF
