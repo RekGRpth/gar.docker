@@ -16,3 +16,4 @@ DELETE FROM $TABLE WHERE NOT current_timestamp between startdate and enddate;
 EOF
 )"
 psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" --command="$COMMAND" <"$CSV"
+rm -f "$CSV"

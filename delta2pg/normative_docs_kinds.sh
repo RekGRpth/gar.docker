@@ -16,3 +16,4 @@ INSERT INTO $TABLE SELECT "id","name" FROM tmp ON CONFLICT ("id") DO UPDATE SET 
 EOF
 )"
 psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" --command="$COMMAND" <"$CSV"
+rm -f "$CSV"

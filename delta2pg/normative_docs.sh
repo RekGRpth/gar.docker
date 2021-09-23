@@ -16,3 +16,4 @@ INSERT INTO $TABLE SELECT "id","name","date","number","type","kind","updatedate"
 EOF
 )"
 psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" --command="$COMMAND" <"$CSV"
+rm -f "$CSV"
