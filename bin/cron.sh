@@ -10,7 +10,7 @@ while
         "delta2pg" )
             find /usr/local/delta2pg -type f -name "*.sh" | sort -u | while read -r SH; do
                 TABLE="$(basename -- "${SH%.*}")"
-                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV sh "$SH" "CSV" || exit 255
+                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV bash "$SH" "CSV"
                 echo "$?"
             done
             echo "$?"
@@ -19,16 +19,16 @@ while
         "full2pg" )
             find /usr/local/full2pg -type f -name "*.sh" | sort -u | while read -r SH; do
                 TABLE="$(basename -- "${SH%.*}")"
-                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV sh "$SH" "CSV" || exit 255
+                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV bash "$SH" "CSV"
                 echo "$?"
             done
             echo "$?"
             echo update >state.txt
         ;;
         "sql2pg" )
-            find /usr/local/sql2pg -type f -name "*.sql" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=SQL psql --no-password --variable=ON_ERROR_STOP=1 --file="SQL" || exit 255
+            find /usr/local/sql2pg -type f -name "*.sql" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=SQL psql --no-password --variable=ON_ERROR_STOP=1 --file="SQL"
             find /usr/local/sql2pg -type f -name "*.sh" | sort -u | while read -r SH; do
-                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=DIR sh "$SH" "DIR" || exit 255
+                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=DIR bash "$SH" "DIR"
                 echo "$?"
             done
             echo "$?"
@@ -44,7 +44,7 @@ while
         ;;
         "update" )
             find /usr/local/update -type f -name "*.sh" | sort -u | while read -r SH; do
-                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=DIR sh "$SH" "DIR" || exit 255
+                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=DIR bash "$SH" "DIR"
                 echo "$?"
             done
             echo "$?"
@@ -53,7 +53,7 @@ while
         "xml2csv" )
             find /usr/local/xml2csv -type f -name "*.sh" | sort -u | while read -r SH; do
                 TABLE="$(basename -- "${SH%.*}")"
-                find . -type f -name "as_${TABLE}_2*.xml" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=XML sh "$SH" "XML" || exit 255
+                find . -type f -name "as_${TABLE}_2*.xml" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=XML bash "$SH" "XML"
                 echo "$?"
             done
             echo "$?"
