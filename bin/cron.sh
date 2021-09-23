@@ -74,6 +74,8 @@ while
                 jq --raw-output "sort_by(.VersionId) | .[] | select(.VersionId > $deltaVersionId) | [.VersionId, .GarXMLDeltaURL] | join(\";\")" <GetAllDownloadFileInfo.json | while IFS=';' read -r lastVersionId GarXMLDeltaURL; do
                     if [ -z "$GarXMLDeltaURL" ]; then continue; fi
                     URL="$GarXMLDeltaURL"
+                    SIZE="$(curl -Is "$URL" | grep 'Content-Length' | grep -oP '\d+')"
+                    test "$SIZE" -lt 1073741824
                     ZIP="$lastVersionId.zip"
                     wget --continue --output-document="$ZIP" "$URL"
                     echo "$lastVersionId" >deltaVersionId.txt
