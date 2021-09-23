@@ -14,4 +14,4 @@ INSERT INTO $TABLE SELECT "id","objectid","parentobjid","changeid","regioncode",
 DELETE FROM $TABLE WHERE NOT isactive;
 EOF
 )"
-exec psql --no-password --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
+exec psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" --command="$COMMAND" <"$CSV"

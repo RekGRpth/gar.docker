@@ -2,7 +2,7 @@
 
 set -eux
 DIR="$1"
-exec psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
+exec psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" <<EOF
 CREATE TABLE IF NOT EXISTS "${DIR}".rooms (CONSTRAINT rooms_pkey PRIMARY KEY (id)) INHERITS (rooms);
 COMMENT ON TABLE "${DIR}".rooms IS 'Сведения по комнатам';
 COMMENT ON COLUMN "${DIR}".rooms.id IS 'Уникальный идентификатор записи. Ключевое поле';

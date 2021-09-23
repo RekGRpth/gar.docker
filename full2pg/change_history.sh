@@ -12,4 +12,4 @@ FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ("chan
 ;
 EOF
 )"
-exec psql --no-password --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
+exec psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" --command="$COMMAND" <"$CSV"

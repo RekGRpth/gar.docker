@@ -2,7 +2,7 @@
 
 set -eux
 DIR="$1"
-exec psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
+exec psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" <<EOF
 CREATE SCHEMA IF NOT EXISTS "${DIR}";
 CREATE TABLE IF NOT EXISTS "${DIR}".carplaces (CONSTRAINT carplaces_pkey PRIMARY KEY (id)) INHERITS (carplaces);
 COMMENT ON TABLE "${DIR}".carplaces IS 'Сведения по машино-местам';
