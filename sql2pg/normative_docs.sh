@@ -5,7 +5,7 @@ trap "exit 255" ERR
 DIR="$1"
 psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
 CREATE SCHEMA IF NOT EXISTS "${DIR}";
-CREATE TABLE IF NOT EXISTS "${DIR}".normative_docs PARTITION OF normative_docs () FOR VALUES IN (${DIR});
+CREATE TABLE IF NOT EXISTS "${DIR}".normative_docs PARTITION OF normative_docs FOR VALUES IN (${DIR});
 COMMENT ON TABLE "${DIR}".normative_docs IS 'Сведения о нормативном документе, являющемся основанием присвоения адресному элементу наименования';
 COMMENT ON COLUMN "${DIR}".normative_docs.id IS 'Уникальный идентификатор документа';
 COMMENT ON COLUMN "${DIR}".normative_docs.name IS 'Наименование документа';
