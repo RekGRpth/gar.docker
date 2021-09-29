@@ -6,6 +6,7 @@ touch fullVersionId.txt
 touch state.txt
 state="$(cat state.txt)"
 while
+    set -eux
     case "$state" in
         "delta2pg" )
             find /usr/local/delta2pg -type f -name "*.sh" | sort -u | while read -r SH; do
@@ -14,6 +15,15 @@ while
                 find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV bash "$SH" "CSV"
             done
             echo update >state.txt
+        ;;
+        "dir2pg" )
+            seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR bash -c "set -eux;trap \"exit 255\" ERR;psql --no-password --variable=ON_ERROR_STOP=1 --command=\"CREATE SCHEMA IF NOT EXISTS \"DIR\"\""
+            find /usr/local/dir2pg -type f | sort -u | while read -r TABLE; do
+                set -eux
+                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR echo "CREATE TABLE IF NOT EXISTS \"DIR\".\"$TABLE\" PARTITION OF \"$TABLE\" FOR VALUES IN (DIR);"
+            done | psql --no-password --variable=ON_ERROR_STOP=1
+            echo wget >fullVersionId.txt
+            echo wget >state.txt
         ;;
         "full2pg" )
             find /usr/local/full2pg -type f -name "*.sh" | sort -u | while read -r SH; do
@@ -25,13 +35,7 @@ while
         ;;
         "sql2pg" )
             find /usr/local/sql2pg -type f -name "*.sql" | sort -u | xargs --verbose --no-run-if-empty --replace=SQL bash -c "set -eux;trap \"exit 255\" ERR;psql --no-password --variable=ON_ERROR_STOP=1 --file=\"SQL\""
-            seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR bash -c "set -eux;trap \"exit 255\" ERR;psql --no-password --variable=ON_ERROR_STOP=1 --command=\"CREATE SCHEMA IF NOT EXISTS \"DIR\"\""
-            find /usr/local/sql2pg -type f -name "*.sh" | sort -u | while read -r SH; do
-                set -eux
-                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR bash "$SH" "DIR"
-            done
-            echo wget >fullVersionId.txt
-            echo wget >state.txt
+            echo dir2pg >state.txt
         ;;
         "unzip" )
             find . -type f -name "*.zip" | sort -u | while read -r ZIP; do
