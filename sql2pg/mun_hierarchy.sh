@@ -5,7 +5,7 @@ trap "exit 255" ERR
 DIR="$1"
 psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
 CREATE SCHEMA IF NOT EXISTS "${DIR}";
-CREATE TABLE IF NOT EXISTS "${DIR}".mun_hierarchy (CONSTRAINT mun_hierarchy_pkey PRIMARY KEY (id)) INHERITS (mun_hierarchy);
+CREATE TABLE IF NOT EXISTS "${DIR}".mun_hierarchy PARTITION OF mun_hierarchy (CONSTRAINT mun_hierarchy_pkey PRIMARY KEY (id)) FOR VALUES IN (${DIR});
 COMMENT ON TABLE "${DIR}".mun_hierarchy IS 'Сведения по иерархии в муниципальном делении';
 COMMENT ON COLUMN "${DIR}".mun_hierarchy.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN "${DIR}".mun_hierarchy.objectid IS 'Глобальный уникальный идентификатор адресного объекта ';

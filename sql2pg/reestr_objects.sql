@@ -5,8 +5,9 @@ CREATE TABLE IF NOT EXISTS reestr_objects (
     levelid INT NOT NULL,
     updatedate DATE NOT NULL,
     objectguid UUID NOT NULL,
-    isactive BOOLEAN NOT NULL
-);
+    isactive BOOLEAN NOT NULL,
+    region smallint NOT NULL
+) PARTITION BY LIST (region);
 COMMENT ON TABLE reestr_objects IS 'Сведения об адресном элементе в части его идентификаторов';
 COMMENT ON COLUMN reestr_objects.objectid IS 'Уникальный идентификатор объекта';
 COMMENT ON COLUMN reestr_objects.createdate IS 'Дата создания';

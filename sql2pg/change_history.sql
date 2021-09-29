@@ -4,8 +4,9 @@ CREATE TABLE IF NOT EXISTS change_history (
     adrobjectid UUID NOT NULL,
     opertypeid INT NOT NULL,
     ndocid BIGINT,
-    changedate DATE NOT NULL
-);
+    changedate DATE NOT NULL,
+    region smallint NOT NULL
+) PARTITION BY LIST (region);
 COMMENT ON TABLE change_history IS 'Сведения по истории изменений';
 COMMENT ON COLUMN change_history.changeid IS 'ID изменившей транзакции';
 COMMENT ON COLUMN change_history.objectid IS 'Уникальный ID объекта';

@@ -4,7 +4,7 @@ set -eux
 trap "exit 255" ERR
 DIR="$1"
 psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
-CREATE TABLE IF NOT EXISTS "${DIR}".steads (CONSTRAINT steads_pkey PRIMARY KEY (id)) INHERITS (steads);
+CREATE TABLE IF NOT EXISTS "${DIR}".steads PARTITION OF steads (CONSTRAINT steads_pkey PRIMARY KEY (id)) FOR VALUES IN (${DIR});
 COMMENT ON TABLE "${DIR}".steads IS 'Сведения по земельным участкам';
 COMMENT ON COLUMN "${DIR}".steads.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN "${DIR}".steads.objectid IS 'Глобальный уникальный идентификатор объекта типа INTEGER';

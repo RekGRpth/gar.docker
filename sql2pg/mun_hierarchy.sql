@@ -9,8 +9,9 @@ CREATE TABLE IF NOT EXISTS mun_hierarchy (
     updatedate DATE NOT NULL,
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,
-    isactive BOOLEAN NOT NULL
-);
+    isactive BOOLEAN NOT NULL,
+    region smallint NOT NULL
+) PARTITION BY LIST (region);
 COMMENT ON TABLE mun_hierarchy IS 'Сведения по иерархии в муниципальном делении';
 COMMENT ON COLUMN mun_hierarchy.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN mun_hierarchy.objectid IS 'Глобальный уникальный идентификатор адресного объекта ';

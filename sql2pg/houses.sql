@@ -16,8 +16,9 @@ CREATE TABLE IF NOT EXISTS houses (
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,
     isactual BOOLEAN NOT NULL,
-    isactive BOOLEAN NOT NULL
-);
+    isactive BOOLEAN NOT NULL,
+    region smallint NOT NULL
+) PARTITION BY LIST (region);
 COMMENT ON TABLE houses IS 'Сведения по номерам домов улиц городов и населенных пунктов';
 COMMENT ON COLUMN houses.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN houses.objectid IS 'Глобальный уникальный идентификатор объекта типа INTEGER';

@@ -10,8 +10,9 @@ CREATE TABLE IF NOT EXISTS normative_docs (
     regnum VARCHAR(100),
     regdate DATE,
     accdate DATE,
-    comment VARCHAR(8000)
-);
+    comment VARCHAR(8000),
+    region smallint NOT NULL
+) PARTITION BY LIST (region);
 COMMENT ON TABLE normative_docs IS 'Сведения о нормативном документе, являющемся основанием присвоения адресному элементу наименования';
 COMMENT ON COLUMN normative_docs.id IS 'Уникальный идентификатор документа';
 COMMENT ON COLUMN normative_docs.name IS 'Наименование документа';

@@ -13,8 +13,9 @@ CREATE TABLE IF NOT EXISTS addr_obj (
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,
     isactual BOOLEAN NOT NULL,
-    isactive BOOLEAN NOT NULL
-);
+    isactive BOOLEAN NOT NULL,
+    region smallint NOT NULL
+) PARTITION BY LIST (region);
 COMMENT ON TABLE addr_obj IS 'Сведения классификатора адресообразующих элементов';
 COMMENT ON COLUMN addr_obj.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN addr_obj.objectid IS 'Глобальный уникальный идентификатор адресного объекта типа INTEGER';

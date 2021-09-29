@@ -6,7 +6,7 @@ DIR="$1"
 for TABLE in addr_obj_params apartments_params carplaces_params houses_params rooms_params steads_params; do
 psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
 CREATE SCHEMA IF NOT EXISTS "${DIR}";
-CREATE TABLE IF NOT EXISTS "${DIR}".${TABLE} (CONSTRAINT ${TABLE}_pkey PRIMARY KEY (id)) INHERITS (param);
+CREATE TABLE IF NOT EXISTS "${DIR}".${TABLE} PARTITION OF ${TABLE} (CONSTRAINT ${TABLE}_pkey PRIMARY KEY (id)) FOR VALUES IN (${DIR});
 COMMENT ON TABLE "${DIR}".${TABLE} IS 'Сведения о классификаторе параметров адресообразующих элементов и объектов недвижимости ';
 COMMENT ON COLUMN "${DIR}".${TABLE}.id IS 'Идентификатор записи';
 COMMENT ON COLUMN "${DIR}".${TABLE}.objectid IS 'Глобальный уникальный идентификатор адресного объекта ';

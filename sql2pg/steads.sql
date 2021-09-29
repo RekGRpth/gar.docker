@@ -11,8 +11,9 @@ CREATE TABLE IF NOT EXISTS steads (
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,
     isactual BOOLEAN NOT NULL,
-    isactive BOOLEAN NOT NULL
-);
+    isactive BOOLEAN NOT NULL,
+    region smallint NOT NULL
+) PARTITION BY LIST (region);
 COMMENT ON TABLE steads IS 'Сведения по земельным участкам';
 COMMENT ON COLUMN steads.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN steads.objectid IS 'Глобальный уникальный идентификатор объекта типа INTEGER';

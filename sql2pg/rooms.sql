@@ -12,8 +12,9 @@ CREATE TABLE IF NOT EXISTS rooms (
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,
     isactual BOOLEAN NOT NULL,
-    isactive BOOLEAN NOT NULL
-);
+    isactive BOOLEAN NOT NULL,
+    region smallint NOT NULL
+) PARTITION BY LIST (region);
 COMMENT ON TABLE rooms IS 'Сведения по комнатам';
 COMMENT ON COLUMN rooms.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN rooms.objectid IS 'Глобальный уникальный идентификатор объекта типа INTEGER';

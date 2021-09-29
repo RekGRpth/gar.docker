@@ -11,8 +11,9 @@ CREATE TABLE IF NOT EXISTS carplaces (
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,
     isactual BOOLEAN NOT NULL,
-    isactive BOOLEAN NOT NULL
-);
+    isactive BOOLEAN NOT NULL,
+    region smallint NOT NULL
+) PARTITION BY LIST (region);
 COMMENT ON TABLE carplaces IS 'Сведения по машино-местам';
 COMMENT ON COLUMN carplaces.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN carplaces.objectid IS 'Глобальный уникальный идентификатор объекта типа INTEGER';

@@ -7,8 +7,9 @@ CREATE TABLE IF NOT EXISTS param (
     value VARCHAR(8000) NOT NULL,
     updatedate DATE NOT NULL,
     startdate DATE NOT NULL,
-    enddate DATE NOT NULL
-);
+    enddate DATE NOT NULL,
+    region smallint NOT NULL
+) PARTITION BY LIST (region);
 COMMENT ON TABLE param IS 'Сведения о классификаторе параметров адресообразующих элементов и объектов недвижимости ';
 COMMENT ON COLUMN param.id IS 'Идентификатор записи';
 COMMENT ON COLUMN param.objectid IS 'Глобальный уникальный идентификатор адресного объекта ';
