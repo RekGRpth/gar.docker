@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS reestr_objects (
     objectguid UUID NOT NULL,
     isactive BOOLEAN NOT NULL,
     region smallint NOT NULL,
-    CONSTRAINT reestr_objects_pkey PRIMARY KEY (id, region)
+    CONSTRAINT reestr_objects_pkey PRIMARY KEY (objectid, region)
 ) PARTITION BY LIST (region);
 COMMENT ON TABLE reestr_objects IS 'Сведения об адресном элементе в части его идентификаторов';
 COMMENT ON COLUMN reestr_objects.objectid IS 'Уникальный идентификатор объекта';
