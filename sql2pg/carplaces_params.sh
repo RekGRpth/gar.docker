@@ -5,7 +5,7 @@ trap "exit 255" ERR
 DIR="$1"
 psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
 CREATE SCHEMA IF NOT EXISTS "${DIR}";
-CREATE TABLE IF NOT EXISTS "${DIR}".carplaces_params PARTITION OF carplaces_params (CONSTRAINT carplaces_params_pkey PRIMARY KEY (id)) FOR VALUES IN (${DIR});
+CREATE TABLE IF NOT EXISTS "${DIR}".carplaces_params PARTITION OF carplaces_params () FOR VALUES IN (${DIR});
 COMMENT ON TABLE "${DIR}".carplaces_params IS 'Сведения о классификаторе параметров адресообразующих элементов и объектов недвижимости ';
 COMMENT ON COLUMN "${DIR}".carplaces_params.id IS 'Идентификатор записи';
 COMMENT ON COLUMN "${DIR}".carplaces_params.objectid IS 'Глобальный уникальный идентификатор адресного объекта ';

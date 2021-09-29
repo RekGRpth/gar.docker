@@ -5,7 +5,7 @@ trap "exit 255" ERR
 DIR="$1"
 psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
 CREATE SCHEMA IF NOT EXISTS "${DIR}";
-CREATE TABLE IF NOT EXISTS "${DIR}".change_history PARTITION OF change_history (CONSTRAINT change_history_pkey PRIMARY KEY (id)) FOR VALUES IN (${DIR});
+CREATE TABLE IF NOT EXISTS "${DIR}".change_history PARTITION OF change_history () FOR VALUES IN (${DIR});
 COMMENT ON TABLE "${DIR}".change_history IS 'Сведения по истории изменений';
 COMMENT ON COLUMN "${DIR}".change_history.changeid IS 'ID изменившей транзакции';
 COMMENT ON COLUMN "${DIR}".change_history.objectid IS 'Уникальный ID объекта';
