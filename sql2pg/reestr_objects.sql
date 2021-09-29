@@ -1,12 +1,13 @@
 CREATE TABLE IF NOT EXISTS reestr_objects (
-    objectid BIGINT NOT NULL PRIMARY KEY,
+    objectid BIGINT NOT NULL,
     createdate DATE NOT NULL,
     changeid BIGINT NOT NULL,
     levelid INT NOT NULL,
     updatedate DATE NOT NULL,
     objectguid UUID NOT NULL,
     isactive BOOLEAN NOT NULL,
-    region smallint NOT NULL
+    region smallint NOT NULL,
+    CONSTRAINT reestr_objects_pkey PRIMARY KEY (id, region)
 ) PARTITION BY LIST (region);
 COMMENT ON TABLE reestr_objects IS 'Сведения об адресном элементе в части его идентификаторов';
 COMMENT ON COLUMN reestr_objects.objectid IS 'Уникальный идентификатор объекта';

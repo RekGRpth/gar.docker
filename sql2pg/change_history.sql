@@ -1,11 +1,12 @@
 CREATE TABLE IF NOT EXISTS change_history (
-    changeid BIGINT NOT NULL PRIMARY KEY,
+    changeid BIGINT NOT NULL,
     objectid BIGINT NOT NULL,
     adrobjectid UUID NOT NULL,
     opertypeid INT NOT NULL,
     ndocid BIGINT,
     changedate DATE NOT NULL,
-    region smallint NOT NULL
+    region smallint NOT NULL,
+    CONSTRAINT change_history_pkey PRIMARY KEY (id, region)
 ) PARTITION BY LIST (region);
 COMMENT ON TABLE change_history IS 'Сведения по истории изменений';
 COMMENT ON COLUMN change_history.changeid IS 'ID изменившей транзакции';

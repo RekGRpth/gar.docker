@@ -11,7 +11,7 @@ DO $body$ BEGIN
     EXCEPTION WHEN others THEN null;
 END $body$;
 CREATE TABLE IF NOT EXISTS gar (
-    id uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+    id uuid NOT NULL DEFAULT gen_random_uuid(),
     parent uuid,
     name text NOT NULL,
     short text NOT NULL,
@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS gar (
     post text,
     object object NOT NULL,
     region smallint NOT NULL,
+    CONSTRAINT gar_pkey PRIMARY KEY (id, region),
     CONSTRAINT gar_name_short_type_key UNIQUE (parent, name, type)
 ) PARTITION BY LIST (region);
 CREATE OR REPLACE FUNCTION gar_text(name text, short text, type text) RETURNS text LANGUAGE sql IMMUTABLE AS $body$

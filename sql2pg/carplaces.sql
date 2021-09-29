@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS carplaces (
-    id BIGINT NOT NULL PRIMARY KEY,
+    id BIGINT NOT NULL,
     objectid BIGINT NOT NULL,
     objectguid UUID NOT NULL,
     changeid BIGINT NOT NULL,
@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS carplaces (
     enddate DATE NOT NULL,
     isactual BOOLEAN NOT NULL,
     isactive BOOLEAN NOT NULL,
-    region smallint NOT NULL
+    region smallint NOT NULL,
+    CONSTRAINT carplaces_pkey PRIMARY KEY (id, region)
 ) PARTITION BY LIST (region);
 COMMENT ON TABLE carplaces IS 'Сведения по машино-местам';
 COMMENT ON COLUMN carplaces.id IS 'Уникальный идентификатор записи. Ключевое поле';

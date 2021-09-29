@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS houses (
-    id BIGINT NOT NULL PRIMARY KEY,
+    id BIGINT NOT NULL,
     objectid BIGINT NOT NULL,
     objectguid UUID NOT NULL,
     changeid BIGINT NOT NULL,
@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS houses (
     enddate DATE NOT NULL,
     isactual BOOLEAN NOT NULL,
     isactive BOOLEAN NOT NULL,
-    region smallint NOT NULL
+    region smallint NOT NULL,
+    CONSTRAINT houses_pkey PRIMARY KEY (id, region)
 ) PARTITION BY LIST (region);
 COMMENT ON TABLE houses IS 'Сведения по номерам домов улиц городов и населенных пунктов';
 COMMENT ON COLUMN houses.id IS 'Уникальный идентификатор записи. Ключевое поле';

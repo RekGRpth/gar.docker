@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS apartments_params (
-    id BIGINT NOT NULL PRIMARY KEY,
+    id BIGINT NOT NULL,
     objectid BIGINT NOT NULL,
     changeid BIGINT,
     changeidend BIGINT NOT NULL,
@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS apartments_params (
     updatedate DATE NOT NULL,
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,
-    region smallint NOT NULL
+    region smallint NOT NULL,
+    CONSTRAINT apartments_params_pkey PRIMARY KEY (id, region)
 ) PARTITION BY LIST (region);
 COMMENT ON TABLE apartments_params IS 'Сведения о классификаторе параметров адресообразующих элементов и объектов недвижимости ';
 COMMENT ON COLUMN apartments_params.id IS 'Идентификатор записи';
