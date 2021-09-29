@@ -2,8 +2,8 @@
 
 set -eux
 trap "exit 255" ERR
-CSV="$1"
-TABLE="\"$(basename -- "${0%.*}")\""
+TABLE="\"$1\""
+CSV="$2"
 COMMAND="$(cat <<EOF
 COPY $TABLE ("id","name","startdate","enddate")
 FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ("id","name","startdate","enddate"))

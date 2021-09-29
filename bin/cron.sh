@@ -12,7 +12,7 @@ while
             find /usr/local/delta2pg -type f -name "*.sh" | sort -u | while read -r SH; do
                 set -eux
                 TABLE="$(basename -- "${SH%.*}")"
-                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV bash "$SH" "CSV"
+                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV bash "$SH" "$TABLE" "CSV"
             done
             echo update >state.txt
         ;;
@@ -30,7 +30,7 @@ while
             find /usr/local/full2pg -type f -name "*.sh" | sort -u | while read -r SH; do
                 set -eux
                 TABLE="$(basename -- "${SH%.*}")"
-                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV bash "$SH" "CSV"
+                find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV bash "$SH" "$TABLE" "CSV"
             done
             echo update >state.txt
         ;;
