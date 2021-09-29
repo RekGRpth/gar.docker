@@ -3,10 +3,7 @@
 set -eux
 trap "exit 255" ERR
 CSV="$1"
-TABLE="${0%.*}"
-DIR="$(dirname -- "$CSV")"
-DIR="$(basename -- "$DIR")"
-if echo "$DIR" | grep -P "^\d\d$" >/dev/null; then TABLE="\"$DIR\".\"$TABLE\""; fi
+TABLE="\"${0%.*}\""
 COMMAND="$(cat <<EOF
 CREATE TEMP TABLE tmp (LIKE $TABLE INCLUDING ALL) ON COMMIT DROP;
 COPY tmp ("id","name","code","desc","updatedate","startdate","enddate","isactive")
@@ -15,5 +12,5 @@ INSERT INTO $TABLE SELECT "id","name","code","desc","updatedate","startdate","en
 DELETE FROM $TABLE WHERE NOT isactive;
 EOF
 )"
-psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" --command="$COMMAND" <"$CSV"
+psql --no-password --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
 rm -f "$CSV"
