@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS gar (
     object object NOT NULL,
     region smallint NOT NULL,
     CONSTRAINT gar_pkey PRIMARY KEY (id, region),
-    CONSTRAINT gar_name_short_type_key UNIQUE (parent, name, type)
+    CONSTRAINT gar_name_short_type_key UNIQUE (parent, name, type, region)
 ) PARTITION BY LIST (region);
 CREATE OR REPLACE FUNCTION gar_text(name text, short text, type text) RETURNS text LANGUAGE sql IMMUTABLE AS $body$
     select case
