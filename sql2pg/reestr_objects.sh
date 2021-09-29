@@ -3,7 +3,7 @@
 set -eux
 trap "exit 255" ERR
 DIR="$1"
-psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" <<EOF
+psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
 CREATE SCHEMA IF NOT EXISTS "${DIR}";
 CREATE TABLE IF NOT EXISTS "${DIR}".reestr_objects (CONSTRAINT reestr_objects_pkey PRIMARY KEY (objectid)) INHERITS (reestr_objects);
 COMMENT ON TABLE "${DIR}".reestr_objects IS 'Сведения об адресном элементе в части его идентификаторов';

@@ -3,7 +3,7 @@
 set -eux
 trap "exit 255" ERR
 DIR="$1"
-psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" <<EOF
+psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
 with _ as (
     SELECT
         addr_obj.objectguid AS id,
@@ -25,7 +25,7 @@ with _ as (
 ) insert into gar SELECT distinct on (parent, name, type) * from _ on conflict (id) do update set
 parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post, object = EXCLUDED.object, region = EXCLUDED.region;
 EOF
-psql --no-password --variable=ON_ERROR_STOP=1 --variable=DIR="$DIR" <<EOF
+psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
 with _ as (
     SELECT
         addr_obj.objectguid AS id,
