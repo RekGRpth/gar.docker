@@ -17,7 +17,7 @@ while
             echo update >state.txt
         ;;
         "dir2pg" )
-            seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR bash -c "set -eux;trap \"exit 255\" ERR;psql --no-password --variable=ON_ERROR_STOP=1 --command=\"CREATE SCHEMA IF NOT EXISTS \"DIR\"\""
+            seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR bash -c "set -eux;trap \"exit 255\" ERR;psql --no-password --variable=ON_ERROR_STOP=1 --command=\"CREATE SCHEMA IF NOT EXISTS \\\"DIR\\\"\""
             find /usr/local/dir2pg -type f | sort -u | while read -r TABLE; do
                 set -eux
                 seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR echo "CREATE TABLE IF NOT EXISTS \"DIR\".\"$TABLE\" PARTITION OF \"$TABLE\" FOR VALUES IN (DIR);"
