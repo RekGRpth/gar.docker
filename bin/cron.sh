@@ -35,7 +35,7 @@ while
             echo update >state.txt
         ;;
         "sql2pg" )
-            find /usr/local/sql2pg -type f -name "*.sql" | sort -u | xargs --verbose --no-run-if-empty --replace=SQL bash -c "set -eux;trap \"exit 255\" ERR;psql --no-password --variable=ON_ERROR_STOP=1 --file=\"SQL\""
+            find /usr/local/sql2pg -type f -name "*.sql" | sort -u | xargs --verbose --no-run-if-empty --replace=SQL cat "SQL" | psql --no-password --variable=ON_ERROR_STOP=1
             echo dir2pg >state.txt
         ;;
         "unzip" )
