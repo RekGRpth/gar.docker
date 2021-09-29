@@ -149,3 +149,4 @@ begin
         ) select gar_update.json as query, to_json(_) as data from _
     ) select to_json(_) from _ into strict gar_update.json;
 end;$body$;
+\connect gar gar
