@@ -21,8 +21,8 @@ while
             find /usr/local/dir2pg -type f | sort -u | while read -r TABLE; do
                 set -eux
                 TABLE="$(basename -- "$TABLE")"
-                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR echo "CREATE TABLE IF NOT EXISTS \"DIR\".\"$TABLE\" PARTITION OF \"$TABLE\" FOR VALUES IN (DIR);" | psql --no-password --variable=ON_ERROR_STOP=1
-            done
+                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR echo "CREATE TABLE IF NOT EXISTS \"DIR\".\"$TABLE\" PARTITION OF \"$TABLE\" FOR VALUES IN (DIR);"
+            done | psql --no-password --variable=ON_ERROR_STOP=1
             echo wget >fullVersionId.txt
             echo wget >state.txt
         ;;
