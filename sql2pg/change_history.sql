@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS change_history (
     ndocid BIGINT,
     changedate DATE NOT NULL,
     region smallint NOT NULL,
-    CONSTRAINT change_history_pkey PRIMARY KEY (id, region)
+    CONSTRAINT change_history_pkey PRIMARY KEY (changeid, region)
 ) PARTITION BY LIST (region);
 COMMENT ON TABLE change_history IS 'Сведения по истории изменений';
 COMMENT ON COLUMN change_history.changeid IS 'ID изменившей транзакции';
