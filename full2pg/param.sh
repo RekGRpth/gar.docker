@@ -8,8 +8,8 @@ DIR="$(dirname -- "$CSV")"
 DIR="$(basename -- "$DIR")"
 if echo "$DIR" | grep -P "^\d\d$" >/dev/null; then TABLE="\"$DIR\".$TABLE"; fi
 COMMAND="$(cat <<EOF
-COPY $TABLE ("id","objectid","changeid","changeidend","typeid","value","updatedate","startdate","enddate")
-FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ("id","objectid","changeidend","typeid","value","updatedate","startdate","enddate"))
+COPY $TABLE ("id","objectid","changeid","changeidend","typeid","value","updatedate","startdate","enddate","region")
+FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ("id","objectid","changeidend","typeid","value","updatedate","startdate","enddate","region"))
 WHERE current_timestamp between startdate::date and enddate::date;
 EOF
 )"
