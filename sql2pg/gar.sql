@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS gar (
     object object NOT NULL,
     region smallint NOT NULL,
     CONSTRAINT gar_name_short_type_key UNIQUE (parent, name, type)
-);
+) PARTITION BY LIST (region);
 CREATE OR REPLACE FUNCTION gar_text(name text, short text, type text) RETURNS text LANGUAGE sql IMMUTABLE AS $body$
     select case
         --when gar_text.type in ('Местность') then gar_text.name
