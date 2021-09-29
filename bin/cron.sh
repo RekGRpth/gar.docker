@@ -20,6 +20,7 @@ while
             seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR echo "CREATE SCHEMA IF NOT EXISTS \"DIR\";" | psql --no-password --variable=ON_ERROR_STOP=1
             find /usr/local/dir2pg -type f | sort -u | while read -r TABLE; do
                 set -eux
+                TABLE="$(basename -- "$TABLE")"
                 seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR echo "CREATE TABLE IF NOT EXISTS \"DIR\".\"$TABLE\" PARTITION OF \"$TABLE\" FOR VALUES IN (DIR);" | psql --no-password --variable=ON_ERROR_STOP=1
             done
             echo wget >fullVersionId.txt
