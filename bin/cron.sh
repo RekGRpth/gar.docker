@@ -25,6 +25,7 @@ while
         ;;
         "sql2pg" )
             find /usr/local/sql2pg -type f -name "*.sql" | sort -u | xargs --verbose --no-run-if-empty --replace=SQL bash -c "set -eux;trap \"exit 255\" ERR;psql --no-password --variable=ON_ERROR_STOP=1 --file=\"SQL\""
+            seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR bash -c "set -eux;trap \"exit 255\" ERR;psql --no-password --variable=ON_ERROR_STOP=1 --command=\"CREATE SCHEMA IF NOT EXISTS \"DIR\"\""
             find /usr/local/sql2pg -type f -name "*.sh" | sort -u | while read -r SH; do
                 set -eux
                 seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR bash "$SH" "DIR"
