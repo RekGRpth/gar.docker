@@ -3,7 +3,7 @@
 set -eux
 trap "exit 255" ERR
 CSV="$1"
-TABLE="\"${0%.*}\""
+TABLE="\"$(basename -- "${0%.*}")\""
 COMMAND="$(cat <<EOF
 CREATE TEMP TABLE tmp (LIKE $TABLE INCLUDING ALL) ON COMMIT DROP;
 COPY tmp ("id","name")

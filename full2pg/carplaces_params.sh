@@ -3,7 +3,7 @@
 set -eux
 trap "exit 255" ERR
 CSV="$1"
-TABLE="\"${0%.*}\""
+TABLE="\"$(basename -- "${0%.*}")\""
 DIR="$(dirname -- "$CSV")"
 DIR="$(basename -- "$DIR")"
 if echo "$DIR" | grep -P "^\d\d$" >/dev/null; then TABLE="\"$DIR\".$TABLE"; fi

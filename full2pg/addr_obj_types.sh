@@ -3,7 +3,7 @@
 set -eux
 trap "exit 255" ERR
 CSV="$1"
-TABLE="\"${0%.*}\""
+TABLE="\"$(basename -- "${0%.*}")\""
 COMMAND="$(cat <<EOF
 COPY $TABLE ("id","level","shortname","name","desc","updatedate","startdate","enddate","isactive")
 FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ("id","level","shortname","name","updatedate","startdate","enddate","isactive"))
