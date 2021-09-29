@@ -4,6 +4,7 @@ set -eux
 trap "exit 255" ERR
 DIR="$1"
 psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
+CREATE SCHEMA IF NOT EXISTS "${DIR}";
 CREATE TABLE IF NOT EXISTS "${DIR}".rooms PARTITION OF rooms (CONSTRAINT rooms_pkey PRIMARY KEY (id)) FOR VALUES IN (${DIR});
 COMMENT ON TABLE "${DIR}".rooms IS 'Сведения по комнатам';
 COMMENT ON COLUMN "${DIR}".rooms.id IS 'Уникальный идентификатор записи. Ключевое поле';
