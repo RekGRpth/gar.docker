@@ -22,6 +22,6 @@ with _ as (
     left join "${DIR}".apartments_params as apartments_params on apartments_params.objectid = apartments.objectid and apartments_params.typeid = param_types.id
     left join "${DIR}".gar as gar on gar.object = 'apartments' and gar.parent = apartments_parent.objectguid and gar.name = apartments.number and gar.type = apartment_types.name
     WHERE gar.id is null
-) insert into "${DIR}".gar SELECT distinct on (parent, name, type) * from _ WHERE parent is not null on conflict (id) do update set
+) insert into "${DIR}".gar SELECT distinct on (parent, name, type) * from _ WHERE parent is not null on conflict ON CONSTRAINT gar_pkey do update set
 parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post, object = EXCLUDED.object, region = EXCLUDED.region;
 EOF
