@@ -22,7 +22,7 @@ with _ as (
     left join "${DIR}".addr_obj_params as addr_obj_params on addr_obj_params.objectid = addr_obj.objectid and addr_obj_params.typeid = param_types.id
     left join "${DIR}".gar as gar on gar.object = 'addr_obj' and gar.parent = addr_obj_parent.objectguid and gar.name = addr_obj.name and gar.type = addr_obj_types.name
     WHERE addr_obj.level = 1 and gar.id is null
-) insert into gar SELECT distinct on (parent, name, type) * from _ on conflict (id) do update set
+) insert into "${DIR}".gar SELECT distinct on (parent, name, type) * from _ on conflict (id) do update set
 parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post, object = EXCLUDED.object, region = EXCLUDED.region;
 EOF
 psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
@@ -44,6 +44,6 @@ with _ as (
     left join "${DIR}".addr_obj_params as addr_obj_params on addr_obj_params.objectid = addr_obj.objectid and addr_obj_params.typeid = param_types.id
     left join "${DIR}".gar as gar on gar.object = 'addr_obj' and gar.parent = addr_obj_parent.objectguid and gar.name = addr_obj.name and gar.type = addr_obj_types.name
     WHERE gar.id is null
-) insert into gar SELECT distinct on (parent, name, type) * from _ WHERE parent is not null on conflict (id) do update set
+) insert into "${DIR}".gar SELECT distinct on (parent, name, type) * from _ WHERE parent is not null on conflict (id) do update set
 parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post, object = EXCLUDED.object, region = EXCLUDED.region;
 EOF
