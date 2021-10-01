@@ -8,7 +8,7 @@ DIR="$(basename -- "$DIR")"
 xml2 \
     <"$XML" \
     | tr -d "\t" \
-    | sed -E "s|(/CARPLACES/CARPLACE/)(@ISACTIVE=.+)|\1\2\n\1@REGION=$DIR|" \
+    | sed -E "s|(/CARPLACES/CARPLACE/)(@ID=.+)|\1\2\n\1@REGION=$DIR|" \
     | 2csv -d "	" CARPLACES/CARPLACE @ID @OBJECTID @OBJECTGUID @CHANGEID @NUMBER @OPERTYPEID @PREVID @NEXTID @UPDATEDATE @STARTDATE @ENDDATE @ISACTUAL @ISACTIVE @REGION \
     >"${XML%.*}.csv"
 rm -f "$XML"
