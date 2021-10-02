@@ -20,8 +20,6 @@ with _ as (
     left join "${DIR}".houses as apartments_parent on apartments_parent.objectid = adm_hierarchy.parentobjid
     left join param_types on param_types.name = 'Почтовый индекс'
     left join "${DIR}".apartments_params as apartments_params on apartments_params.objectid = apartments.objectid and apartments_params.typeid = param_types.id
-    left join gar on gar.object = 'apartments' and gar.region = ${DIR} and gar.parent = apartments_parent.objectguid and gar.name = apartments.number and gar.type = apartment_types.name
-    WHERE gar.id is null
 ) insert into gar SELECT distinct on (parent, name, type) * from _ WHERE parent is not null on conflict ON CONSTRAINT gar_pkey do update set
 parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post, object = EXCLUDED.object, region = EXCLUDED.region;
 EOF
