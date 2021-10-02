@@ -11,8 +11,7 @@ with _ as (
         rooms.number AS name,
         rtrim(room_types.shortname, '.') AS short,
         room_types.name AS type,
-        rooms_params.value AS post,
-        'rooms'::object as object
+        rooms_params.value AS post
     FROM "${DIR}".rooms as rooms
     inner JOIN room_types ON room_types.id = rooms.roomtype
     left join "${DIR}".adm_hierarchy as adm_hierarchy on adm_hierarchy.objectid = rooms.objectid
@@ -20,5 +19,5 @@ with _ as (
     left join param_types on param_types.name = 'Почтовый индекс'
     left join "${DIR}".rooms_params as rooms_params on rooms_params.objectid = rooms.objectid and rooms_params.typeid = param_types.id
 ) insert into gar SELECT distinct on (parent, name, type) * from _ WHERE parent is not null and short is not null on conflict ON CONSTRAINT gar_pkey do update set
-parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post, object = EXCLUDED.object;
+parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post;
 EOF

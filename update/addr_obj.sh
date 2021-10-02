@@ -11,8 +11,7 @@ with _ as (
         addr_obj.name AS name,
         rtrim(addr_obj_types.shortname, '.') AS short,
         addr_obj_types.name AS type,
-        addr_obj_params.value AS post,
-        'addr_obj'::object as object
+        addr_obj_params.value AS post
     FROM "${DIR}".addr_obj as addr_obj
     inner JOIN addr_obj_types ON addr_obj_types.level = addr_obj.level AND addr_obj_types.shortname = addr_obj.typename
     left join "${DIR}".adm_hierarchy as adm_hierarchy on adm_hierarchy.objectid = addr_obj.objectid
@@ -21,7 +20,7 @@ with _ as (
     left join "${DIR}".addr_obj_params as addr_obj_params on addr_obj_params.objectid = addr_obj.objectid and addr_obj_params.typeid = param_types.id
     WHERE addr_obj.level = 1
 ) insert into gar SELECT distinct on (parent, name, type) * from _ on conflict ON CONSTRAINT gar_pkey do update set
-parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post, object = EXCLUDED.object;
+parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post;
 EOF
 psql --no-password --variable=ON_ERROR_STOP=1 <<EOF
 with _ as (
@@ -31,8 +30,7 @@ with _ as (
         addr_obj.name AS name,
         rtrim(addr_obj_types.shortname, '.') AS short,
         addr_obj_types.name AS type,
-        addr_obj_params.value AS post,
-        'addr_obj'::object as object
+        addr_obj_params.value AS post
     FROM "${DIR}".addr_obj as addr_obj
     inner JOIN addr_obj_types ON addr_obj_types.level = addr_obj.level AND addr_obj_types.shortname = addr_obj.typename
     left join "${DIR}".adm_hierarchy as adm_hierarchy on adm_hierarchy.objectid = addr_obj.objectid
@@ -40,5 +38,5 @@ with _ as (
     left join param_types on param_types.name = 'Почтовый индекс'
     left join "${DIR}".addr_obj_params as addr_obj_params on addr_obj_params.objectid = addr_obj.objectid and addr_obj_params.typeid = param_types.id
 ) insert into gar SELECT distinct on (parent, name, type) * from _ WHERE parent is not null on conflict ON CONSTRAINT gar_pkey do update set
-parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post, object = EXCLUDED.object;
+parent = EXCLUDED.parent, name = EXCLUDED.name, short = EXCLUDED.short, type = EXCLUDED.type, post = EXCLUDED.post;
 EOF
