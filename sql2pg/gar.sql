@@ -1,4 +1,3 @@
--- drop table gar cascade
 CREATE TABLE IF NOT EXISTS gar (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     parent uuid,
@@ -17,9 +16,7 @@ CREATE OR REPLACE FUNCTION gar_text(name text, short text, type text) RETURNS te
         else gar_text.short||'.'||gar_text.name
     end;
 $body$;
---drop view gar_view;
 CREATE OR REPLACE VIEW gar_view AS SELECT gar.*, gar_text(name, short, type) AS text from gar;
-GRANT SELECT ON TABLE gar TO nginx;
 CREATE OR REPLACE FUNCTION gar_child(id uuid) RETURNS bigint LANGUAGE sql STABLE AS $body$
     select count(1) from gar where parent = gar_child.id;
 $body$;
