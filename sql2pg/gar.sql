@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS gar (
     id uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
-    parent uuid REFERENCES gar (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE SET NULL,
+    parent uuid,
     name text NOT NULL,
     short text NOT NULL,
     type text NOT NULL,

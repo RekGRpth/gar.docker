@@ -13,7 +13,7 @@ SELECT
     addr_obj_types.name AS type,
     addr_obj_params.value AS post
 FROM "${DIR}".addr_obj as addr_obj
-inner JOIN addr_obj_types ON /*addr_obj_types.level = addr_obj.level AND */addr_obj_types.shortname = addr_obj.typename
+inner JOIN addr_obj_types ON addr_obj_types.level = addr_obj.level AND addr_obj_types.shortname = addr_obj.typename
 left join "${DIR}".adm_hierarchy as adm_hierarchy on adm_hierarchy.objectid = addr_obj.objectid
 left join "${DIR}".addr_obj as addr_obj_parent on addr_obj_parent.objectid = adm_hierarchy.parentobjid
 left join param_types on param_types.name = 'Почтовый индекс'
