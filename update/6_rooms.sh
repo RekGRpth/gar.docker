@@ -9,7 +9,7 @@ SELECT distinct on (id)
     rooms.objectguid AS id,
     rooms_parent.objectguid AS parent,
     rooms.number AS name,
-    rtrim(room_types.shortname, '.') AS short,
+    rtrim(coalesce(room_types.shortname, ''), '.') AS short,
     room_types.name AS type,
     rooms_params.value AS post
 FROM "${DIR}".rooms as rooms
