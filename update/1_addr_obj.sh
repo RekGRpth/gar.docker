@@ -5,7 +5,7 @@ trap "exit 255" ERR
 DIR="$1"
 psql --no-password --variable=ON_ERROR_STOP=1 --single-transaction <<EOF
 CREATE TEMPORARY TABLE s ON COMMIT DROP as
-SELECT
+SELECT distinct on (id)
     addr_obj.objectguid AS id,
     addr_obj_parent.objectguid AS parent,
     addr_obj.name AS name,

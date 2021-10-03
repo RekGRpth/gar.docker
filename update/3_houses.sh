@@ -5,7 +5,7 @@ trap "exit 255" ERR
 DIR="$1"
 psql --no-password --variable=ON_ERROR_STOP=1 --single-transaction <<EOF
 CREATE TEMPORARY TABLE s ON COMMIT DROP as
-SELECT
+SELECT distinct on (id)
     houses.objectguid AS id,
     houses_parent.objectguid AS parent,
     concat_ws(', ', houses.housenum, case when houses.addnum1 is not null then concat(case when coalesce(house_types1.id, houses.housetype) = houses.housetype then 'корп' else rtrim(house_types1.shortname, '.') end, '.', houses.addnum1) end, case when houses.addnum2 is not null then concat(case when coalesce(house_types2.id, houses.housetype) = houses.housetype then 'стр' else rtrim(house_types2.shortname, '.') end, '.', houses.addnum2) end) AS name,
