@@ -1,11 +1,10 @@
 CREATE TABLE IF NOT EXISTS gar (
-    id uuid NOT NULL DEFAULT gen_random_uuid(),
+    id uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
     parent uuid REFERENCES gar (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE SET NULL,
     name text NOT NULL,
     short text NOT NULL,
     type text NOT NULL,
     post text,
-    CONSTRAINT gar_pkey PRIMARY KEY (id),
     CONSTRAINT gar_name_short_type_key UNIQUE (parent, name, type)
 );
 CREATE OR REPLACE FUNCTION gar_text(name text, short text, type text) RETURNS text LANGUAGE sql IMMUTABLE AS $body$
