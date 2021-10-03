@@ -21,7 +21,7 @@ WHERE steads_parent.objectguid is not null;
 CREATE TEMPORARY TABLE u ON COMMIT DROP as select s.* from s inner join gar as g using (id) where (s.parent, s.name, s.short, s.type, s.post) is distinct from (g.parent, g.name, g.short, g.type, g.post);
 CREATE TEMPORARY TABLE i ON COMMIT DROP as select s.* from s left join gar as g using (id) where g.id is null;
 with u as (
-    select u.* from gar as g inner join u using (id) for update of g
+    select u.* from gar as g inner join u using (id) for update of g skip locked
 ) update gar as g set parent = u.parent, name = u.name, short = u.short, type = u.type from u where g.id = u.id;
 insert into gar select * from i;
 EOF
