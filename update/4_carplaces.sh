@@ -23,5 +23,5 @@ CREATE TEMPORARY TABLE i ON COMMIT DROP as select s.* from s left join gar as g 
 with u as (
     select u.* from gar as g inner join u using (id) for update of g
 ) update gar as g set parent = u.parent, name = u.name, short = u.short, type = u.type from u where g.id = u.id;
-insert into gar select * from i;
+insert into gar select * from i on conflict on constraint gar_pkey do nothing;
 EOF

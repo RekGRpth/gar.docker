@@ -13,7 +13,7 @@ SELECT
     addr_obj_types.name AS type,
     addr_obj_params.value AS post
 FROM "${DIR}".addr_obj as addr_obj
-inner JOIN addr_obj_types ON addr_obj_types.level = addr_obj.level AND addr_obj_types.shortname = addr_obj.typename
+inner JOIN addr_obj_types ON /*addr_obj_types.level = addr_obj.level AND */addr_obj_types.shortname = addr_obj.typename
 left join "${DIR}".adm_hierarchy as adm_hierarchy on adm_hierarchy.objectid = addr_obj.objectid
 left join "${DIR}".addr_obj as addr_obj_parent on addr_obj_parent.objectid = adm_hierarchy.parentobjid
 left join param_types on param_types.name = 'Почтовый индекс'
@@ -24,5 +24,5 @@ CREATE TEMPORARY TABLE i ON COMMIT DROP as select s.* from s left join gar as g 
 with u as (
     select u.* from gar as g inner join u using (id) for update of g
 ) update gar as g set parent = u.parent, name = u.name, short = u.short, type = u.type from u where g.id = u.id;
-insert into gar select * from i;
+insert into gar select * from i on conflict on constraint gar_pkey do nothing;
 EOF
