@@ -4,8 +4,7 @@ CREATE TABLE IF NOT EXISTS gar (
     name text NOT NULL,
     short text NOT NULL,
     type text NOT NULL,
-    post text,
-    CONSTRAINT gar_name_short_type_key UNIQUE (parent, name, type)
+    post text
 );
 CREATE OR REPLACE FUNCTION gar_text(name text, short text, type text) RETURNS text LANGUAGE sql IMMUTABLE AS $body$
     select case
