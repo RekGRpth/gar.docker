@@ -6,19 +6,18 @@ DIR="$1"
 psql --no-password --variable=ON_ERROR_STOP=1 --single-transaction <<EOF
 CREATE TEMPORARY TABLE s ON COMMIT DROP as
 SELECT
-    addr_obj.objectguid AS id,
-    addr_obj_parent.objectguid AS parent,
-    addr_obj.name AS name,
-    rtrim(addr_obj_types.shortname, '.') AS short,
-    addr_obj_types.name AS type,
-    addr_obj_params.value AS post
-FROM "${DIR}".addr_obj as addr_obj
-inner JOIN addr_obj_types ON addr_obj_types.level = addr_obj.level AND addr_obj_types.shortname = addr_obj.typename
-left join "${DIR}".adm_hierarchy as adm_hierarchy on adm_hierarchy.objectid = addr_obj.objectid
-left join "${DIR}".addr_obj as addr_obj_parent on addr_obj_parent.objectid = adm_hierarchy.parentobjid
+    steads.objectguid AS id,
+    steads_parent.objectguid AS parent,
+    steads.number AS name,
+    'уч' AS short,
+    'Участок' AS type,
+    steads_params.value AS post
+FROM "${DIR}".steads as steads
+left join "${DIR}".adm_hierarchy as adm_hierarchy on adm_hierarchy.objectid = steads.objectid
+left join "${DIR}".addr_obj as steads_parent on steads_parent.objectid = adm_hierarchy.parentobjid
 left join param_types on param_types.name = 'Почтовый индекс'
-left join "${DIR}".addr_obj_params as addr_obj_params on addr_obj_params.objectid = addr_obj.objectid and addr_obj_params.typeid = param_types.id
-WHERE (addr_obj.level = 1) or (addr_obj_parent.objectguid is not null);
+left join "${DIR}".steads_params as steads_params on steads_params.objectid = steads.objectid and steads_params.typeid = param_types.id
+WHERE addr_obj_parent.objectguid is not null;
 CREATE TEMPORARY TABLE u ON COMMIT DROP as select s.* from s inner join gar as g using (id) where (s.parent, s.name, s.short, s.type, s.post) is distinct from (g.parent, g.name, g.short, g.type, g.post);
 CREATE TEMPORARY TABLE i ON COMMIT DROP as select s.* from s left join gar as g using (id) where g.id is null;
 with u as (
