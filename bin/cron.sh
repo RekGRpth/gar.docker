@@ -10,6 +10,7 @@ while
     case "$state" in
         "delta2pg" )
             find /usr/local/delta2pg -type f -name "*.sh" | sort -u | while read -r SH; do
+                TABLE="$(basename -- "${SH%.*}")"
                 find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV bash "$SH" "CSV"
                 test $? -eq 0 || kill -SIGINT "$SELF"
             done
@@ -17,6 +18,7 @@ while
         ;;
         "full2pg" )
             find /usr/local/full2pg -type f -name "*.sh" | sort -u | while read -r SH; do
+                TABLE="$(basename -- "${SH%.*}")"
                 find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV bash "$SH" "CSV"
                 test $? -eq 0 || kill -SIGINT "$SELF"
             done
