@@ -13,5 +13,5 @@ INSERT INTO "$REGION".change_history SELECT "changeid","objectid","adrobjectid",
 "objectid"=EXCLUDED."objectid","adrobjectid"=EXCLUDED."adrobjectid","opertypeid"=EXCLUDED."opertypeid","ndocid"=EXCLUDED."ndocid","changedate"=EXCLUDED."changedate";
 EOF
 )"
-psql --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
+psql --variable=ON_ERROR_STOP=1 --single-transaction --command="$COMMAND" <"$CSV"
 rm -f "$CSV"

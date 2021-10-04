@@ -14,5 +14,5 @@ INSERT INTO "$REGION".steads_params SELECT "id","objectid","changeid","changeide
 DELETE FROM "$REGION".steads_params WHERE NOT current_timestamp between startdate and enddate;
 EOF
 )"
-psql --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
+psql --variable=ON_ERROR_STOP=1 --single-transaction --command="$COMMAND" <"$CSV"
 rm -f "$CSV"

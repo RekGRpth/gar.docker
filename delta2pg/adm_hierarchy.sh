@@ -14,5 +14,5 @@ INSERT INTO "$REGION".adm_hierarchy SELECT "id","objectid","parentobjid","change
 DELETE FROM "$REGION".adm_hierarchy WHERE NOT isactive;
 EOF
 )"
-psql --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
+psql --variable=ON_ERROR_STOP=1 --single-transaction --command="$COMMAND" <"$CSV"
 rm -f "$CSV"

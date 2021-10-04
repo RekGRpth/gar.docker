@@ -13,5 +13,5 @@ INSERT INTO "$REGION".normative_docs SELECT "id","name","date","number","type","
 "name"=EXCLUDED."name","date"=EXCLUDED."date","number"=EXCLUDED."number","type"=EXCLUDED."type","kind"=EXCLUDED."kind","updatedate"=EXCLUDED."updatedate","orgname"=EXCLUDED."orgname","regnum"=EXCLUDED."regnum","regdate"=EXCLUDED."regdate","accdate"=EXCLUDED."accdate","comment"=EXCLUDED."comment";
 EOF
 )"
-psql --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
+psql --variable=ON_ERROR_STOP=1 --single-transaction --command="$COMMAND" <"$CSV"
 rm -f "$CSV"

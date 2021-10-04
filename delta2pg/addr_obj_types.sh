@@ -12,5 +12,5 @@ INSERT INTO addr_obj_types SELECT "id","level","shortname","name","desc","update
 DELETE FROM addr_obj_types WHERE NOT isactive;
 EOF
 )"
-psql --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
+psql --variable=ON_ERROR_STOP=1 --single-transaction --command="$COMMAND" <"$CSV"
 rm -f "$CSV"

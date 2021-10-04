@@ -12,5 +12,5 @@ INSERT INTO house_types SELECT "id","name","shortname","desc","updatedate","star
 DELETE FROM house_types WHERE NOT isactive;
 EOF
 )"
-psql --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
+psql --variable=ON_ERROR_STOP=1 --single-transaction --command="$COMMAND" <"$CSV"
 rm -f "$CSV"

@@ -14,5 +14,5 @@ INSERT INTO "$REGION".reestr_objects SELECT "objectid","createdate","changeid","
 DELETE FROM "$REGION".reestr_objects WHERE NOT isactive;
 EOF
 )"
-psql --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
+psql --variable=ON_ERROR_STOP=1 --single-transaction --command="$COMMAND" <"$CSV"
 rm -f "$CSV"

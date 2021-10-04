@@ -14,5 +14,5 @@ INSERT INTO "$REGION".addr_obj SELECT "id","objectid","objectguid","changeid","n
 DELETE FROM "$REGION".addr_obj WHERE NOT isactive;
 EOF
 )"
-psql --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
+psql --variable=ON_ERROR_STOP=1 --single-transaction --command="$COMMAND" <"$CSV"
 rm -f "$CSV"

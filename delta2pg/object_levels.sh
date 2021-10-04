@@ -12,5 +12,5 @@ INSERT INTO object_levels SELECT "level","name","shortname","updatedate","startd
 DELETE FROM object_levels WHERE NOT isactive;
 EOF
 )"
-psql --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
+psql --variable=ON_ERROR_STOP=1 --single-transaction --command="$COMMAND" <"$CSV"
 rm -f "$CSV"
