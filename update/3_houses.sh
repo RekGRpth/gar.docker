@@ -12,14 +12,14 @@ SELECT distinct on (id)
     rtrim(house_types.shortname, '.') AS short,
     house_types.name AS type,
     houses_params.value AS post
-FROM "${REGION}".houses as houses
+FROM "$REGION".houses as houses
 inner JOIN house_types ON house_types.id = houses.housetype
 left JOIN house_types as house_types1 ON house_types1.id = houses.addtype1
 left JOIN house_types as house_types2 ON house_types2.id = houses.addtype2
-left join "${REGION}".adm_hierarchy as adm_hierarchy on adm_hierarchy.objectid = houses.objectid
-left join "${REGION}".addr_obj as houses_parent on houses_parent.objectid = adm_hierarchy.parentobjid
+left join "$REGION".adm_hierarchy as adm_hierarchy on adm_hierarchy.objectid = houses.objectid
+left join "$REGION".addr_obj as houses_parent on houses_parent.objectid = adm_hierarchy.parentobjid
 left join param_types on param_types.name = 'Почтовый индекс'
-left join "${REGION}".houses_params as houses_params on houses_params.objectid = houses.objectid and houses_params.typeid = param_types.id
+left join "$REGION".houses_params as houses_params on houses_params.objectid = houses.objectid and houses_params.typeid = param_types.id
 WHERE houses_parent.objectguid is not null;
 CREATE TEMPORARY TABLE u ON COMMIT DROP as select s.* from s inner join gar as g using (id) where (s.parent, s.name, s.short, s.type, s.post) is distinct from (g.parent, g.name, g.short, g.type, g.post);
 CREATE TEMPORARY TABLE i ON COMMIT DROP as select s.* from s left join gar as g using (id) where g.id is null;
