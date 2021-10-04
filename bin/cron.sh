@@ -9,60 +9,46 @@ while
     set -eux
     case "$state" in
         "delta2pg" )
-            set -eux
             find /usr/local/delta2pg -type f -name "*.sh" | sort -u | while read -r SH; do
-                set -eux
                 TABLE="$(basename -- "${SH%.*}")"
                 find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV bash "$SH" "$TABLE" "CSV"
             done
             echo update >state.txt
         ;;
         "dir2pg" )
-            set -eux
             seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR echo "CREATE SCHEMA IF NOT EXISTS \"DIR\";" | psql --variable=ON_ERROR_STOP=1
-            find /usr/local/dir2pg -type f | sort -u | while read -r TABLE; do
-                set -eux
-                TABLE="$(basename -- "$TABLE")"
-                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR echo "CREATE TABLE IF NOT EXISTS \"DIR\".\"$TABLE\" PARTITION OF \"$TABLE\" FOR VALUES IN (DIR);"
-            done | psql --variable=ON_ERROR_STOP=1
+            find /usr/local/dir2pg -type f -name "*.sh" | sort -u | while read -r SH; do
+                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR sh "$SH" "DIR" | psql --variable=ON_ERROR_STOP=1
+            done
             echo wget >fullVersionId.txt
             echo wget >state.txt
         ;;
         "full2pg" )
-            set -eux
             find /usr/local/full2pg -type f -name "*.sh" | sort -u | while read -r SH; do
-                set -eux
                 TABLE="$(basename -- "${SH%.*}")"
                 find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV bash "$SH" "$TABLE" "CSV"
             done
             echo update >state.txt
         ;;
         "sql2pg" )
-            set -eux
             find /usr/local/sql2pg -type f -name "*.sql" | sort -u | xargs --verbose --no-run-if-empty --replace=SQL cat "SQL" | psql --variable=ON_ERROR_STOP=1
             echo dir2pg >state.txt
         ;;
         "unzip" )
-            set -eux
             find . -type f -name "*.zip" | sort -u | while read -r ZIP; do
-                set -eux
                 unzip -ouLL "$ZIP" -d "${ZIP%.*}"
                 rm -f "$ZIP"
             done
             echo xml2csv >state.txt
         ;;
         "update" )
-            set -eux
             find /usr/local/update -type f -name "*.sh" | sort -u | while read -r SH; do
-                set -eux
                 seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=DIR bash "$SH" "DIR"
             done
             echo "done" >state.txt
         ;;
         "xml2csv" )
-            set -eux
             find /usr/local/xml2csv -type f -name "*.sh" | sort -u | while read -r SH; do
-                set -eux
                 TABLE="$(basename -- "${SH%.*}")"
                 find . -type f -name "as_${TABLE}_2*.xml" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=XML bash "$SH" "XML"
             done
@@ -75,7 +61,6 @@ while
             fi
         ;;
         * )
-            set -eux
             echo "done" >state.txt
             deltaVersionId="$(cat deltaVersionId.txt)"
             fullVersionId="$(cat fullVersionId.txt)"
