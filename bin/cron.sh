@@ -1,6 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 
 set -eux
+trap "kill -SIGINT $$" ERR
 touch deltaVersionId.txt
 touch fullVersionId.txt
 touch state.txt
