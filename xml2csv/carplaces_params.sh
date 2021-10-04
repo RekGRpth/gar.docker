@@ -8,7 +8,6 @@ DIR="$(basename -- "$DIR")"
 xml2 \
     <"$XML" \
     | tr -d "\t" \
-    | sed -E "s|(/PARAMS/PARAM/)(@ID=.+)|\1\2\n\1@REGION=$DIR|" \
-    | 2csv -d "	" PARAMS/PARAM @ID @OBJECTID @CHANGEID @CHANGEIDEND @TYPEID @VALUE @UPDATEDATE @STARTDATE @ENDDATE @REGION \
+    | 2csv -d "	" PARAMS/PARAM @ID @OBJECTID @CHANGEID @CHANGEIDEND @TYPEID @VALUE @UPDATEDATE @STARTDATE @ENDDATE \
     >"${XML%.*}.csv"
 rm -f "$XML"

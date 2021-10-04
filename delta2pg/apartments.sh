@@ -9,9 +9,9 @@ DIR="$(basename -- "$DIR")"
 if echo "$DIR" | grep -P "^\d\d$" >/dev/null; then TABLE="\"$DIR\".$TABLE"; fi
 COMMAND="$(cat <<EOF
 CREATE TEMP TABLE tmp (LIKE $TABLE INCLUDING ALL) ON COMMIT DROP;
-COPY tmp ("id","objectid","objectguid","changeid","number","aparttype","opertypeid","previd","nextid","updatedate","startdate","enddate","isactual","isactive","region")
-FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ("id","objectid","objectguid","changeid","number","aparttype","opertypeid","updatedate","startdate","enddate","isactual","isactive","region"));
-INSERT INTO $TABLE SELECT "id","objectid","objectguid","changeid","number","aparttype","opertypeid","previd","nextid","updatedate","startdate","enddate","isactual","isactive" FROM tmp ON CONFLICT ON CONSTRAINT ${TABLE}_pkey DO UPDATE SET "objectid"=EXCLUDED."objectid","objectguid"=EXCLUDED."objectguid","changeid"=EXCLUDED."changeid","number"=EXCLUDED."number","aparttype"=EXCLUDED."aparttype","opertypeid"=EXCLUDED."opertypeid","previd"=EXCLUDED."previd","nextid"=EXCLUDED."nextid","updatedate"=EXCLUDED."updatedate","startdate"=EXCLUDED."startdate","enddate"=EXCLUDED."enddate","isactual"=EXCLUDED."isactual","isactive"=EXCLUDED."isactive","region"=EXCLUDED."region";
+COPY tmp ("id","objectid","objectguid","changeid","number","aparttype","opertypeid","previd","nextid","updatedate","startdate","enddate","isactual","isactive")
+FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ("id","objectid","objectguid","changeid","number","aparttype","opertypeid","updatedate","startdate","enddate","isactual","isactive"));
+INSERT INTO $TABLE SELECT "id","objectid","objectguid","changeid","number","aparttype","opertypeid","previd","nextid","updatedate","startdate","enddate","isactual","isactive" FROM tmp ON CONFLICT ON CONSTRAINT ${TABLE}_pkey DO UPDATE SET "objectid"=EXCLUDED."objectid","objectguid"=EXCLUDED."objectguid","changeid"=EXCLUDED."changeid","number"=EXCLUDED."number","aparttype"=EXCLUDED."aparttype","opertypeid"=EXCLUDED."opertypeid","previd"=EXCLUDED."previd","nextid"=EXCLUDED."nextid","updatedate"=EXCLUDED."updatedate","startdate"=EXCLUDED."startdate","enddate"=EXCLUDED."enddate","isactual"=EXCLUDED."isactual","isactive"=EXCLUDED."isactive";
 DELETE FROM $TABLE WHERE NOT isactive;
 EOF
 )"

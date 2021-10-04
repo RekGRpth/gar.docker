@@ -8,8 +8,8 @@ DIR="$(dirname -- "$CSV")"
 DIR="$(basename -- "$DIR")"
 if echo "$DIR" | grep -P "^\d\d$" >/dev/null; then TABLE="\"$DIR\".$TABLE"; fi
 COMMAND="$(cat <<EOF
-COPY $TABLE ("id","parentid","childid","changeid","region")
-FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ("id","parentid","childid","changeid","region"))
+COPY $TABLE ("id","parentid","childid","changeid")
+FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ("id","parentid","childid","changeid"))
 ;
 EOF
 )"
