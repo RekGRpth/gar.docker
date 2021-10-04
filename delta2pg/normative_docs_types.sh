@@ -12,5 +12,5 @@ INSERT INTO $TABLE SELECT "id","name","startdate","enddate" FROM tmp ON CONFLICT
 DELETE FROM $TABLE WHERE NOT current_timestamp between startdate and enddate;
 EOF
 )"
-psql --no-password --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
+psql --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
 rm -f "$CSV"

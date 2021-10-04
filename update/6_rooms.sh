@@ -3,7 +3,7 @@
 set -eux
 trap "exit 255" ERR
 DIR="$1"
-psql --no-password --variable=ON_ERROR_STOP=1 --single-transaction <<EOF
+psql --variable=ON_ERROR_STOP=1 --single-transaction <<EOF
 CREATE TEMPORARY TABLE s ON COMMIT DROP as
 SELECT distinct on (id)
     rooms.objectguid AS id,

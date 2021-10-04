@@ -13,5 +13,5 @@ FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ("obje
 WHERE isactive::bool;
 EOF
 )"
-psql --no-password --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
+psql --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
 rm -f "$CSV"

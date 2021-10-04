@@ -12,5 +12,5 @@ INSERT INTO $TABLE SELECT "id","name" FROM tmp ON CONFLICT ON CONSTRAINT ${TABLE
 
 EOF
 )"
-psql --no-password --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
+psql --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
 rm -f "$CSV"

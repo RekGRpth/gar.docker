@@ -15,5 +15,5 @@ INSERT INTO $TABLE SELECT "id","parentid","childid","changeid" FROM tmp ON CONFL
 
 EOF
 )"
-psql --no-password --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
+psql --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
 rm -f "$CSV"

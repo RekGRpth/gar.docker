@@ -19,12 +19,12 @@ while
         ;;
         "dir2pg" )
             set -eux
-            seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR echo "CREATE SCHEMA IF NOT EXISTS \"DIR\";" | psql --no-password --variable=ON_ERROR_STOP=1
+            seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR echo "CREATE SCHEMA IF NOT EXISTS \"DIR\";" | psql --variable=ON_ERROR_STOP=1
             find /usr/local/dir2pg -type f | sort -u | while read -r TABLE; do
                 set -eux
                 TABLE="$(basename -- "$TABLE")"
                 seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR echo "CREATE TABLE IF NOT EXISTS \"DIR\".\"$TABLE\" PARTITION OF \"$TABLE\" FOR VALUES IN (DIR);"
-            done | psql --no-password --variable=ON_ERROR_STOP=1
+            done | psql --variable=ON_ERROR_STOP=1
             echo wget >fullVersionId.txt
             echo wget >state.txt
         ;;
@@ -39,7 +39,7 @@ while
         ;;
         "sql2pg" )
             set -eux
-            find /usr/local/sql2pg -type f -name "*.sql" | sort -u | xargs --verbose --no-run-if-empty --replace=SQL cat "SQL" | psql --no-password --variable=ON_ERROR_STOP=1
+            find /usr/local/sql2pg -type f -name "*.sql" | sort -u | xargs --verbose --no-run-if-empty --replace=SQL cat "SQL" | psql --variable=ON_ERROR_STOP=1
             echo dir2pg >state.txt
         ;;
         "unzip" )

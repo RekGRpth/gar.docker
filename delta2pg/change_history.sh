@@ -15,5 +15,5 @@ INSERT INTO $TABLE SELECT "changeid","objectid","adrobjectid","opertypeid","ndoc
 
 EOF
 )"
-psql --no-password --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
+psql --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
 rm -f "$CSV"
