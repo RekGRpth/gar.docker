@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
 set -eux
-trap "kill -SIGINT $$" ERR
+SELF="$$"
 touch deltaVersionId.txt
 touch fullVersionId.txt
 touch state.txt
@@ -12,30 +12,30 @@ while
         "delta2pg" )
             find /usr/local/delta2pg -type f -name "*.sh" | sort -u | while read -r SH; do
                 find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV bash "$SH" "CSV"
-                test $? -eq 0 || exit $?
+                test $? -eq 0 || kill -SIGINT "$SELF"
             done
             echo update >state.txt
         ;;
         "full2pg" )
             find /usr/local/full2pg -type f -name "*.sh" | sort -u | while read -r SH; do
                 find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV bash "$SH" "CSV"
-                test $? -eq 0 || exit $?
+                test $? -eq 0 || kill -SIGINT "$SELF"
             done
             echo update >state.txt
         ;;
         "region2pg" )
             seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=REGION echo "CREATE SCHEMA IF NOT EXISTS \"REGION\";" | psql --variable=ON_ERROR_STOP=1
-            test $? -eq 0 || exit $?
+            test $? -eq 0 || kill -SIGINT "$SELF"
             find /usr/local/region2pg -type f -name "*.sh" | sort -u | while read -r SH; do
                 seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=REGION sh "$SH" "REGION" | psql --variable=ON_ERROR_STOP=1
-                test $? -eq 0 || exit $?
+                test $? -eq 0 || kill -SIGINT "$SELF"
             done
             echo wget >fullVersionId.txt
             echo wget >state.txt
         ;;
         "sql2pg" )
             find /usr/local/sql2pg -type f -name "*.sql" | sort -u | xargs --verbose --no-run-if-empty --replace=SQL cat "SQL" | psql --variable=ON_ERROR_STOP=1
-            test $? -eq 0 || exit $?
+            test $? -eq 0 || kill -SIGINT "$SELF"
             echo region2pg >state.txt
         ;;
         "unzip" )
@@ -48,7 +48,7 @@ while
         "update" )
             find /usr/local/update -type f -name "*.sh" | sort -u | while read -r SH; do
                 seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=REGION bash "$SH" "REGION"
-                test $? -eq 0 || exit $?
+                test $? -eq 0 || kill -SIGINT "$SELF"
             done
             echo "done" >state.txt
         ;;
@@ -56,7 +56,7 @@ while
             find /usr/local/xml2csv -type f -name "*.sh" | sort -u | while read -r SH; do
                 TABLE="$(basename -- "${SH%.*}")"
                 find . -type f -name "as_${TABLE}_2*.xml" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=XML bash "$SH" "XML"
-                test $? -eq 0 || exit $?
+                test $? -eq 0 || kill -SIGINT "$SELF"
             done
             deltaVersionId="$(cat deltaVersionId.txt)"
             fullVersionId="$(cat fullVersionId.txt)"
