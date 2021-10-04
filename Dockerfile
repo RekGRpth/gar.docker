@@ -1,4 +1,5 @@
 FROM ghcr.io/rekgrpth/gost.docker
+ADD analyze  /usr/local/analyze
 ADD bin /usr/local/bin
 ADD delta2pg /usr/local/delta2pg
 ADD full2pg /usr/local/full2pg
