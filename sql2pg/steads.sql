@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS steads (
-    id INT NOT NULL,
+    id INT NOT NULL PRIMARY KEY,
     objectid INT NOT NULL,
     objectguid UUID NOT NULL,
     changeid INT NOT NULL,
@@ -11,10 +11,8 @@ CREATE TABLE IF NOT EXISTS steads (
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,
     isactual BOOLEAN NOT NULL,
-    isactive BOOLEAN NOT NULL,
-    region smallint NOT NULL,
-    CONSTRAINT steads_pkey PRIMARY KEY (id, region)
-) PARTITION BY LIST (region);
+    isactive BOOLEAN NOT NULL
+);
 COMMENT ON TABLE steads IS 'Сведения по земельным участкам';
 COMMENT ON COLUMN steads.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN steads.objectid IS 'Глобальный уникальный идентификатор объекта типа INTEGER';

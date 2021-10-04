@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS addr_obj (
-    id BIGINT NOT NULL,
+    id BIGINT NOT NULL PRIMARY KEY,
     objectid BIGINT NOT NULL,
     objectguid UUID NOT NULL,
     changeid BIGINT NOT NULL,
@@ -13,10 +13,8 @@ CREATE TABLE IF NOT EXISTS addr_obj (
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,
     isactual BOOLEAN NOT NULL,
-    isactive BOOLEAN NOT NULL,
-    region smallint NOT NULL,
-    CONSTRAINT addr_obj_pkey PRIMARY KEY (id, region)
-) PARTITION BY LIST (region);
+    isactive BOOLEAN NOT NULL
+);
 COMMENT ON TABLE addr_obj IS 'Сведения классификатора адресообразующих элементов';
 COMMENT ON COLUMN addr_obj.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN addr_obj.objectid IS 'Глобальный уникальный идентификатор адресного объекта типа INTEGER';

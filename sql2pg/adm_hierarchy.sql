@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS adm_hierarchy (
-    id BIGINT NOT NULL,
+    id BIGINT NOT NULL PRIMARY KEY,
     objectid BIGINT NOT NULL,
     parentobjid BIGINT,
     changeid BIGINT NOT NULL,
@@ -14,10 +14,8 @@ CREATE TABLE IF NOT EXISTS adm_hierarchy (
     updatedate DATE NOT NULL,
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,
-    isactive BOOLEAN NOT NULL,
-    region smallint NOT NULL,
-    CONSTRAINT adm_hierarchy_pkey PRIMARY KEY (id, region)
-) PARTITION BY LIST (region);
+    isactive BOOLEAN NOT NULL
+);
 COMMENT ON TABLE adm_hierarchy IS 'Сведения по иерархии в административном делении';
 COMMENT ON COLUMN adm_hierarchy.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN adm_hierarchy.objectid IS 'Глобальный уникальный идентификатор объекта';

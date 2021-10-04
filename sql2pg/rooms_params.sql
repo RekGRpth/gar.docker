@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS rooms_params (
-    id BIGINT NOT NULL,
+    id BIGINT NOT NULL PRIMARY KEY,
     objectid BIGINT NOT NULL,
     changeid BIGINT,
     changeidend BIGINT NOT NULL,
@@ -7,10 +7,8 @@ CREATE TABLE IF NOT EXISTS rooms_params (
     value VARCHAR(8000) NOT NULL,
     updatedate DATE NOT NULL,
     startdate DATE NOT NULL,
-    enddate DATE NOT NULL,
-    region smallint NOT NULL,
-    CONSTRAINT rooms_params_pkey PRIMARY KEY (id, region)
-) PARTITION BY LIST (region);
+    enddate DATE NOT NULL
+);
 COMMENT ON TABLE rooms_params IS 'Сведения о классификаторе параметров адресообразующих элементов и объектов недвижимости ';
 COMMENT ON COLUMN rooms_params.id IS 'Идентификатор записи';
 COMMENT ON COLUMN rooms_params.objectid IS 'Глобальный уникальный идентификатор адресного объекта ';

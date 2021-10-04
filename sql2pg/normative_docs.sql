@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS normative_docs (
-    id BIGINT NOT NULL,
+    id BIGINT NOT NULL PRIMARY KEY,
     name VARCHAR(8000) NOT NULL,
     date DATE NOT NULL,
     number VARCHAR(150) NOT NULL,
@@ -10,10 +10,8 @@ CREATE TABLE IF NOT EXISTS normative_docs (
     regnum VARCHAR(100),
     regdate DATE,
     accdate DATE,
-    comment VARCHAR(8000),
-    region smallint NOT NULL,
-    CONSTRAINT normative_docs_pkey PRIMARY KEY (id, region)
-) PARTITION BY LIST (region);
+    comment VARCHAR(8000)
+);
 COMMENT ON TABLE normative_docs IS 'Сведения о нормативном документе, являющемся основанием присвоения адресному элементу наименования';
 COMMENT ON COLUMN normative_docs.id IS 'Уникальный идентификатор документа';
 COMMENT ON COLUMN normative_docs.name IS 'Наименование документа';

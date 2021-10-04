@@ -1,11 +1,9 @@
 CREATE TABLE IF NOT EXISTS addr_obj_division (
-    id BIGINT NOT NULL,
+    id BIGINT NOT NULL PRIMARY KEY,
     parentid BIGINT NOT NULL,
     childid BIGINT NOT NULL,
-    changeid BIGINT NOT NULL,
-    region smallint NOT NULL,
-    CONSTRAINT addr_obj_division_pkey PRIMARY KEY (id, region)
-) PARTITION BY LIST (region);
+    changeid BIGINT NOT NULL
+);
 COMMENT ON TABLE addr_obj_division IS 'Сведения по операциям переподчинения';
 COMMENT ON COLUMN addr_obj_division.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN addr_obj_division.parentid IS 'Родительский ID';

@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS rooms (
-    id BIGINT NOT NULL,
+    id BIGINT NOT NULL PRIMARY KEY,
     objectid BIGINT NOT NULL,
     objectguid UUID NOT NULL,
     changeid BIGINT NOT NULL,
@@ -12,10 +12,8 @@ CREATE TABLE IF NOT EXISTS rooms (
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,
     isactual BOOLEAN NOT NULL,
-    isactive BOOLEAN NOT NULL,
-    region smallint NOT NULL,
-    CONSTRAINT rooms_pkey PRIMARY KEY (id, region)
-) PARTITION BY LIST (region);
+    isactive BOOLEAN NOT NULL
+);
 COMMENT ON TABLE rooms IS 'Сведения по комнатам';
 COMMENT ON COLUMN rooms.id IS 'Уникальный идентификатор записи. Ключевое поле';
 COMMENT ON COLUMN rooms.objectid IS 'Глобальный уникальный идентификатор объекта типа INTEGER';
