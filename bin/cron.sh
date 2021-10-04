@@ -7,7 +7,6 @@ touch fullVersionId.txt
 touch state.txt
 state="$(cat state.txt)"
 while
-    set -eux
     case "$state" in
         "delta2pg" )
             find /usr/local/delta2pg -type f -name "*.sh" | sort -u | while read -r SH; do
