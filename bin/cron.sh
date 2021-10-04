@@ -26,9 +26,9 @@ while
             seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=REGION echo "CREATE SCHEMA IF NOT EXISTS \"REGION\";" | psql --variable=ON_ERROR_STOP=1
             test $? -eq 0 || exit $?
             find /usr/local/region2pg -type f -name "*.sh" | sort -u | while read -r SH; do
-                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=REGION sh "$SH" "REGION" | psql --variable=ON_ERROR_STOP=1
+                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=REGION sh "$SH" "REGION"
                 test $? -eq 0 || exit $?
-            done
+            done | psql --variable=ON_ERROR_STOP=1
             echo wget >fullVersionId.txt
             echo wget >state.txt
         ;;
