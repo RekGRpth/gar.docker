@@ -3,7 +3,7 @@
 set -eux
 REGION="$1"
 cat <<EOF
-CREATE TABLE IF NOT EXISTS "$REGION".rooms_params (INHERITS rooms_params);
+CREATE TABLE IF NOT EXISTS "$REGION".rooms_params INHERITS (rooms_params);
 CREATE INDEX IF NOT EXISTS rooms_params_objectid_idx ON "$REGION".rooms_params USING btree (objectid);
 CREATE INDEX IF NOT EXISTS rooms_params_typeid_idx ON "$REGION".rooms_params USING btree (typeid);
 CREATE INDEX IF NOT EXISTS rooms_params_startdate_idx ON "$REGION".rooms_params USING btree (startdate);
