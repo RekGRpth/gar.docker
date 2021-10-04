@@ -1,8 +1,8 @@
 FROM ghcr.io/rekgrpth/gost.docker
 ADD bin /usr/local/bin
 ADD delta2pg /usr/local/delta2pg
-ADD dir2pg /usr/local/dir2pg
 ADD full2pg /usr/local/full2pg
+ADD region2pg /usr/local/region2pg
 ADD sql2pg /usr/local/sql2pg
 ADD update /usr/local/update
 ADD xml2csv /usr/local/xml2csv

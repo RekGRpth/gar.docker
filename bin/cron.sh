@@ -15,14 +15,6 @@ while
             done
             echo update >state.txt
         ;;
-        "dir2pg" )
-            seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR echo "CREATE SCHEMA IF NOT EXISTS \"DIR\";" | psql --variable=ON_ERROR_STOP=1
-            find /usr/local/dir2pg -type f -name "*.sh" | sort -u | while read -r SH; do
-                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=DIR sh "$SH" "DIR" | psql --variable=ON_ERROR_STOP=1
-            done
-            echo wget >fullVersionId.txt
-            echo wget >state.txt
-        ;;
         "full2pg" )
             find /usr/local/full2pg -type f -name "*.sh" | sort -u | while read -r SH; do
                 TABLE="$(basename -- "${SH%.*}")"
@@ -30,9 +22,17 @@ while
             done
             echo update >state.txt
         ;;
+        "region2pg" )
+            seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=REGION echo "CREATE SCHEMA IF NOT EXISTS \"REGION\";" | psql --variable=ON_ERROR_STOP=1
+            find /usr/local/region2pg -type f -name "*.sh" | sort -u | while read -r SH; do
+                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=REGION sh "$SH" "REGION" | psql --variable=ON_ERROR_STOP=1
+            done
+            echo wget >fullVersionId.txt
+            echo wget >state.txt
+        ;;
         "sql2pg" )
             find /usr/local/sql2pg -type f -name "*.sql" | sort -u | xargs --verbose --no-run-if-empty --replace=SQL cat "SQL" | psql --variable=ON_ERROR_STOP=1
-            echo dir2pg >state.txt
+            echo region2pg >state.txt
         ;;
         "unzip" )
             find . -type f -name "*.zip" | sort -u | while read -r ZIP; do
@@ -43,7 +43,7 @@ while
         ;;
         "update" )
             find /usr/local/update -type f -name "*.sh" | sort -u | while read -r SH; do
-                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=DIR bash "$SH" "DIR"
+                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=REGION bash "$SH" "REGION"
             done
             echo "done" >state.txt
         ;;

@@ -3,8 +3,8 @@
 set -eux
 trap "exit 255" ERR
 XML="$1"
-DIR="$(dirname -- "$XML")"
-DIR="$(basename -- "$DIR")"
+REGION="$(dirname -- "$XML")"
+REGION="$(basename -- "$REGION")"
 xml2 \
     <"$XML" \
     | tr -d "\t" \

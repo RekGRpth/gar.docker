@@ -4,9 +4,9 @@ set -eux
 trap "exit 255" ERR
 TABLE="$1"
 CSV="$2"
-DIR="$(dirname -- "$CSV")"
-DIR="$(basename -- "$DIR")"
-if echo "$DIR" | grep -P "^\d\d$" >/dev/null; then TABLE="\"$DIR\".$TABLE"; fi
+REGION="$(dirname -- "$CSV")"
+REGION="$(basename -- "$REGION")"
+if echo "$REGION" | grep -P "^\d\d$" >/dev/null; then TABLE="\"$REGION\".$TABLE"; fi
 COMMAND="$(cat <<EOF
 CREATE TEMP TABLE tmp (LIKE $TABLE INCLUDING ALL) ON COMMIT DROP;
 COPY tmp ("id","objectid","changeid","changeidend","typeid","value","updatedate","startdate","enddate")
