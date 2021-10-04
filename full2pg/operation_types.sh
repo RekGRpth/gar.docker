@@ -2,10 +2,9 @@
 
 set -eux
 trap "exit 255" ERR
-TABLE="\"$1\""
-CSV="$2"
+CSV="$1"
 COMMAND="$(cat <<EOF
-COPY $TABLE ("id","name","shortname","desc","updatedate","startdate","enddate","isactive")
+COPY operation_types ("id","name","shortname","desc","updatedate","startdate","enddate","isactive")
 FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ("id","name","updatedate","startdate","enddate","isactive"))
 WHERE isactive::bool;
 EOF

@@ -2,17 +2,16 @@
 
 set -eux
 trap "exit 255" ERR
-TABLE="$1"
-CSV="$2"
+CSV="$1"
 REGION="$(dirname -- "$CSV")"
 REGION="$(basename -- "$REGION")"
-if echo "$REGION" | grep -P "^\d\d$" >/dev/null; then TABLE="\"$REGION\".$TABLE"; fi
 COMMAND="$(cat <<EOF
-CREATE TEMP TABLE tmp (LIKE $TABLE INCLUDING ALL) ON COMMIT DROP;
+CREATE TEMP TABLE tmp (LIKE "$REGION".reestr_objects INCLUDING ALL) ON COMMIT DROP;
 COPY tmp ("objectid","createdate","changeid","levelid","updatedate","objectguid","isactive")
 FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ("objectid","createdate","changeid","levelid","updatedate","objectguid","isactive"));
-INSERT INTO $TABLE SELECT "objectid","createdate","changeid","levelid","updatedate","objectguid","isactive" FROM tmp ON CONFLICT ON CONSTRAINT ${TABLE}_pkey DO UPDATE SET "createdate"=EXCLUDED."createdate","changeid"=EXCLUDED."changeid","levelid"=EXCLUDED."levelid","updatedate"=EXCLUDED."updatedate","objectguid"=EXCLUDED."objectguid","isactive"=EXCLUDED."isactive";
-DELETE FROM $TABLE WHERE NOT isactive;
+INSERT INTO "$REGION".reestr_objects SELECT "objectid","createdate","changeid","levelid","updatedate","objectguid","isactive" FROM tmp ON CONFLICT ON CONSTRAINT reestr_objects_pkey DO UPDATE SET
+"createdate"=EXCLUDED."createdate","changeid"=EXCLUDED."changeid","levelid"=EXCLUDED."levelid","updatedate"=EXCLUDED."updatedate","objectguid"=EXCLUDED."objectguid","isactive"=EXCLUDED."isactive";
+DELETE FROM "$REGION".reestr_objects WHERE NOT isactive;
 EOF
 )"
 psql --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"

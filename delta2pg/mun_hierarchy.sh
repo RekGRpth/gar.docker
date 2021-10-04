@@ -2,17 +2,16 @@
 
 set -eux
 trap "exit 255" ERR
-TABLE="$1"
-CSV="$2"
+CSV="$1"
 REGION="$(dirname -- "$CSV")"
 REGION="$(basename -- "$REGION")"
-if echo "$REGION" | grep -P "^\d\d$" >/dev/null; then TABLE="\"$REGION\".$TABLE"; fi
 COMMAND="$(cat <<EOF
-CREATE TEMP TABLE tmp (LIKE $TABLE INCLUDING ALL) ON COMMIT DROP;
+CREATE TEMP TABLE tmp (LIKE "$REGION".mun_hierarchy INCLUDING ALL) ON COMMIT DROP;
 COPY tmp ("id","objectid","parentobjid","changeid","oktmo","previd","nextid","updatedate","startdate","enddate","isactive")
 FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ("id","objectid","changeid","updatedate","startdate","enddate","isactive"));
-INSERT INTO $TABLE SELECT "id","objectid","parentobjid","changeid","oktmo","previd","nextid","updatedate","startdate","enddate","isactive" FROM tmp ON CONFLICT ON CONSTRAINT ${TABLE}_pkey DO UPDATE SET "objectid"=EXCLUDED."objectid","parentobjid"=EXCLUDED."parentobjid","changeid"=EXCLUDED."changeid","oktmo"=EXCLUDED."oktmo","previd"=EXCLUDED."previd","nextid"=EXCLUDED."nextid","updatedate"=EXCLUDED."updatedate","startdate"=EXCLUDED."startdate","enddate"=EXCLUDED."enddate","isactive"=EXCLUDED."isactive";
-DELETE FROM $TABLE WHERE NOT isactive;
+INSERT INTO "$REGION".mun_hierarchy SELECT "id","objectid","parentobjid","changeid","oktmo","previd","nextid","updatedate","startdate","enddate","isactive" FROM tmp ON CONFLICT ON CONSTRAINT mun_hierarchy_pkey DO UPDATE SET
+"objectid"=EXCLUDED."objectid","parentobjid"=EXCLUDED."parentobjid","changeid"=EXCLUDED."changeid","oktmo"=EXCLUDED."oktmo","previd"=EXCLUDED."previd","nextid"=EXCLUDED."nextid","updatedate"=EXCLUDED."updatedate","startdate"=EXCLUDED."startdate","enddate"=EXCLUDED."enddate","isactive"=EXCLUDED."isactive";
+DELETE FROM "$REGION".mun_hierarchy WHERE NOT isactive;
 EOF
 )"
 psql --variable=ON_ERROR_STOP=1 --command="$COMMAND" <"$CSV"
