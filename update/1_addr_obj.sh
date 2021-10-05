@@ -15,7 +15,7 @@ WITH s AS (
         'addr_obj'::object as object,
         $REGION as region
     FROM "$REGION".addr_obj AS o
-    INNER JOIN addr_obj_types ON t.level = o.level AND t.shortname = o.typename
+    INNER JOIN addr_obj_types AS t ON t.level = o.level AND t.shortname = o.typename
     LEFT JOIN "$REGION".adm_hierarchy AS h ON h.objectid = o.objectid
     LEFT JOIN "$REGION".addr_obj AS p ON p.objectid = h.parentobjid
     LEFT JOIN "$REGION".addr_obj_params AS v ON v.objectid = o.objectid AND v.typeid = 5

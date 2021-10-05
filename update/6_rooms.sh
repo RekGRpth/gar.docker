@@ -15,7 +15,7 @@ WITH s AS (
         'rooms'::object as object,
         $REGION as region
     FROM "$REGION".rooms AS o
-    INNER JOIN t ON t.id = o.roomtype
+    INNER JOIN room_types AS t ON t.id = o.roomtype
     LEFT JOIN "$REGION".adm_hierarchy AS h ON h.objectid = o.objectid
     LEFT JOIN "$REGION".apartments AS p ON p.objectid = h.parentobjid
     LEFT JOIN "$REGION".rooms_params AS v ON v.objectid = o.objectid AND v.typeid = 5
