@@ -11,7 +11,9 @@ WITH s AS (
         concat_ws(', ', houses.housenum, CASE WHEN houses.addnum1 IS NOT NULL THEN concat(CASE WHEN coalesce(house_types1.id, houses.housetype) = houses.housetype THEN 'корп' ELSE rtrim(house_types1.shortname, '.') END, '.', houses.addnum1) END, CASE WHEN houses.addnum2 IS NOT NULL THEN concat(CASE WHEN coalesce(house_types2.id, houses.housetype) = houses.housetype THEN 'стр' ELSE rtrim(house_types2.shortname, '.') END, '.', houses.addnum2) END) AS name,
         rtrim(house_types.shortname, '.') AS short,
         house_types.name AS type,
-        houses_params.value AS post
+        houses_params.value AS post,
+        'houses'::object as object,
+        ${DIR} as region
     FROM "$REGION".houses AS houses
     INNER JOIN house_types ON house_types.id = houses.housetype
     LEFT JOIN house_types AS house_types1 ON house_types1.id = houses.addtype1
@@ -21,7 +23,7 @@ WITH s AS (
     LEFT JOIN "$REGION".houses_params AS houses_params ON houses_params.objectid = houses.objectid AND houses_params.typeid = 5
     WHERE houses_parent.objectguid IS NOT NULL
 ), o AS (
-    SELECT s.* FROM s INNER JOIN gar AS g USING (id) WHERE (s.parent, s.name, s.short, s.type, s.post) IS DISTINCT FROM (g.parent, g.name, g.short, g.type, g.post) FOR UPDATE OF g SKIP LOCKED
+    SELECT s.* FROM s INNER JOIN gar AS g USING (id) WHERE g.object = 'houses' AND g.region = $REGION AND (s.parent, s.name, s.short, s.type, s.post) IS DISTINCT FROM (g.parent, g.name, g.short, g.type, g.post) FOR UPDATE OF g SKIP LOCKED
 ), i AS (
     INSERT INTO gar SELECT s.* FROM s LEFT JOIN gar AS g USING (id) WHERE g.id IS NULL RETURNING *
 ), u AS (

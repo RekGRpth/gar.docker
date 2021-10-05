@@ -5,10 +5,12 @@ CREATE OR REPLACE FUNCTION gar_insert(INOUT json json) RETURNS json LANGUAGE plp
     short text default nullif(trim(gar_insert.json->>'short'), ''); -- кратко
     type text default nullif(trim(gar_insert.json->>'type'), ''); -- тип
     post text default nullif(trim(gar_insert.json->>'port'), ''); -- индекс
+    object text default nullif(trim(gar_insert.json->>'object'), ''); -- объект
+    region text default nullif(trim(gar_insert.json->>'region'), ''); -- регион
 begin
     with _ as (
         with _ as (
-            select * from gar_insert(local.id, local.parent, local.name, local.short, local.type, local.post)
+            select * from gar_insert(local.id, local.parent, local.name, local.short, local.type, local.post, local.object, local.region)
         ) select gar_insert.json as query, to_json(_) as data from _
     ) select to_json(_) from _ into strict gar_insert.json;
 end;$body$;
@@ -19,6 +21,8 @@ CREATE OR REPLACE FUNCTION gar_select(INOUT json json) RETURNS json LANGUAGE plp
     short text default nullif(trim(gar_select.json->>'short'), ''); -- кратко
     type text default nullif(trim(gar_select.json->>'type'), ''); -- тип
     post text default nullif(trim(gar_select.json->>'port'), ''); -- индекс
+    object text default nullif(trim(gar_select.json->>'object'), ''); -- объект
+    region text default nullif(trim(gar_select.json->>'region'), ''); -- регион
     text text default nullif(trim(gar_select.json->>'text'), ''); -- строка поиска
     offset int default coalesce(nullif(trim(gar_select.json->>'offset'), '')::int, 0); -- офсет
     limit int default coalesce(nullif(trim(gar_select.json->>'limit'), '')::int, 10); -- лимит
@@ -90,7 +94,7 @@ begin
         if local.text is not null and local.parent is null then -- если искать что-то и родитель не задан
             with _ as (
                 with _ as (
-                    select * from gar_select_parent(local.parent::uuid, local.name, local.short, array['Город', 'Поселок', 'Поселение', 'Деревня', 'Населенный пункт', 'Село', 'Рабочий поселок', 'Поселок городского типа']::text, local.post)
+                    select * from gar_select_parent(local.parent::uuid, local.name, local.short, array['Город', 'Поселок', 'Поселение', 'Деревня', 'Населенный пункт', 'Село', 'Рабочий поселок', 'Поселок городского типа']::text, local.post, local.object, local.region)
                 ) select count(1), gar_select.json as query, local.offset, local.limit, (
                     with _ as (
                         select * from _ offset local.offset limit local.limit
@@ -104,7 +108,7 @@ begin
             if local.full then -- если все результаты
                 with _ as (
                     with _ as (
-                        select * from gar_select(local.parent::uuid, local.name, local.short, local.type, local.post)
+                        select * from gar_select(local.parent::uuid, local.name, local.short, local.type, local.post, local.object, local.region)
                     ) select count(1), gar_select.json as query, local.offset, local.limit, (
                         with _ as (
                             select * from _ offset local.offset limit local.limit
@@ -116,7 +120,7 @@ begin
             else -- иначе - не все результаты
                 with _ as (
                     with _ as (
-                        select * from gar_select(local.parent::uuid, local.name, local.short, local.type, local.post)
+                        select * from gar_select(local.parent::uuid, local.name, local.short, local.type, local.post, local.object, local.region)
                     ) select count(1), gar_select.json as query, local.offset, local.limit, (
                         with _ as (
                             select *, case when local.child then gar_child(_.id) end as child from _ offset local.offset limit local.limit
@@ -134,10 +138,12 @@ CREATE OR REPLACE FUNCTION gar_update(INOUT json json) RETURNS json LANGUAGE plp
     short text default nullif(trim(gar_update.json->>'short'), ''); -- кратко
     type text default nullif(trim(gar_update.json->>'type'), ''); -- тип
     post text default nullif(trim(gar_update.json->>'port'), ''); -- индекс
+    object text default nullif(trim(gar_update.json->>'object'), ''); -- объект
+    region text default nullif(trim(gar_update.json->>'region'), ''); -- регион
 begin
     with _ as (
         with _ as (
-            select * from gar_update(local.id, local.parent, local.name, local.short, local.type, local.post)
+            select * from gar_update(local.id, local.parent, local.name, local.short, local.type, local.post, local.object, local.region)
         ) select gar_update.json as query, to_json(_) as data from _
     ) select to_json(_) from _ into strict gar_update.json;
 end;$body$;

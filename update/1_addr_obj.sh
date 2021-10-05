@@ -11,7 +11,9 @@ WITH s AS (
         addr_obj.name AS name,
         rtrim(addr_obj_types.shortname, '.') AS short,
         addr_obj_types.name AS type,
-        addr_obj_params.value AS post
+        addr_obj_params.value AS post,
+        'addr_obj'::object as object,
+        ${DIR} as region
     FROM "$REGION".addr_obj AS addr_obj
     INNER JOIN addr_obj_types ON addr_obj_types.level = addr_obj.level AND addr_obj_types.shortname = addr_obj.typename
     LEFT JOIN "$REGION".adm_hierarchy AS adm_hierarchy ON adm_hierarchy.objectid = addr_obj.objectid
@@ -19,7 +21,7 @@ WITH s AS (
     LEFT JOIN "$REGION".addr_obj_params AS addr_obj_params ON addr_obj_params.objectid = addr_obj.objectid AND addr_obj_params.typeid = 5
     WHERE (addr_obj.level = 1) OR (addr_obj_parent.objectguid IS NOT NULL)
 ), o AS (
-    SELECT s.* FROM s INNER JOIN gar AS g USING (id) WHERE (s.parent, s.name, s.short, s.type, s.post) IS DISTINCT FROM (g.parent, g.name, g.short, g.type, g.post) FOR UPDATE OF g SKIP LOCKED
+    SELECT s.* FROM s INNER JOIN gar AS g USING (id) WHERE g.object = 'addr_obj' AND g.region = $REGION AND (s.parent, s.name, s.short, s.type, s.post) IS DISTINCT FROM (g.parent, g.name, g.short, g.type, g.post) FOR UPDATE OF g SKIP LOCKED
 ), i AS (
     INSERT INTO gar SELECT s.* FROM s LEFT JOIN gar AS g USING (id) WHERE g.id IS NULL RETURNING *
 ), u AS (
