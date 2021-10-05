@@ -21,7 +21,7 @@ WITH s AS (
     LEFT JOIN "$REGION".addr_obj_params AS v ON v.objectid = o.objectid AND v.typeid = 5
     WHERE (o.level = 1) OR (p.objectguid IS NOT NULL)
 ), o AS (
-    SELECT g.id FROM s INNER JOIN gar AS g ON g.id = s.id AND g.object = 'addr_obj' AND g.region = $REGION AND (s.parent, s.name, s.short, s.type, s.post) IS DISTINCT FROM (g.parent, g.name, g.short, g.type, g.post) FOR UPDATE OF g SKIP LOCKED
+    SELECT s.* FROM s INNER JOIN gar AS g ON g.id = s.id AND g.object = 'addr_obj' AND g.region = $REGION AND (s.parent, s.name, s.short, s.type, s.post) IS DISTINCT FROM (g.parent, g.name, g.short, g.type, g.post) FOR UPDATE OF g SKIP LOCKED
 ), i AS (
     INSERT INTO gar SELECT s.* FROM s LEFT JOIN gar AS g ON g.id = s.id WHERE g.id IS NULL RETURNING *
 ), u AS (
