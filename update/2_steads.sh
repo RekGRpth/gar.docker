@@ -13,7 +13,7 @@ WITH s AS (
         'Участок' AS type,
         v.value AS post,
         'steads'::object as object,
-        ${DIR} as region
+        $REGION as region
     FROM "$REGION".steads AS o
     LEFT JOIN "$REGION".adm_hierarchy AS h ON h.objectid = o.objectid
     LEFT JOIN "$REGION".addr_obj AS p ON p.objectid = h.parentobjid

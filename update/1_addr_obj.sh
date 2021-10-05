@@ -13,7 +13,7 @@ WITH s AS (
         t.name AS type,
         v.value AS post,
         'addr_obj'::object as object,
-        ${DIR} as region
+        $REGION as region
     FROM "$REGION".addr_obj AS o
     INNER JOIN t ON t.level = o.level AND t.shortname = o.typename
     LEFT JOIN "$REGION".adm_hierarchy AS h ON h.objectid = o.objectid

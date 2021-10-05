@@ -13,7 +13,7 @@ WITH s AS (
         t.name AS type,
         v.value AS post,
         'rooms'::object as object,
-        ${DIR} as region
+        $REGION as region
     FROM "$REGION".rooms AS o
     INNER JOIN t ON t.id = o.roomtype
     LEFT JOIN "$REGION".adm_hierarchy AS h ON h.objectid = o.objectid

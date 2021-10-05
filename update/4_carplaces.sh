@@ -13,7 +13,7 @@ WITH s AS (
         'Машино-место' AS type,
         v.value AS post,
         'carplaces'::object as object,
-        ${DIR} as region
+        $REGION as region
     FROM "$REGION".carplaces AS o
     LEFT JOIN "$REGION".adm_hierarchy AS h ON h.objectid = o.objectid
     LEFT JOIN "$REGION".houses AS p ON p.objectid = h.parentobjid

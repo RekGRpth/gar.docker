@@ -13,7 +13,7 @@ WITH s AS (
         t.name AS type,
         v.value AS post,
         'houses'::object as object,
-        ${DIR} as region
+        $REGION as region
     FROM "$REGION".houses AS o
     INNER JOIN t ON t.id = o.housetype
     LEFT JOIN house_types AS t1 ON t1.id = o.addtype1
