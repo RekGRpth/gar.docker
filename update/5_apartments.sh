@@ -6,20 +6,20 @@ REGION="$1"
 psql --variable=ON_ERROR_STOP=1 <<EOF
 WITH s AS (
     SELECT DISTINCT ON (id)
-        apartments.objectguid AS id,
-        apartments_parent.objectguid AS parent,
-        apartments.number AS name,
-        rtrim(apartment_types.shortname, '.') AS short,
-        apartment_types.name AS type,
-        apartments_params.value AS post,
+        o.objectguid AS id,
+        p.objectguid AS parent,
+        o.number AS name,
+        rtrim(t.shortname, '.') AS short,
+        t.name AS type,
+        v.value AS post,
         'apartments'::object as object,
         ${DIR} as region
-    FROM "$REGION".apartments AS apartments
-    INNER JOIN apartment_types ON apartment_types.id = apartments.aparttype
-    LEFT JOIN "$REGION".adm_hierarchy AS adm_hierarchy ON adm_hierarchy.objectid = apartments.objectid
-    LEFT JOIN "$REGION".houses AS apartments_parent ON apartments_parent.objectid = adm_hierarchy.parentobjid
-    LEFT JOIN "$REGION".apartments_params AS apartments_params ON apartments_params.objectid = apartments.objectid AND apartments_params.typeid = 5
-    WHERE apartments_parent.objectguid IS NOT NULL
+    FROM "$REGION".apartments AS o
+    INNER JOIN t ON t.id = o.aparttype
+    LEFT JOIN "$REGION".adm_hierarchy AS h ON h.objectid = o.objectid
+    LEFT JOIN "$REGION".houses AS p ON p.objectid = h.parentobjid
+    LEFT JOIN "$REGION".apartments_params AS v ON v.objectid = o.objectid AND v.typeid = 5
+    WHERE p.objectguid IS NOT NULL
 ), o AS (
     SELECT s.* FROM s INNER JOIN gar AS g USING (id) WHERE g.object = 'apartments' AND g.region = $REGION AND (s.parent, s.name, s.short, s.type, s.post) IS DISTINCT FROM (g.parent, g.name, g.short, g.type, g.post) FOR UPDATE OF g SKIP LOCKED
 ), i AS (

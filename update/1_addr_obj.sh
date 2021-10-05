@@ -6,20 +6,20 @@ REGION="$1"
 psql --variable=ON_ERROR_STOP=1 <<EOF
 WITH s AS (
     SELECT DISTINCT ON (id)
-        addr_obj.objectguid AS id,
-        addr_obj_parent.objectguid AS parent,
-        addr_obj.name AS name,
-        rtrim(addr_obj_types.shortname, '.') AS short,
-        addr_obj_types.name AS type,
-        addr_obj_params.value AS post,
+        o.objectguid AS id,
+        p.objectguid AS parent,
+        o.name AS name,
+        rtrim(t.shortname, '.') AS short,
+        t.name AS type,
+        v.value AS post,
         'addr_obj'::object as object,
         ${DIR} as region
-    FROM "$REGION".addr_obj AS addr_obj
-    INNER JOIN addr_obj_types ON addr_obj_types.level = addr_obj.level AND addr_obj_types.shortname = addr_obj.typename
-    LEFT JOIN "$REGION".adm_hierarchy AS adm_hierarchy ON adm_hierarchy.objectid = addr_obj.objectid
-    LEFT JOIN "$REGION".addr_obj AS addr_obj_parent ON addr_obj_parent.objectid = adm_hierarchy.parentobjid
-    LEFT JOIN "$REGION".addr_obj_params AS addr_obj_params ON addr_obj_params.objectid = addr_obj.objectid AND addr_obj_params.typeid = 5
-    WHERE (addr_obj.level = 1) OR (addr_obj_parent.objectguid IS NOT NULL)
+    FROM "$REGION".addr_obj AS o
+    INNER JOIN t ON t.level = o.level AND t.shortname = o.typename
+    LEFT JOIN "$REGION".adm_hierarchy AS h ON h.objectid = o.objectid
+    LEFT JOIN "$REGION".addr_obj AS p ON p.objectid = h.parentobjid
+    LEFT JOIN "$REGION".addr_obj_params AS v ON v.objectid = o.objectid AND v.typeid = 5
+    WHERE (o.level = 1) OR (p.objectguid IS NOT NULL)
 ), o AS (
     SELECT s.* FROM s INNER JOIN gar AS g USING (id) WHERE g.object = 'addr_obj' AND g.region = $REGION AND (s.parent, s.name, s.short, s.type, s.post) IS DISTINCT FROM (g.parent, g.name, g.short, g.type, g.post) FOR UPDATE OF g SKIP LOCKED
 ), i AS (
