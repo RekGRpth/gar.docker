@@ -21,6 +21,6 @@ LEFT JOIN "$REGION".rooms_params AS v ON v.objectid = o.objectid AND v.typeid = 
 INNER JOIN gar AS g ON g.id = o.objectguid AND g.object = 'rooms' AND g.region = $REGION
 WHERE p.objectguid IS NOT NULL AND (p.objectguid, o.number, rtrim(coalesce(t.shortname, ''), '.'), t.name, v.value) IS DISTINCT FROM (g.parent, g.name, g.short, g.type, g.post);
 WITH _ AS (
-    UPDATE gar AS g SET parent = t.parent, name = t.name, short = t.short, type = t.type FROM t WHERE g.id = t.id RETURNING *
+    UPDATE gar AS g SET parent = t.parent, name = t.name, short = t.short, type = t.type FROM "$REGION".t AS t WHERE g.id = t.id RETURNING *
 ) SELECT 'rooms' AS object, $REGION AS region, 'update' as command, count(*) FROM _;
 EOF
