@@ -6,7 +6,7 @@ CSV="$1"
 REGION="$(dirname -- "$CSV")"
 REGION="$(basename -- "$REGION")"
 COMMAND="$(cat <<EOF
-CREATE TEMP TABLE "$REGION".tmp (LIKE "$REGION".adm_hierarchy INCLUDING ALL);
+CREATE TEMP TABLE "$REGION".tmp (LIKE "$REGION".adm_hierarchy);
 COPY "$REGION".tmp ("id","objectid","parentobjid","changeid","regioncode","areacode","citycode","placecode","plancode","streetcode","previd","nextid","updatedate","startdate","enddate","isactive")
 FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ("id","objectid","changeid","updatedate","startdate","enddate","isactive"));
 INSERT INTO "$REGION".adm_hierarchy SELECT "id","objectid","parentobjid","changeid","regioncode","areacode","citycode","placecode","plancode","streetcode","previd","nextid","updatedate","startdate","enddate","isactive" FROM "$REGION".tmp ON CONFLICT ON CONSTRAINT adm_hierarchy_pkey DO UPDATE SET

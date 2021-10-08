@@ -6,7 +6,7 @@ CSV="$1"
 REGION="$(dirname -- "$CSV")"
 REGION="$(basename -- "$REGION")"
 COMMAND="$(cat <<EOF
-CREATE TEMP TABLE "$REGION".tmp (LIKE "$REGION".rooms INCLUDING ALL);
+CREATE TEMP TABLE "$REGION".tmp (LIKE "$REGION".rooms);
 COPY "$REGION".tmp ("id","objectid","objectguid","changeid","number","roomtype","opertypeid","previd","nextid","updatedate","startdate","enddate","isactual","isactive")
 FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ("id","objectid","objectguid","changeid","number","roomtype","opertypeid","updatedate","startdate","enddate","isactual","isactive"));
 INSERT INTO "$REGION".rooms SELECT "id","objectid","objectguid","changeid","number","roomtype","opertypeid","previd","nextid","updatedate","startdate","enddate","isactual","isactive" FROM "$REGION".tmp ON CONFLICT ON CONSTRAINT rooms_pkey DO UPDATE SET

@@ -4,7 +4,7 @@ set -eux
 trap "exit 255" ERR
 CSV="$1"
 COMMAND="$(cat <<EOF
-CREATE TEMP TABLE tmp (LIKE apartment_types INCLUDING ALL);
+CREATE TEMP TABLE tmp (LIKE apartment_types);
 COPY tmp ("id","name","shortname","desc","updatedate","startdate","enddate","isactive")
 FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ("id","name","updatedate","startdate","enddate","isactive"));
 INSERT INTO apartment_types SELECT "id","name","shortname","desc","updatedate","startdate","enddate","isactive" FROM tmp ON CONFLICT ON CONSTRAINT apartment_types_pkey DO UPDATE SET
