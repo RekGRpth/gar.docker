@@ -6,10 +6,10 @@ CSV="$1"
 REGION="$(dirname -- "$CSV")"
 REGION="$(basename -- "$REGION")"
 COMMAND="$(cat <<EOF
-CREATE TEMP TABLE "$REGION".tmp (LIKE "$REGION".rooms_params);
-COPY "$REGION".tmp ("id","objectid","changeid","changeidend","typeid","value","updatedate","startdate","enddate")
+CREATE TEMP TABLE tmp (LIKE "$REGION".rooms_params);
+COPY tmp ("id","objectid","changeid","changeidend","typeid","value","updatedate","startdate","enddate")
 FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ("id","objectid","changeidend","typeid","value","updatedate","startdate","enddate"));
-INSERT INTO "$REGION".rooms_params SELECT "id","objectid","changeid","changeidend","typeid","value","updatedate","startdate","enddate" FROM "$REGION".tmp ON CONFLICT ON CONSTRAINT rooms_params_pkey DO UPDATE SET
+INSERT INTO "$REGION".rooms_params SELECT "id","objectid","changeid","changeidend","typeid","value","updatedate","startdate","enddate" FROM tmp ON CONFLICT ON CONSTRAINT rooms_params_pkey DO UPDATE SET
 "objectid"=EXCLUDED."objectid","changeid"=EXCLUDED."changeid","changeidend"=EXCLUDED."changeidend","typeid"=EXCLUDED."typeid","value"=EXCLUDED."value","updatedate"=EXCLUDED."updatedate","startdate"=EXCLUDED."startdate","enddate"=EXCLUDED."enddate";
 DELETE FROM "$REGION".rooms_params WHERE NOT current_timestamp between startdate and enddate;
 EOF

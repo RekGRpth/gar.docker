@@ -6,10 +6,10 @@ CSV="$1"
 REGION="$(dirname -- "$CSV")"
 REGION="$(basename -- "$REGION")"
 COMMAND="$(cat <<EOF
-CREATE TEMP TABLE "$REGION".tmp (LIKE "$REGION".rooms);
-COPY "$REGION".tmp ("id","objectid","objectguid","changeid","number","roomtype","opertypeid","previd","nextid","updatedate","startdate","enddate","isactual","isactive")
+CREATE TEMP TABLE tmp (LIKE "$REGION".rooms);
+COPY tmp ("id","objectid","objectguid","changeid","number","roomtype","opertypeid","previd","nextid","updatedate","startdate","enddate","isactual","isactive")
 FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ("id","objectid","objectguid","changeid","number","roomtype","opertypeid","updatedate","startdate","enddate","isactual","isactive"));
-INSERT INTO "$REGION".rooms SELECT "id","objectid","objectguid","changeid","number","roomtype","opertypeid","previd","nextid","updatedate","startdate","enddate","isactual","isactive" FROM "$REGION".tmp ON CONFLICT ON CONSTRAINT rooms_pkey DO UPDATE SET
+INSERT INTO "$REGION".rooms SELECT "id","objectid","objectguid","changeid","number","roomtype","opertypeid","previd","nextid","updatedate","startdate","enddate","isactual","isactive" FROM tmp ON CONFLICT ON CONSTRAINT rooms_pkey DO UPDATE SET
 "objectid"=EXCLUDED."objectid","objectguid"=EXCLUDED."objectguid","changeid"=EXCLUDED."changeid","number"=EXCLUDED."number","roomtype"=EXCLUDED."roomtype","opertypeid"=EXCLUDED."opertypeid","previd"=EXCLUDED."previd","nextid"=EXCLUDED."nextid","updatedate"=EXCLUDED."updatedate","startdate"=EXCLUDED."startdate","enddate"=EXCLUDED."enddate","isactual"=EXCLUDED."isactual","isactive"=EXCLUDED."isactive";
 DELETE FROM "$REGION".rooms WHERE NOT isactive;
 EOF

@@ -6,10 +6,10 @@ CSV="$1"
 REGION="$(dirname -- "$CSV")"
 REGION="$(basename -- "$REGION")"
 COMMAND="$(cat <<EOF
-CREATE TEMP TABLE "$REGION".tmp (LIKE "$REGION".addr_obj_division);
-COPY "$REGION".tmp ("id","parentid","childid","changeid")
+CREATE TEMP TABLE tmp (LIKE "$REGION".addr_obj_division);
+COPY tmp ("id","parentid","childid","changeid")
 FROM stdin WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\b', FORCE_NOT_NULL ("id","parentid","childid","changeid"));
-INSERT INTO "$REGION".addr_obj_division SELECT "id","parentid","childid","changeid" FROM "$REGION".tmp ON CONFLICT ON CONSTRAINT addr_obj_division_pkey DO UPDATE SET
+INSERT INTO "$REGION".addr_obj_division SELECT "id","parentid","childid","changeid" FROM tmp ON CONFLICT ON CONSTRAINT addr_obj_division_pkey DO UPDATE SET
 "parentid"=EXCLUDED."parentid","childid"=EXCLUDED."childid","changeid"=EXCLUDED."changeid";
 EOF
 )"
