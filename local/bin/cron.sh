@@ -47,10 +47,8 @@ while
             echo region2pg >state.txt
         ;;
         "unzip" )
-            find . -type f -name "*.zip" | sort -u | while read -r ZIP; do
-                unzip -ouLL "$ZIP" -d "${ZIP%.*}"
-                rm -f "$ZIP"
-            done
+            find . -type f -name "*.zip" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=ZIP bash /usr/local/bin/unzip.sh "ZIP"
+            test $? -eq 0 || kill -SIGINT "$SELF"
             echo xml2csv >state.txt
         ;;
         "update" )
