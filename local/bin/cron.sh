@@ -14,6 +14,7 @@ while
                 find -mindepth 1 -maxdepth 1 -type d | sort -u | while read -r DIR; do
                     find "$DIR" -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV bash "$SH" "CSV"
                     test $? -eq 0 || kill -SIGINT "$SELF"
+                    rmdir "$DIR"/* "$DIR"
                 done
             done
             echo update >state.txt
