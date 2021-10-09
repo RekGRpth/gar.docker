@@ -88,16 +88,8 @@ while
                 echo "$lastVersionId" >fullVersionId.txt
             else
                 wget --output-document=GetAllDownloadFileInfo.json https://fias.nalog.ru/WebServices/Public/GetAllDownloadFileInfo
-                jq --raw-output "sort_by(.VersionId) | .[] | select(.VersionId > $deltaVersionId) | [.VersionId, .GarXMLDeltaURL] | join(\";\")" <GetAllDownloadFileInfo.json | while IFS=';' read -r lastVersionId GarXMLDeltaURL; do
-                    if [ -z "$GarXMLDeltaURL" ]; then continue; fi
-                    URL="$GarXMLDeltaURL"
-                    SIZE="$(curl -Is "$URL" | grep 'Content-Length' | grep -oP '\d+')"
-                    test "$SIZE" -lt 1073741824
-                    ZIP="$lastVersionId.zip"
-                    wget --continue --output-document="$ZIP" "$URL"
-                    echo "$lastVersionId" >deltaVersionId.txt
-                    echo unzip >state.txt
-                done
+                jq --raw-output "sort_by(.VersionId) | .[] | select(.VersionId > $deltaVersionId) | .GarXMLDeltaURL" <GetAllDownloadFileInfo.json | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=URL bash /usr/local/bin/wget.sh "URL"
+                test $? -eq 0 || kill -SIGINT "$SELF"
             fi
         ;;
     esac
