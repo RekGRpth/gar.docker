@@ -90,6 +90,8 @@ while
                 wget --output-document=GetAllDownloadFileInfo.json https://fias.nalog.ru/WebServices/Public/GetAllDownloadFileInfo
                 jq --raw-output "sort_by(.VersionId) | .[] | select(.VersionId > $deltaVersionId) | .GarXMLDeltaURL" <GetAllDownloadFileInfo.json | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=URL bash /usr/local/bin/wget.sh "URL"
                 test $? -eq 0 || kill -SIGINT "$SELF"
+                jq --raw-output "sort_by(.VersionId) | .[] | select(.VersionId > $deltaVersionId) | .GarXMLDeltaURL" <GetAllDownloadFileInfo.json | xargs --verbose --no-run-if-empty --replace=URL bash /usr/local/bin/version.sh "URL"
+                test $? -eq 0 || kill -SIGINT "$SELF"
             fi
         ;;
     esac

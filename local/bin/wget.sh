@@ -8,5 +8,3 @@ test "$SIZE" -lt 1073741824
 ZIP="$(dirname -- "$URL")"
 ZIP="$(basename -- "$ZIP" | tr -d '.')"
 wget --continue --output-document="$ZIP.zip" "$URL"
-echo "$ZIP" >deltaVersionId.txt
-echo unzip >state.txt
