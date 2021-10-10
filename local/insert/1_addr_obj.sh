@@ -4,7 +4,7 @@ set -eux
 trap "exit 255" ERR
 REGION="$1"
 psql --variable=ON_ERROR_STOP=1 <<EOF
-CREATE TEMPORARY TABLE "$REGION".t AS SELECT DISTINCT ON (id)
+CREATE TEMP TABLE "$REGION".t AS SELECT DISTINCT ON (id)
     o.objectguid AS id,
     p.objectguid AS parent,
     o.name AS name,

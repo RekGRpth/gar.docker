@@ -4,7 +4,7 @@ set -eux
 trap "exit 255" ERR
 REGION="$1"
 psql --variable=ON_ERROR_STOP=1 <<EOF
-CREATE TEMPORARY TABLE "$REGION".t AS SELECT DISTINCT ON (id)
+CREATE TEMP TABLE "$REGION".t AS SELECT DISTINCT ON (id)
     o.objectguid AS id,
     p.objectguid AS parent,
     concat_ws(', ', o.housenum, CASE WHEN o.addnum1 IS NOT NULL THEN concat(CASE WHEN coalesce(t1.id, o.housetype) = o.housetype THEN 'корп' ELSE rtrim(t1.shortname, '.') END, '.', o.addnum1) END, CASE WHEN o.addnum2 IS NOT NULL THEN concat(CASE WHEN coalesce(t2.id, o.housetype) = o.housetype THEN 'стр' ELSE rtrim(t2.shortname, '.') END, '.', o.addnum2) END) AS name,
