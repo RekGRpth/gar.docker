@@ -18,7 +18,9 @@ INNER JOIN addr_obj_types AS t ON t.level = o.level AND t.shortname = o.typename
 LEFT JOIN "$REGION".adm_hierarchy AS h ON h.objectid = o.objectid
 LEFT JOIN "$REGION".addr_obj AS p ON p.objectid = h.parentobjid
 LEFT JOIN "$REGION".addr_obj_params AS v ON v.objectid = o.objectid AND v.typeid = 5
-INNER JOIN gar AS g ON g.id = o.objectguid AND g.object = 'addr_obj' AND g.region = $REGION
-WHERE ((o.level = 1) OR (p.objectguid IS NOT NULL)) AND (p.objectguid, o.name, rtrim(t.shortname, '.'), t.name, v.value) IS DISTINCT FROM (g.parent, g.name, g.short, g.type, g.post);
-UPDATE gar AS g SET parent = t.parent, name = t.name, short = t.short, type = t.type, post = t.post FROM t AS t WHERE g.id = t.id;
+WHERE ((o.level = 1) OR (p.objectguid IS NOT NULL));
+CREATE TEMP TABLE u AS SELECT t.* FROM t INNER JOIN gar AS g ON g.id = t.id AND g.object = t.object AND g.region = t.region WHERE (t.parent, t.name, t.short, t.type, t.post) IS DISTINCT FROM (g.parent, g.name, g.short, g.type, g.post);
+UPDATE gar AS g SET parent = u.parent, name = u.name, short = u.short, type = u.type, post = u.post FROM u WHERE g.id = u.id;
+CREATE TEMP TABLE i AS SELECT t.* FROM t LEFT JOIN gar AS g ON g.id = t.id AND g.object = t.object AND g.region = t.region WHERE g.id IS NULL;
+INSERT INTO gar SELECT * FROM i;
 EOF

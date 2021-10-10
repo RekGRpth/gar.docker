@@ -20,7 +20,9 @@ LEFT JOIN house_types AS t2 ON t2.id = o.addtype2
 LEFT JOIN "$REGION".adm_hierarchy AS h ON h.objectid = o.objectid
 LEFT JOIN "$REGION".addr_obj AS p ON p.objectid = h.parentobjid
 LEFT JOIN "$REGION".houses_params AS v ON v.objectid = o.objectid AND v.typeid = 5
-INNER JOIN gar AS g ON g.id = o.objectguid AND g.object = 'houses' AND g.region = $REGION
-WHERE p.objectguid IS NOT NULL AND (p.objectguid, concat_ws(', ', o.housenum, CASE WHEN o.addnum1 IS NOT NULL THEN concat(CASE WHEN coalesce(t1.id, o.housetype) = o.housetype THEN 'корп' ELSE rtrim(t1.shortname, '.') END, '.', o.addnum1) END, CASE WHEN o.addnum2 IS NOT NULL THEN concat(CASE WHEN coalesce(t2.id, o.housetype) = o.housetype THEN 'стр' ELSE rtrim(t2.shortname, '.') END, '.', o.addnum2) END), rtrim(t.shortname, '.'), t.name, v.value) IS DISTINCT FROM (g.parent, g.name, g.short, g.type, g.post);
-UPDATE gar AS g SET parent = t.parent, name = t.name, short = t.short, type = t.type, post = t.post FROM t AS t WHERE g.id = t.id;
+WHERE p.objectguid IS NOT NULL;
+CREATE TEMP TABLE u AS SELECT t.* FROM t INNER JOIN gar AS g ON g.id = t.id AND g.object = t.object AND g.region = t.region WHERE (t.parent, t.name, t.short, t.type, t.post) IS DISTINCT FROM (g.parent, g.name, g.short, g.type, g.post);
+UPDATE gar AS g SET parent = u.parent, name = u.name, short = u.short, type = u.type, post = u.post FROM u WHERE g.id = u.id;
+CREATE TEMP TABLE i AS SELECT t.* FROM t LEFT JOIN gar AS g ON g.id = t.id AND g.object = t.object AND g.region = t.region WHERE g.id IS NULL;
+INSERT INTO gar SELECT * FROM i;
 EOF
