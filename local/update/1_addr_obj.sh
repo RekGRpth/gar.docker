@@ -20,5 +20,5 @@ LEFT JOIN "$REGION".addr_obj AS p ON p.objectid = h.parentobjid
 LEFT JOIN "$REGION".addr_obj_params AS v ON v.objectid = o.objectid AND v.typeid = 5
 INNER JOIN gar AS g ON g.id = o.objectguid AND g.object = 'addr_obj' AND g.region = $REGION
 WHERE ((o.level = 1) OR (p.objectguid IS NOT NULL)) AND (p.objectguid, o.name, rtrim(t.shortname, '.'), t.name, v.value) IS DISTINCT FROM (g.parent, g.name, g.short, g.type, g.post);
-UPDATE gar AS g SET parent = t.parent, name = t.name, short = t.short, type = t.type FROM t AS t WHERE g.id = t.id;
+UPDATE gar AS g SET parent = t.parent, name = t.name, short = t.short, type = t.type, post = t.post FROM t AS t WHERE g.id = t.id;
 EOF
