@@ -25,14 +25,7 @@ while
                 find . -type f -name "as_${TABLE}_2*.csv" | sort -u | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=CSV bash "$SH" "CSV"
                 test $? -eq 0 || kill -SIGINT "$SELF"
             done
-            echo insert >state.txt
-        ;;
-        "insert" )
-            find /usr/local/insert -type f -name "*.sh" | sort -u | while read -r SH; do
-                seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=REGION bash "$SH" "REGION"
-                test $? -eq 0 || kill -SIGINT "$SELF"
-            done
-            echo "done" >state.txt
+            echo update >state.txt
         ;;
         "region2pg" )
             seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --replace=REGION echo "CREATE SCHEMA IF NOT EXISTS \"REGION\";" | psql --variable=ON_ERROR_STOP=1
@@ -59,7 +52,7 @@ while
                 seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=REGION bash "$SH" "REGION"
                 test $? -eq 0 || kill -SIGINT "$SELF"
             done
-            echo insert >state.txt
+            echo "done" >state.txt
         ;;
         "xml2csv" )
             find /usr/local/xml2csv -type f -name "*.sh" | sort -u | while read -r SH; do
