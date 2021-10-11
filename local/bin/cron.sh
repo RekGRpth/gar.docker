@@ -48,20 +48,20 @@ while
             echo xml2csv >state.txt
         ;;
         "update" )
-            psql --variable=ON_ERROR_STOP=1 <<EOF
+            find /usr/local/update -type f -name "*.sh" | sort -u | while read -r SH; do
+                psql --variable=ON_ERROR_STOP=1 <<EOF
 TRUNCATE TABLE "update";
 TRUNCATE TABLE "insert";
 EOF
-            find /usr/local/update -type f -name "*.sh" | sort -u | while read -r SH; do
                 seq --format "%02.0f" 1 99 | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=REGION bash "$SH" "REGION"
                 test $? -eq 0 || kill -SIGINT "$SELF"
-            done
-            psql --variable=ON_ERROR_STOP=1 <<EOF
+                psql --variable=ON_ERROR_STOP=1 <<EOF
 UPDATE gar AS g SET parent = u.parent, name = u.name, short = u.short, type = u.type, post = u.post FROM "update" AS u WHERE g.id = u.id;
 INSERT INTO gar SELECT * FROM "insert";
 TRUNCATE TABLE "update";
 TRUNCATE TABLE "insert";
 EOF
+            done
             echo "done" >state.txt
         ;;
         "xml2csv" )
