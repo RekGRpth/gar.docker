@@ -5,13 +5,13 @@ trap "exit 255" ERR
 REGION="$1"
 psql --variable=ON_ERROR_STOP=1 <<EOF
 CREATE TEMP TABLE t AS SELECT DISTINCT ON (id)
-    o.objectguid AS id,
-    p.objectguid AS parent,
-    o.name AS name,
-    rtrim(t.shortname, '.') AS short,
-    t.name AS type,
-    v.value AS post,
-    $REGION as region
+    o.objectguid::uuid AS id,
+    p.objectguid::uuid AS parent,
+    o.name::text AS name,
+    rtrim(t.shortname, '.')::text AS short,
+    t.name::text AS type,
+    v.value::text AS post,
+    $REGION::smallint as region
 FROM "$REGION".addr_obj AS o
 INNER JOIN addr_obj_types AS t ON t.level = o.level AND t.shortname = o.typename
 LEFT JOIN "$REGION".adm_hierarchy AS h ON h.objectid = o.objectid
