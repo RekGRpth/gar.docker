@@ -7,6 +7,8 @@ CREATE TABLE IF NOT EXISTS gar (
     post text,
     region smallint NOT NULL
 );
+CREATE UNLOGGED TABLE "insert" (LIKE gar);
+CREATE UNLOGGED TABLE "update" (LIKE gar);
 CREATE OR REPLACE FUNCTION gar_text(name text, short text, type text) RETURNS text LANGUAGE sql IMMUTABLE AS $body$
     select case
         when gar_text.type in ('Не определено') then gar_text.name
