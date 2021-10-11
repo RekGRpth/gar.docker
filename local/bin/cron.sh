@@ -58,10 +58,12 @@ EOF
                 psql --variable=ON_ERROR_STOP=1 <<EOF
 UPDATE gar AS g SET parent = u.parent, name = u.name, short = u.short, type = u.type, post = u.post FROM "update" AS u WHERE g.id = u.id;
 INSERT INTO gar SELECT * FROM "insert";
+EOF
+            done
+            psql --variable=ON_ERROR_STOP=1 <<EOF
 TRUNCATE TABLE "update";
 TRUNCATE TABLE "insert";
 EOF
-            done
             echo "done" >state.txt
         ;;
         "xml2csv" )
