@@ -16,11 +16,10 @@ docker run \
     --hostname gar \
     --interactive \
     --mount type=bind,source=/etc/certs,destination=/etc/certs,readonly \
-    --mount type=bind,source=/home/georgy/data/load/gar,destination=/home \
     --mount type=bind,source=/run/postgresql,destination=/run/postgresql \
+    --mount type=volume,source=gar,destination=/home \
     --name gar \
     --network name=docker \
     --rm \
     --tty \
     ghcr.io/rekgrpth/gar.docker su-exec gar:gar cron.sh
-#    --mount type=volume,source=gar,destination=/home \
