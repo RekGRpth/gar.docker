@@ -82,6 +82,7 @@ while
                 wget --continue --output-document="$ZIP" "$URL"
                 echo "$lastVersionId" >deltaVersionId.txt
                 echo "$lastVersionId" >fullVersionId.txt
+                echo unzip >state.txt
             else
                 wget --output-document=GetAllDownloadFileInfo.json https://fias.nalog.ru/WebServices/Public/GetAllDownloadFileInfo
                 jq --raw-output "sort_by(.VersionId) | .[] | select(.VersionId > $deltaVersionId) | .GarXMLDeltaURL" <GetAllDownloadFileInfo.json | xargs --verbose --no-run-if-empty --max-procs="$(nproc)" --replace=URL bash /usr/local/bin/wget.sh "URL"
