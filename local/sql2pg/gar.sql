@@ -77,7 +77,7 @@ CREATE OR REPLACE FUNCTION gar_text(id uuid[], post boolean DEFAULT true) RETURN
         with _ as (
             select * from gar_select(gar_text.id)
         ), p as (
-            select unnest(array_agg(post)) as post, generate_subscripts(array_agg(post), 1) as i from _ where coalesce(true, false) and post is not null order by i desc limit 1
+            select unnest(array_agg(post)) as post, generate_subscripts(array_agg(post), 1) as i from _ where gar_text.post and post is not null order by i desc limit 1
         ) select post as text from p union select string_agg(gar_text(name, short, type), ', ') as text from _
     ) select string_agg(text, ', ') from _
 $body$;
@@ -86,7 +86,7 @@ CREATE OR REPLACE FUNCTION gar_text(id uuid, post boolean DEFAULT true) RETURNS 
         with _ as (
             select * from gar_select(gar_text.id)
         ), p as (
-            select unnest(array_agg(post)) as post, generate_subscripts(array_agg(post), 1) as i from _ where coalesce(true, false) and post is not null order by i desc limit 1
+            select unnest(array_agg(post)) as post, generate_subscripts(array_agg(post), 1) as i from _ where gar_text.post and post is not null order by i desc limit 1
         ) select post as text from p union select string_agg(gar_text(name, short, type), ', ') as text from _
     ) select string_agg(text, ', ') from _
 $body$;
