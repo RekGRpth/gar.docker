@@ -8,12 +8,12 @@ CREATE TEMP TABLE t AS SELECT DISTINCT ON (id)
     o.objectguid::uuid AS id,
     p.objectguid::uuid AS parent,
     o.number::text AS name,
-    rtrim(t.shortname, '.')::text AS short,
-    t.name::text AS type,
+    COALESCE(rtrim(t.shortname, '.'), '')::text AS short,
+    COALESCE(t.name, 'Не определено')::text AS type,
     v.value::text AS post,
     $REGION::smallint as region
 FROM "$REGION".apartments AS o
-INNER JOIN apartment_types AS t ON t.id = o.aparttype
+LEFT JOIN apartment_types AS t ON t.id = o.aparttype
 LEFT JOIN "$REGION".adm_hierarchy AS h ON h.objectid = o.objectid
 LEFT JOIN "$REGION".houses AS p ON p.objectid = h.parentobjid
 LEFT JOIN "$REGION".apartments_params AS v ON v.objectid = o.objectid AND v.typeid = 5

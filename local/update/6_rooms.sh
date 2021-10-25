@@ -8,7 +8,7 @@ CREATE TEMP TABLE t AS SELECT DISTINCT ON (id)
     o.objectguid::uuid AS id,
     p.objectguid::uuid AS parent,
     o.number::text AS name,
-    rtrim(coalesce(t.shortname, ''), '.')::text AS short,
+    COALESCE(rtrim(t.shortname, '.'), '')::text AS short,
     t.name::text AS type,
     v.value::text AS post,
     $REGION::smallint as region
