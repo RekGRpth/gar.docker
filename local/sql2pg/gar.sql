@@ -7,6 +7,11 @@ CREATE TABLE IF NOT EXISTS gar (
     post text,
     region smallint NOT NULL
 );
+CREATE INDEX IF NOT EXISTS gar_parent_idx ON gar USING btree (parent);
+CREATE INDEX IF NOT EXISTS gar_name_idx ON gar USING btree (name);
+CREATE INDEX IF NOT EXISTS gar_short_idx ON gar USING btree (short);
+CREATE INDEX IF NOT EXISTS gar_type_idx ON gar USING btree (type);
+CREATE INDEX IF NOT EXISTS gar_region_idx ON gar USING btree (region);
 CREATE OR REPLACE FUNCTION gar_text(name text, short text, type text) RETURNS text LANGUAGE sql IMMUTABLE AS $body$
     select case
         when gar_text.type in ('Не определено') then gar_text.name
@@ -95,8 +100,3 @@ CREATE OR REPLACE FUNCTION gar_update(id uuid, parent uuid, name text, short tex
         region = coalesce(gar_update.region, region)
     WHERE id = gar_update.id returning gar.*, gar_text(gar.name, gar.short, gar.type) AS text;
 $body$;
-CREATE INDEX IF NOT EXISTS gar_parent_idx ON gar USING btree (parent);
-CREATE INDEX IF NOT EXISTS gar_name_idx ON gar USING btree (name);
-CREATE INDEX IF NOT EXISTS gar_short_idx ON gar USING btree (short);
-CREATE INDEX IF NOT EXISTS gar_type_idx ON gar USING btree (type);
-CREATE INDEX IF NOT EXISTS gar_region_idx ON gar USING btree (region);
