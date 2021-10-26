@@ -8,9 +8,9 @@ CREATE TEMP TABLE t AS SELECT DISTINCT ON (id)
     o.objectguid::uuid AS id,
     p.objectguid::uuid AS parent,
     concat_ws(', ',
-        CASE WHEN o.housenum IS NOT NULL THEN concat(COALESCE(rtrim(t.shortname, '.'), 'д'), '.', o.housenum) END,
-        CASE WHEN o.addnum1 IS NOT NULL THEN concat(COALESCE(rtrim(t1.shortname, '.'), 'корп'), '.', o.addnum1) END,
-        CASE WHEN o.addnum2 IS NOT NULL THEN concat(COALESCE(rtrim(t2.shortname, '.'), 'стр'), '.', o.addnum2) END
+        o.housenum,
+        CASE WHEN o.housenum IS NULL THEN o.addnum1 ELSE CASE WHEN o.addnum1 IS NOT NULL THEN concat(coalesce(rtrim(t1.shortname, '.'), 'корп'), '.', o.addnum1) END END,
+        CASE WHEN o.housenum IS NULL AND o.addnum1 IS NULL THEN o.addnum2 ELSE CASE WHEN o.addnum2 IS NOT NULL THEN concat(coalesce(rtrim(t2.shortname, '.'), 'стр'), '.', o.addnum2) END END
     )::text AS name,
     COALESCE(rtrim(t.shortname, '.'), 'д')::text AS short,
     COALESCE(t.name, 'Дом')::text AS type,
