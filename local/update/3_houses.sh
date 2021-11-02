@@ -10,7 +10,7 @@ CREATE TEMP TABLE t AS SELECT DISTINCT ON (id)
     concat_ws(', ',
         o.housenum,
         CASE WHEN o.housenum IS NULL THEN o.addnum1 ELSE CASE WHEN o.addnum1 IS NOT NULL THEN concat(COALESCE(rtrim(CASE WHEN o.addtype1 IS DISTINCT FROM o.housetype THEN t1.shortname END, '.'), 'к'), '.', o.addnum1) END END,
-        CASE WHEN o.housenum IS NULL AND o.addnum1 IS NULL THEN o.addnum2 ELSE CASE WHEN o.addnum2 IS NOT NULL THEN concat(COALESCE(rtrim(t2.shortname, '.'), 'стр'), '.', o.addnum2) END END
+        CASE WHEN o.housenum IS NULL AND o.addnum1 IS NULL THEN o.addnum2 ELSE CASE WHEN o.addnum2 IS NOT NULL THEN concat(COALESCE(rtrim(CASE WHEN o.addtype2 IS DISTINCT FROM o.housetype AND o.addtype2 IS DISTINCT FROM o.addtype1 THEN t2.shortname END, '.'), 'стр'), '.', o.addnum2) END END
     )::text AS name,
     COALESCE(rtrim(t.shortname, '.'), 'д')::text AS short,
     COALESCE(t.name, 'Дом')::text AS type,
