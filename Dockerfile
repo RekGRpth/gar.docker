@@ -22,6 +22,7 @@ RUN set -eux; \
     cd "$HOME/src"; \
     git clone https://github.com/RekGRpth/xml2.git; \
     cd "$HOME/src/xml2"; \
+    autoreconf -vif; \
     ./configure; \
     make -j"$(nproc)" install; \
     cd /; \
