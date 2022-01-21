@@ -7,14 +7,14 @@ on:
     types:
       - latest
   workflow_dispatch:
+env:
+  GITHUB_TOKEN: ${{ github.token }}
+concurrency:
+  cancel-in-progress: true
+  group: ${{ github.repository }}/${{ github.job }}
 jobs:
   latest:
-    concurrency:
-      cancel-in-progress: true
-      group: ${{ github.ref }}/latest
-    env:
-      GITHUB_TOKEN: ${{ github.token }}
-    name: ${{ github.event.client_payload.repository }} ${{ github.event_name }} ${{ github.event.branch }}
+    name: ${{ github.job }} ${{ github.event.client_payload.repository }} ${{ github.event_name }} ${{ github.event.branch }}
     runs-on: ubuntu-latest
     steps:
       - uses: rekgrpth/git-clone-shell-action@v1
@@ -22,12 +22,8 @@ jobs:
       - uses: rekgrpth/github-publish-action-shell-action@v1
     timeout-minutes: 20
   edge:
-    concurrency:
-      cancel-in-progress: true
-      group: ${{ github.ref }}/edge
     env:
       DOCKER_FROM: gost.docker:edge
-      GITHUB_TOKEN: ${{ github.token }}
       INPUTS_TAG: edge
     runs-on: ubuntu-latest
     steps:
