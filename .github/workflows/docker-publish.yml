@@ -8,7 +8,6 @@ on:
       - latest
   workflow_dispatch:
 env:
-  DOCKER_FROM: gost.docker:${{ github.job }}
   GITHUB_TOKEN: ${{ github.token }}
   INPUTS_TAG: ${{ github.job }}
 concurrency:
@@ -21,11 +20,4 @@ jobs:
       - uses: rekgrpth/git-clone-shell-action@v1
       - uses: rekgrpth/docker-login-build-push-shell-action@v1
       - uses: rekgrpth/github-publish-action-shell-action@v1
-    timeout-minutes: 20
-  edge:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: rekgrpth/git-clone-shell-action@v1
-      - uses: rekgrpth/docker-login-build-push-shell-action@v1
-      - uses: rekgrpth/github-publish-action-shell-action@v1
-    timeout-minutes: 20
+    timeout-minutes: 30

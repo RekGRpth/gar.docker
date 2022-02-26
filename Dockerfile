@@ -1,5 +1,4 @@
-ARG DOCKER_FROM=gost.docker:latest
-FROM "ghcr.io/rekgrpth/$DOCKER_FROM"
+FROM ghcr.io/rekgrpth/gost.docker:latest
 ADD local /usr/local
 ENV GROUP=gar \
     USER=gar
