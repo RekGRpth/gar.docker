@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS param_types (
     id INT NOT NULL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    code VARCHAR(50) NOT NULL,
-    "desc" VARCHAR(120),
+    name VARCHAR NOT NULL,
+    code VARCHAR NOT NULL,
+    "desc" VARCHAR,
     updatedate DATE NOT NULL,
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,

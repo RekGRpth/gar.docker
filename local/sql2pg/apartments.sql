@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS apartments (
     objectid BIGINT NOT NULL,
     objectguid UUID NOT NULL,
     changeid BIGINT NOT NULL,
-    number VARCHAR(50) NOT NULL,
+    number VARCHAR NOT NULL,
     aparttype INT NOT NULL,
     opertypeid BIGINT NOT NULL,
     previd BIGINT,

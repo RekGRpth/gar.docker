@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS steads (
     objectid INT NOT NULL,
     objectguid UUID NOT NULL,
     changeid INT NOT NULL,
-    number VARCHAR(250) NOT NULL,
+    number VARCHAR NOT NULL,
     opertypeid VARCHAR(2) NOT NULL,
     previd INT,
     nextid INT,

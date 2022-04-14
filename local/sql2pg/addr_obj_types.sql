@@ -1,9 +1,9 @@
 CREATE TABLE IF NOT EXISTS addr_obj_types (
     id INT NOT NULL PRIMARY KEY,
     level INT NOT NULL,
-    shortname VARCHAR(50) NOT NULL,
-    name VARCHAR(250) NOT NULL,
-    "desc" VARCHAR(250),
+    shortname VARCHAR NOT NULL,
+    name VARCHAR NOT NULL,
+    "desc" VARCHAR,
     updatedate DATE NOT NULL,
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,

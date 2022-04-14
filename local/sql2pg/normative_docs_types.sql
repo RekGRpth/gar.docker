@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS normative_docs_types (
     id INT NOT NULL PRIMARY KEY,
-    name VARCHAR(500) NOT NULL,
+    name VARCHAR NOT NULL,
     startdate DATE NOT NULL,
     enddate DATE NOT NULL
 );

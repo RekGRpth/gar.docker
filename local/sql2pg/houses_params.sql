@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS houses_params (
     changeid BIGINT,
     changeidend BIGINT NOT NULL,
     typeid INT NOT NULL,
-    value VARCHAR(8000) NOT NULL,
+    value VARCHAR NOT NULL,
     updatedate DATE NOT NULL,
     startdate DATE NOT NULL,
     enddate DATE NOT NULL

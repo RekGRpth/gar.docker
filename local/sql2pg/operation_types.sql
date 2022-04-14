@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS operation_types (
     id INT NOT NULL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    shortname VARCHAR(100),
-    "desc" VARCHAR(250),
+    name VARCHAR NOT NULL,
+    shortname VARCHAR,
+    "desc" VARCHAR,
     updatedate DATE NOT NULL,
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,

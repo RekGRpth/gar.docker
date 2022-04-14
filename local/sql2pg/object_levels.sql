@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS object_levels (
     level INT NOT NULL PRIMARY KEY,
-    name VARCHAR(250) NOT NULL,
-    shortname VARCHAR(50),
+    name VARCHAR NOT NULL,
+    shortname VARCHAR,
     updatedate DATE NOT NULL,
     startdate DATE NOT NULL,
     enddate DATE NOT NULL,
