@@ -1,8 +1,13 @@
-FROM ghcr.io/rekgrpth/gost.docker:latest
+FROM alpine:latest
 ADD local /usr/local
+ENTRYPOINT [ "docker_entrypoint.sh" ]
+ENV HOME=/home
+MAINTAINER RekGRpth
+WORKDIR "$HOME"
 ENV GROUP=gar \
     USER=gar
 RUN set -eux; \
+    ln -fs su-exec /sbin/gosu; \
     chmod +x /usr/local/bin/*.sh; \
     apk update --no-cache; \
     apk upgrade --no-cache; \
@@ -27,14 +32,21 @@ RUN set -eux; \
     cd /; \
     apk add --no-cache --virtual .gar \
         bash \
+        busybox-extras \
+        busybox-suid \
+        ca-certificates \
         coreutils \
         curl \
         execline \
         findutils \
         grep \
         jq \
+        musl-locales \
         postgresql-client \
         sed \
+        shadow \
+        su-exec \
+        tzdata \
         unzip \
         wget \
         $(scanelf --needed --nobanner --format '%n#p' --recursive /usr/local | tr ',' '\n' | grep -v "^$" | grep -v -e libcrypto | sort -u | while read -r lib; do test -z "$(find /usr/local/lib -name "$lib")" && echo "so:$lib"; done) \
